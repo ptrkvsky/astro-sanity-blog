@@ -1,0 +1,602 @@
+---
+title: Comment typer une fonction avec Typescript
+description: Tout savoir pour bien typer une fonction avec Typescript.
+date: '2022-01-12'
+dateModified: '12 January 2022'
+datePublished: '12 January 2022'
+image: '/images/typescript-react.png'
+slug: 'fonction-typescript'
+---
+
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/typescript-fonction.jpg';
+
+<Image
+  alt={`Illustration Typescript et React`}
+  src={banner}
+  width={880}
+  height={880}
+  priority
+/>
+
+<blockquote cite="https://kentcdodds.com/blog/typescript-function-syntaxes">
+  Cet article est une traduction de l'article{' '}
+  <a
+    rel="follow"
+    href="https://kentcdodds.com/blog/typescript-function-syntaxes"
+  >
+    TypeScript Function Syntaxes
+  </a>
+  <br />
+  par Kent C. Dodds.
+</blockquote>
+
+En JavaScript même, il existe de nombreuses façons d'écrire des fonctions. Ajoutez TypeScript à l'ensemble et tout d'un coup, il y a matière à réfléchir. Avec l'aide de [quelques](https://twitter.com/kentcdodds/status/1365046763892084736) [amis](https://gist.github.com/kentcdodds/61176c067ec5250b5bd3c7fe57a0120d), j'ai donc dressé une <strong>liste des différentes formes de fonctions</strong> dont vous aurez généralement besoin, avec des exemples simples.
+
+N'oubliez pas qu'il existe des tonnes de combinaisons de syntaxes différentes. Je n'ai inclus que celles qui sont des combinaisons moins évidentes ou uniques d'une certaine manière.
+
+Tout d'abord, la plus grande confusion que j'ai toujours eue avec la syntaxe des choses est de savoir où placer le type de retour.
+
+Quand dois-je utiliser `:` et quand dois-je utiliser `=>`.
+
+Voici quelques exemples rapides qui pourraient vous aider à accélérer le processus si vous utilisez cet article comme référence rapide :
+
+```ts
+// Type simple pour une fonction, utiliser =>
+type FnType = (arg: ArgType) => ReturnType;
+
+// Les autres fois, utiliser :
+type FnAsObjType = {
+  (arg: ArgType): ReturnType;
+};
+interface InterfaceWithFn {
+  fn(arg: ArgType): ReturnType;
+}
+
+const fnImplementation = (arg: ArgType): ReturnType => {
+  /* implementation */
+};
+```
+
+Je pense que c'était la plus grande source de confusion pour moi. Après avoir écrit ceci, je sais maintenant que la seule fois où j'utilise `=> ReturnType` est lorsque je définis un type de fonction comme un type en soi. Le reste du temps, il faut utiliser `: ReturnType`.
+
+Continuez à lire pour un tas d'exemples de comment cela se passe dans des exemples de code typiques.
+
+## Déclation d'une fonction
+
+```ts
+// Le type du retour est déduit/inféré
+function sum(a: number, b: number) {
+  return a + b;
+}
+```
+
+```ts
+// Le type du retour est défini
+function sum(a: number, b: number): number {
+  return a + b;
+}
+```
+
+Dans les exemples ci-dessous, nous utiliserons des types de retour explicites, mais techniquement, il n'est pas nécessaire de le préciser.
+
+## Expression d'une fonction
+
+```ts
+// expression d'une fonction nommée
+const sum = function sum(a: number, b: number): number {
+  return a + b;
+};
+```
+
+```ts
+// expression d'une fonction anonyme
+const sum = function (a: number, b: number): number {
+  return a + b;
+};
+```
+
+```ts
+// expression d'une fonction fléchée
+const sum = (a: number, b: number): number => {
+  return a + b;
+};
+```
+
+```ts
+// expression d'une fonction implicite
+const sum = (a: number, b: number): number => a + b;
+// Le retour implicite d'un objet nécessite des parenthèses pour désambiguïser les accolades.
+```
+
+```ts
+const sum = (a: number, b: number): { result: number } => ({ result: a + b });
+```
+
+Vous pouvez également ajouter une annotation de type à côté de la variable, et la fonction elle-même assumera alors ces types :
+
+```ts
+const sum: (a: number, b: number) => number = (a, b) => a + b;
+```
+
+Vous pouvez également extraire le type
+
+```ts
+type MathFn = (a: number, b: number) => number;
+
+const sum: MathFn = (a, b) => a + b;
+```
+
+Vous pouvez aussi utiliser la syntaxe du type d'objet :
+
+```ts
+type MathFn = {
+  (a: number, b: number): number;
+};
+
+const sum: MathFn = (a, b) => a + b;
+```
+
+Ce qui peut être utile si vous voulez ajouter une propriété typée à la fonction :
+
+```ts
+type MathFn = {
+  (a: number, b: number): number;
+  operator: string;
+};
+
+const sum: MathFn = (a, b) => a + b;
+sum.operator = '+';
+```
+
+Cela peut également être fait avec une interface :
+
+```ts
+interface MathFn {
+  (a: number, b: number): number;
+  operator: string;
+}
+const sum: MathFn = (a, b) => a + b;
+sum.operator = '+';
+```
+
+Et puis il y a `declare function` et `declare namespace` qui sont destinés à dire : "Hé, il existe une variable avec ce nom et ce type".
+Nous pouvons l'utiliser pour créer le type, puis utiliser `typeof` pour affecter ce type à notre fonction.
+Vous trouverez souvent `declare` utilisé dans les fichiers `.d.ts` pour déclarer les types des bibliothèques.
+
+```ts
+declare function MathFn(a: number, b: number): number;
+
+declare namespace MathFn {
+  let operator: '+';
+}
+
+const sum: typeof MathFn = (a, b) => a + b;
+sum.operator = '+';
+```
+
+Si j'ai le choix entre le type, l'interface et la fonction `declare`, <b>je pense que je préfère personnellement le type</b>,
+sauf si j'ai besoin de l'extensibilité qu'offre l'interface.
+Je n'utiliserais vraiment `declare` que si je voulais vraiment informer le compilateur de quelque chose qu'il ne connaît pas encore (comme une bibliothèque).
+
+## Paramètres par défaut et optionnels dans une fonction Typescript
+
+### Paramètre optionnel d'une fonction Typescript
+
+```ts
+const sum = (a: number, b?: number): number => a + (b ?? 0);
+```
+
+Notez que l'ordre est important ici. Si vous rendez un paramètre facultatif, tous les paramètres suivants doivent l'être également.
+En effet, il est possible d'appeler `sum(1)` mais pas `sum(, 2)`. Cependant, il est possible d'appeler `sum(indéfini, 2)`
+et si c'est ce que vous voulez activer, vous pouvez le faire aussi :
+
+```ts
+const sum = (a: number | undefined, b: number): number => (a ?? 0) + b;
+```
+
+### Paramètre par défaut d'une fonction Typescript
+
+Lorsque j'écrivais ceci, je pensais qu'il serait inutile d'utiliser des paramètres par défaut sans rendre ce paramètre optionnel,
+mais il s'avère que lorsque vous avez une valeur par défaut, TypeScript la traite comme un paramètre optionnel. Donc cela fonctionne :
+
+```ts
+const sum = (a: number, b: number = 0): number => a + b;
+sum(1); // résultat 1
+sum(2, undefined); // résultat 2
+```
+
+Cet exemple est donc fonctionnellement équivalent à :
+
+```ts
+const sum = (a: number, b: number | undefined = 0): number => a + b;
+```
+
+Il est intéressant de noter que cela signifie également que si vous souhaitez que le premier argument soit facultatif
+mais que le second soit obligatoire, vous pouvez le faire sans utiliser `| undefined`.
+
+```ts
+const sum = (a: number = 0, b: number): number => a + b;
+
+sum(undefined, 3); // résultat 3
+```
+
+Toutefois, lorsque vous extrayez le type, vous devez ajouter manuellement le signe `| undefined`, car `= 0` est une expression JavaScript et non un type.
+
+```ts
+type MathFn = (a: number | undefined, b: number) => number;
+
+const sum: MathFn = (a = 0, b) => a + b;
+```
+
+## Paramètres du reste (Rest parameters)
+
+Rest params est une fonctionnalité JavaScript qui vous permet de rassembler le "reste" des arguments d'un appel de fonction dans un tableau.
+Vous pouvez les utiliser à n'importe quelle position de paramètre (premier, deuxième, troisième, etc.).
+La seule exigence est qu'il s'agisse du dernier paramètre.
+
+```ts
+const sum = (a: number = 0, ...rest: Array<number>): number => {
+  return rest.reduce((acc, n) => acc + n, a);
+};
+```
+
+Et vous pouvez extraire le type :
+
+```ts
+type MathFn = (a?: number, ...rest: Array<number>) => number;
+
+const sum: MathFn = (a = 0, ...rest) => rest.reduce((acc, n) => acc + n, a);
+```
+
+## Propriétés et méthodes des objets
+
+### Méthodes des objets dans une fonction Typescript
+
+```ts
+const math = {
+  sum(a: number, b: number): number {
+    return a + b;
+  },
+};
+```
+
+### Propriété comme expression de fonction :
+
+```ts
+const math = {
+  sum: function sum(a: number, b: number): number {
+    return a + b;
+  },
+};
+```
+
+Propriété en tant qu'expression de fonction fléchée (avec retour implicite) :
+
+```ts
+const math = {
+  sum: (a: number, b: number): number => a + b,
+};
+```
+
+Malheureusement, pour extraire le type, vous ne pouvez pas taper la fonction elle-même, vous devez taper l'objet qui l'entoure.
+Il est impossible d'annoter la fonction avec un type lorsqu'elle est définie dans un objet littéral :
+
+```ts
+type MathFn = (a: number, b: number) => number;
+
+const math: { sum: MathFn } = {
+  sum: (a, b) => a + b,
+};
+```
+
+De plus, si vous voulez lui ajouter une propriété comme dans certains des exemples ci-dessus,
+il est impossible de le faire dans l'objet littéral.
+Vous devez extraire complètement la définition de la fonction :
+
+```ts
+type MathFn = {
+  (a: number, b: number): number;
+  operator: string;
+};
+const sum: MathFn = (a, b) => a + b;
+sum.operator = '+';
+
+const math = { sum };
+```
+
+Vous avez peut-être remarqué que cet exemple est identique à un exemple précédent avec seulement l'ajout de la const `math = {sum}`.
+Donc oui, il n'y a aucun moyen de faire tout cela en ligne avec la déclaration d'objet.
+
+## Comment typer les fonctions dans les classes avec Typescript
+
+Les classes elles-mêmes sont des fonctions, mais elles sont spéciales (elles doivent être invoquées avec `new`), mais cette section traitera de la façon dont les fonctions sont définies dans le corps de la classe.
+
+Voici une méthode ordinaire, la forme la plus courante d'une fonction dans le corps d'une classe :
+
+```ts
+class MathUtils {
+  sum(a: number, b: number): number {
+    return a + b;
+  }
+}
+
+const math = new MathUtils();
+math.sum(1, 2);
+```
+
+Vous pouvez également utiliser un champ de classe si vous souhaitez que la fonction soit liée à l'instance spécifique de la classe :
+
+```ts
+class MathUtils {
+  sum = (a: number, b: number): number => {
+    return a + b;
+  };
+}
+
+// Faire cela comme ça vous autorise à :
+const math = new MathUtils();
+const sum = math.sum;
+sum(1, 2);
+
+// mais cela a aussi un coût qui annule les gains de performance que vous obtenez
+// en choisissant une classe plutôt qu'un objet ordinaire, donc...
+```
+
+Et ensuite vous pouvez extraire ces types. Voici à quoi cela ressemble avec notre premier exemple
+
+```ts
+interface MathUtilsInterface {
+  sum(a: number, b: number): number;
+}
+
+class MathUtils implements MathUtilsInterface {
+  sum(a: number, b: number): number {
+    return a + b;
+  }
+}
+```
+
+Il est intéressant de noter qu'il semble que vous devez toujours définir les types de la fonction, même si ceux-ci font partie de l'interface qu'elle est censée implémenter 🤔 🤷♂️.
+
+Une dernière remarque. En TypeScript, vous avez aussi `public`, `private` et `protected`. Personnellement, je n'utilise pas si souvent les classes et je n'aime pas utiliser ces fonctionnalités particulières de TypeScript.
+
+JavaScript aura bientôt une syntaxe spéciale pour les membres privés, ce qui est génial [en savoir plus](https://github.com/tc39/proposal-class-fields).
+
+## Les Modules
+
+L'importation et l'exportation de définitions de fonctions fonctionnent de la même manière qu'avec n'importe quel autre élément.
+Là où les choses deviennent uniques pour TypeScript, c'est si vous voulez écrire un fichier `.d.ts` avec une déclaration de module.
+Prenons par exemple notre fonction `sum` comme exemple :
+
+```ts
+const sum = (a: number, b: number): number => a + b;
+sum.operator = '+';
+```
+
+Voici ce que nous ferions en supposant que nous l'exportons par défaut :
+
+```ts
+declare const sum: {
+  (a: number, b: number): number;
+  operator: string;
+};
+export default sum;
+```
+
+Et dans le cas où nous souhaitons un export nommé :
+
+```ts
+declare const sum: {
+  (a: number, b: number): number;
+  operator: string;
+};
+export { sum };
+```
+
+## Surcharges
+
+J'ai écrit sur ce sujet en particulier et vous pouvez le lire : [Définir des types de surcharge de fonction avec TypeScript](https://kentcdodds.com/blog/define-function-overload-types-with-type-script). Voici l'exemple de cet article :
+
+```ts
+type asyncSumCb = (result: number) => void;
+// define all valid function signatures
+function asyncSum(a: number, b: number): Promise<number>;
+function asyncSum(a: number, b: number, cb: asyncSumCb): void;
+// define the actual implementation
+// notice cb is optional
+// also notice that the return type is inferred, but it could be specified
+// as `void | Promise<number>`
+function asyncSum(a: number, b: number, cb?: asyncSumCb) {
+  const result = a + b;
+  if (cb) return cb(result);
+  else return Promise.resolve(result);
+}
+```
+
+En fait, il s'agit de définir la fonction plusieurs fois et de ne l'implémenter que la dernière fois. Il est important que les types de l'implémentation supportent tous les types de surcharge, c'est pourquoi le `cb` est optionnel ci-dessus.
+
+## Générateurs
+
+Je n'ai pas utilisé une seule fois un générateur dans du code de production... Mais quand j'ai joué un peu avec dans la cour de récréation de TypeScript, il n'y avait pas grand chose à faire pour le cas simple :
+
+```ts
+function* generator(start: number) {
+  yield start + 1;
+  yield start + 2;
+}
+
+var iterator = generator(0);
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+```
+
+TypeScript déduit correctement que iterator.next() renvoie un objet du type suivant :
+
+```ts
+type IteratorNextType = {
+  value: number | void;
+  done: boolean;
+};
+```
+
+Si vous souhaitez que la valeur d'achèvement de l'expression de rendement soit protégée contre les erreurs de type, ajoutez une annotation de type à la variable à laquelle vous l'affectez :
+
+```ts
+function* generator(start: number) {
+  const newStart: number = yield start + 1;
+  yield newStart + 2;
+}
+
+var iterator = generator(0);
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next(3)); // { value: 5, done: false }
+console.log(iterator.next()); // { value: undefined, done: true }
+```
+
+TypeScript déduit correctement que iterator.next() renvoie un objet du type suivant :
+
+```ts
+type IteratorNextType = {
+  value: number | void;
+  done: boolean;
+};
+```
+
+Et maintenant, si vous essayez d'appeler `iterator.next('3')` au lieu de `iterator.next(3)`, vous obtiendrez une erreur de compilation 🎉.
+
+## Comment typer les fonctions asynchrones avec Typescript ?
+
+Les fonctions `async/await` en TypeScript fonctionnent exactement de la même manière qu'en JavaScript et la seule différence dans leur typage est que le type de retour sera toujours un générique `Promise`.
+
+```ts
+const sum = async (a: number, b: number): Promise<number> => a + b;
+```
+
+```ts
+async function sum(a: number, b: number): Promise<number> {
+  return a + b;
+}
+```
+
+## Les fonctions avec des types génériques
+
+Déclaration d'une fonction
+
+```ts
+function arrayify2<Type>(a: Type): Array<Type> {
+  return [a];
+}
+```
+
+Malheureusement, avec une fonction flèchée (lorsque TypeScript est configuré pour JSX), l'ouverture `<` de la fonction est ambiguë pour le compilateur. "Est-ce de la syntaxe générique ? Ou est-ce du JSX ?" Vous devez donc ajouter un petit quelque chose pour l'aider à désambiguïser. Je pense que la chose la plus simple à faire est de `extends unknown` :
+
+```ts
+const arrayify = <Type extends unknown>(a: Type): Array<Type> => [a];
+```
+
+Ce qui nous montre commodément la syntaxe des extensions dans les génériques.
+
+### Protection de type (Type Guards)
+
+Une protection de type est un mécanisme permettant de réduire le nombre de types. Par exemple, il vous permet de réduire quelque chose qui est `string | number` à une chaîne ou à un nombre. Il existe des mécanismes intégrés pour cela (comme typeof x === 'string'), mais vous pouvez également créer les vôtres. Voici l'un de mes préférés ([chapeau à mon ami Peter](https://twitter.com/aprillion0042) qui me l'a montré à l'origine) :
+
+Vous avez un tableau avec des valeurs erronées et vous voulez les supprimer :
+
+```ts
+// Array<number | undefined>
+const arrayWithFalsyValues = [1, undefined, 0, 2];
+```
+
+En JavaScript classique nous pouvons faire :
+
+```ts
+// Array<number | undefined>
+const arrayWithoutFalsyValues = arrayWithFalsyValues.filter(Boolean);
+```
+
+Malheureusement, TypeScript ne considère pas qu'il s'agit d'une garde de rétrécissement de type, donc le type est toujours `Array<number | undefined>` (aucun rétrécissement appliqué).
+
+Nous pouvons donc écrire notre propre fonction et indiquer au compilateur qu'elle renvoie vrai/faux pour savoir si l'argument donné est d'un type spécifique. Pour nous, nous dirons que notre fonction renvoie vrai si le type de l'argument donné n'est pas inclus dans l'un des types de valeur `falsy`.
+
+```ts
+type FalsyType = false | null | undefined | '' | 0;
+function typedBoolean<ValueType>(
+  value: ValueType
+): value is Exclude<ValueType, FalsyType> {
+  return Boolean(value);
+}
+```
+
+Et avec ça nous pouvons faire
+
+```ts
+// Array<number>
+const arrayWithoutFalsyValues = arrayWithFalsyValues.filter(typedBoolean);
+```
+
+Woo!
+
+## Fonctions d'assertion
+
+Vous savez que parfois vous faites des vérifications au moment de l'exécution pour être plus sûr de quelque chose ? Par exemple, lorsqu'un objet peut avoir une propriété avec une valeur ou nulle, vous voulez vérifier si elle est nulle et peut-être lancer une erreur si elle est nulle. Voici comment vous pouvez faire quelque chose comme ça :
+
+```ts
+type User = {
+  name: string;
+  displayName: string | null;
+};
+
+function logUserDisplayNameUpper(user: User) {
+  if (!user.displayName) throw new Error('Oh no, user has no displayName');
+  console.log(user.displayName.toUpperCase());
+}
+```
+
+TypeScript accepte `user.displayName.toUpperCase()` parce que l'instruction if est une garde de type qu'il comprend. Maintenant, disons que vous voulez prendre cette vérification `if` et la mettre dans une fonction :
+
+```ts
+type User = {
+  name: string;
+  displayName: string | null;
+};
+
+function assertDisplayName(user: User) {
+  if (!user.displayName) throw new Error('Oh no, user has no displayName');
+}
+
+function logUserDisplayName(user: User) {
+  assertDisplayName(user);
+  console.log(user.displayName.toUpperCase());
+}
+```
+
+Maintenant, TypeScript n'est plus content parce que l'appel à `assertDisplayName` n'est pas une protection de type suffisante. Je dirais que c'est une limitation de la part de TypeScript. Hé, aucune technologie n'est parfaite. Quoi qu'il en soit, nous pouvons aider TypeScript un peu en lui disant que notre fonction fait une assertion :
+(voir ligne 8)
+
+```ts
+type User = {
+  name: string;
+  displayName: string | null;
+};
+
+function assertDisplayName(
+  user: User
+): asserts user is User & { displayName: string } {
+  if (!user.displayName) throw new Error('Oh no, user has no displayName');
+}
+
+function logUserDisplayName(user: User) {
+  assertDisplayName(user);
+  console.log(user.displayName.toUpperCase());
+}
+```
+
+Et c'est une autre façon de transformer notre fonction en une fonction de rétrécissement de type !
+
+## Conclusion
+
+Ce n'est certainement pas tout, mais c'est une grande partie de la syntaxe commune que je me retrouve à écrire lorsque je traite des fonctions dans TypeScript. J'espère que cela vous a été utile ! Ajoutez cette page à vos favoris et partagez-la avec vos amis 😘
+
+(crédit photo : Nubelson Fernandes sur unsplash.com)

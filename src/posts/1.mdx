@@ -1,0 +1,44 @@
+---
+title: Comment réduire le TTFB (Time to first bytes)
+description: Découvrez 6 leviers pour optimiser le TTFB de votre application web ou de votre site internet.
+date: '2021-10-31'
+image: '/images/nettoyage.jpg'
+slug: 'comment-reduire-le-ttfb'
+---
+
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/typescript-fonction.jpg';
+
+# Comment réduire le TTFB
+
+<Image alt={`Comment optimiser le TTFB`} src={banner} />
+
+Dans le dernier billet, nous avons parlé du Time To First Byte (TTFB), c'est-à-dire du paramètre utilisé pour mesurer la réactivité du serveur web. En quelques mots, le TTFB est le temps qui s'écoule entre une demande du client HTTP et la réception du premier octet de la page web.
+
+Il s'agit d'une dimension critique pour tout site Web, car elle affecte le classement et l'expérience de l'utilisateur. Il est donc très important que la valeur TTFB soit la plus faible possible. Dans l'article d'aujourd'hui nous allons parler de cela, et nous allons vous donner quelques conseils pour vous aider à optimiser votre Time To First Byte. Dans les lignes qui suivent, vous trouverez quelques conseils pour accélérer le serveur web et obtenir une meilleure valeur TTFB.
+
+## 6 façons d'améliorer le TTFB :
+
+### 1. Utiliser un réseau de diffusion de contenu
+
+Un réseau de diffusion de contenu (CDN) est un réseau de serveurs géographiquement distribué qui permet aux utilisateurs de télécharger les données des sites Web qu'ils visitent en utilisant le nœud de réseau le plus proche. De cette façon, le site web sera plus rapide tant au niveau du téléchargement que du chargement des pages et l'expérience de l'utilisateur sera améliorée. L'utilisation d'un CDN n'est pas nécessaire pour tous les types de sites web, il est donc utile de comprendre s'il est judicieux d'utiliser ce service ou non.
+
+### 2. Optimiser le code de l'application
+
+Le code de l'application est un élément crucial de l'optimisation du site Web. Plusieurs actions permettent d'accélérer la TTFB en ce qui concerne le code de l'application : ajouter un équilibreur de charge et mettre en cache le contenu statique et dynamique, mettre à jour le logiciel installé sur le serveur web, utiliser un serveur Reverse Proxy pour accélérer les applications et les sécuriser. En outre, compressez les données et mettez en œuvre le HTTP/2, ainsi que la surveillance des performances du serveur web et des activités en direct pour identifier les éventuels goulets d'étranglement.
+
+### 3. Optimiser les requêtes de la base de données
+
+Pour optimiser les requêtes de la base de données, vous devez tout d'abord créer correctement les index et ne récupérer que les données dont vous avez réellement besoin. En outre, évitez d'utiliser des fonctions à gauche de l'opérateur, afin de ne pas avoir à lire l'ensemble de la base de données pour répondre à la requête. Évitez également les sous-requêtes corrélées, car elles dépendent d'autres requêtes et ralentissent le processus.
+
+### 4. Réduire les requêtes HTTP
+
+Pour réduire les requêtes HTTP, vous devez vérifier le nombre de requêtes que votre site Web effectue actuellement et supprimer les images inutiles. Une fois cette étape franchie, vous pouvez réduire la taille des fichiers des images restantes et analyser les facteurs susceptibles d'affecter la vitesse de chargement. D'autres choses que vous pouvez faire pour optimiser le TTFB sont de rendre JavaScript asynchrone et de combiner les fichiers CSS ensemble.
+
+### 5. Assurer un temps de réponse plus rapide du serveur
+
+Même ici, il est important d'intervenir sur les fichiers CSS et JavaScript et de combiner les fichiers externes. Dans certains cas, vous pouvez utiliser de petits fichiers CSS et JavaScript en ligne, en les plaçant dans le fichier HTML lui-même, de sorte que vous n'ayez pas besoin de ressources externes et qu'aucun appel supplémentaire ne soit nécessaire pour eux. Il est également important de différer les images, car cela permet d'économiser de la bande passante et de réduire le temps de chargement des pages.
+
+### 6. Utilisez le cache RFPL (Respond First, Process Later)
+
+Avec cette méthode de cache, l'utilisateur voit immédiatement la réponse précédemment mise en cache et, dans le même temps, le serveur continue de traiter la demande en arrière-plan. Ainsi, les utilisateurs ne sont pas obligés d'attendre la réponse.

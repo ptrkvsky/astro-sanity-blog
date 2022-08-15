@@ -1,0 +1,45 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type {Frontmatter} from "@interfaces/Frontmatter";
+import "@features/blog/style/post.css"
+import TableOfContent from "@features/blog/components/TableOfContent"
+import getSchemaBlogPosting from "src/helpers/getSchemaBlogPosting";
+import type { AstroComponentFactory } from "astro/dist/types/runtime/server";
+import type { MarkdownHeading } from "astro";
+
+interface AstroProps {
+  MdxContent: AstroComponentFactory
+  frontmatter: Frontmatter
+  getHeadings: () => Promise<MarkdownHeading[]>
+}
+
+export async function getStaticPaths() {
+  return Promise.all((await Astro.glob('../../../content/*.mdx'))
+    // .filter((page) => !page.frontmatter.draft) // skip drafts
+    .map(async ({ default: MdxContent, frontmatter,getHeadings   }) => {
+        return {
+          params: { slug: frontmatter.slug || "index" },
+          props: { 
+            MdxContent,
+            getHeadings,
+            frontmatter:  frontmatter,
+          }
+        }
+     })
+  ) 
+}
+const { MdxContent, frontmatter, getHeadings } = Astro.props as AstroProps;
+const schema = getSchemaBlogPosting(frontmatter)
+const headings = await getHeadings()
+
+---
+
+<BaseLayout title={frontmatter.title} schema={schema}>
+
+  <div class="max-w-5xl  mx-auto">
+    <TableOfContent headings={headings} />
+    <p class="mb-10 text-sm text-gray-500 dark:text-gray-400">Temps de lecture <span class="font-semibold">{frontmatter.minutesRead} minutes</span></p>
+    <MdxContent />
+  </div>
+</BaseLayout>
+

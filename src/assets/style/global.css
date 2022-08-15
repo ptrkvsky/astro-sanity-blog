@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Polysans';
+  src: url('/assets/fonts/PolySans-Neutral.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'Polysans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #212529;
+}
+
+h1 {
+  @apply text-2xl;
+}
+
+code {
+  overflow: scroll !important;
+}

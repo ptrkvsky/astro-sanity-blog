@@ -1,0 +1,31 @@
+---
+import '@assets/style/global.css'
+import type {WithContext} from 'schema-dts';
+import type {BlogPosting} from 'schema-dts';
+
+interface Props {
+  title: string;
+  schema: WithContext<BlogPosting>;
+}
+
+const { title, schema } = Astro.props as Props;
+---
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+	</head>
+  <head>
+    <!-- Add other Head elements here, like styles and meta tags. -->
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- 2. Rendered HTML will be passed into the default slot. -->
+    <slot />
+  </body>
+</html>

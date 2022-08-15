@@ -1,0 +1,37 @@
+{
+  "name": "@example/basics",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "devDependencies": {
+    "@astrojs/image": "^0.3.4",
+    "@astrojs/mdx": "^0.9.0",
+    "@astrojs/react": "^1.0.0",
+    "@astrojs/sitemap": "^1.0.0",
+    "@astrojs/tailwind": "^1.0.0",
+    "@types/react": "^18.0.17",
+    "astro": "^1.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.1.8"
+  },
+  "dependencies": {
+    "@portabletext/react": "^1.0.6",
+    "@sanity/block-content-to-react": "^3.0.0",
+    "@sanity/client": "^3.3.3",
+    "mdast-util-to-string": "^3.1.0",
+    "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^6.1.1",
+    "rehype-slug": "^5.0.1",
+    "rehype-toc": "^3.0.2",
+    "remark": "^14.0.2",
+    "remark-toc": "^8.0.1",
+    "schema-dts": "^1.1.0"
+  }
+}

@@ -26,24 +26,61 @@ strong {
   @apply mb-3 text-base;
 }
 
+blockquote {
+  @apply relative italic my-7 w-fit px-12 py-4 bg-gray-200 border-l-4 border-gray-300;
+}
+
+blockquote p {
+  @apply mb-0;
+}
+
+blockquote:before {
+  content: '“';
+  font-family: 'Times New Roman', serif;
+  font-size: 6em;
+  font-weight: bold;
+  position: absolute;
+  left: -8px;
+  top: 4px;
+  opacity: 0.25;
+}
+
+pre {
+  @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
+}
+
+.post {
+  @apply relative justify-between  max-w-6xl mx-auto flex;
+}
+
+.wrapper-table-of-content {
+  @apply max-w-xs  max-h-screen  sticky order-last top-0;
+}
+
 .depth {
   @apply mb-0 text-sm;
 }
+
 .depth-2 {
   @apply ml-2;
 }
+
 .depth-3 {
   @apply ml-4;
 }
+
 .depth-3 {
   @apply ml-6;
 }
+
 .depth-4 {
   @apply ml-8;
 }
+
 .depth-5 {
   @apply ml-10;
 }
+
 .depth-6 {
   @apply ml-12;
 }

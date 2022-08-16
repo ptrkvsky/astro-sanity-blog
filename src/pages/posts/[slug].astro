@@ -35,11 +35,14 @@ const headings = await getHeadings()
 ---
 
 <BaseLayout title={frontmatter.title} schema={schema}>
-
-  <div class="max-w-5xl  mx-auto">
-    <TableOfContent headings={headings} />
-    <p class="mb-10 text-sm text-gray-500 dark:text-gray-400">Temps de lecture <span class="font-semibold">{frontmatter.minutesRead} minutes</span></p>
-    <MdxContent />
+  <div class="post">
+    <aside class="wrapper-table-of-content">
+      <TableOfContent headings={headings} />
+    </aside>
+    <article class="max-w-2xl ">
+      <p class="mb-10 text-sm text-gray-500 dark:text-gray-400">Temps de lecture <span class="font-semibold">{frontmatter.minutesRead} minutes</span></p>
+      <MdxContent />
+    </article>
   </div>
 </BaseLayout>
 

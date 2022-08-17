@@ -27,7 +27,7 @@ strong {
 }
 
 blockquote {
-  @apply relative italic my-7 w-fit px-12 py-4 bg-gray-200 border-l-4 border-gray-300;
+  @apply relative italic my-7 w-full px-12 py-4 bg-indigo-50 border-l-4 border-gray-300;
 }
 
 .post___table-of-content___heading {
@@ -36,7 +36,7 @@ blockquote {
 }
 
 blockquote p {
-  @apply mb-0;
+  @apply m-0;
 }
 
 blockquote:before {

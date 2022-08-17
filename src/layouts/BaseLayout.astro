@@ -1,23 +1,24 @@
 ---
 import '@assets/style/global.css'
-import type {WithContext} from 'schema-dts';
+import type {Graph, WithContext} from 'schema-dts';
 import type {BlogPosting} from 'schema-dts';
 
 interface Props {
   title: string;
-  schema: WithContext<BlogPosting>;
+  description: string;
+  schema: WithContext<BlogPosting> | Graph;
 }
 
-const { title, schema } = Astro.props as Props;
+const { title, schema, description } = Astro.props as Props;
 ---
-<html>
+<html lang="fr-FR">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-
+    <meta name="description" content={description} />
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 	</head>
   <head>

@@ -10,7 +10,6 @@ export default function TableOfContent({ headings }: Props) {
   const ids = headings.map((heading) => heading.slug);
   const activeSlug = useScrollSpy(ids, { rootMargin: '0% 0% -25% 0%' });
 
-  console.log(activeSlug);
   return (
     <>
       <p className=" post___table-of-content___heading">Table des matières</p>

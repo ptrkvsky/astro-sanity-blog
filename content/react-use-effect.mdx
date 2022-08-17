@@ -1,0 +1,354 @@
+---
+category: 'React'
+date: '2022-01-12'
+dateModified: '12 January 2022'
+datePublished: '12 January 2022'
+description: Tout savoir sur la fonction de nettoyage à utiliser dnas le hook useEffect. Elle pourra vous être utile dans bien des situations, notamment si vous rencontrez l'erreur suivante - Warning  Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
+image: '/images/use-effect.webpb'
+layout: '../src/layouts/LayoutPost.astro'
+slug: 'comment-reduire-le-ttfb'
+title: React fonction de retour et useEffect
+---
+
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/use-effect.webp';
+
+<Image
+  alt={`Nettoyage fonction de retour react`}
+  src={banner}
+  width={774}
+  height={1161}
+/>
+
+La fonction de nettoyage useEffect de React préserve les applications de comportements indésirables comme les fuites de mémoire en nettoyant les effets. Ce faisant, nous pouvons optimiser les performances de notre application.
+
+Pour commencer cet article, vous devez avoir une compréhension de base de ce qu'est `useEffect`, y compris son utilisation pour récupérer des données d'une API.
+Cet article expliquera la fonction de nettoyage du _Hook_ `useEffect` et, si tout va bien, à la fin de cet article, vous devriez être en mesure d'utiliser confortablement la fonction de nettoyage.
+
+## Qu'est-ce que la fonction de nettoyage `UseEffect` ?
+
+Comme son nom l'indique, la fonction nettoyage de `useEffect` est une fonction du _Hook_ `useEffect` qui nous permet de mettre de l'ordre dans notre code avant que notre composant ne se démonte.
+Lorsque notre code s'exécute et se ré-exécute pour chaque rendu, `useEffect` fait également le ménage après lui-même à l'aide de la fonction cleanup.
+
+Le Hook `useEffect` est conçu de manière à ce que nous puissions renvoyer une fonction à l'intérieur de celui-ci, et c'est dans cette fonction de retour que s'effectue le nettoyage.
+La fonction de nettoyage évite les fuites de mémoire (_memory leak_) et supprime certains comportements inutiles et indésirables.
+
+Notez que vous ne mettez pas non plus l'état à jour dans la fonction de retour :
+
+```jsx
+useEffect(() => {
+  effet;
+  return () => {
+    nettoyage;
+  };
+}, [dépendance]);
+```
+
+## Pourquoi la fonction de nettoyage est-elle utile ?
+
+Comme indiqué précédemment, la fonction de nettoyage useEffect aide les développeurs à nettoyer les effets qui empêchent les comportements indésirables et optimise les performances de l'application.
+
+Cependant, il est pertinent de noter que la fonction de nettoyage useEffect ne s'exécute pas seulement lorsque notre composant veut démonter, elle s'exécute également juste avant l'exécution du prochain effet planifié.
+
+En fait, après l'exécution de notre effet, le prochain effet planifié est généralement basé sur la dépendance (tableau) :
+
+```jsx
+useEffect(() => {
+  // La dépendance est un tableau
+  useEffect( callback, dependency )
+```
+
+Par conséquent, lorsque notre effet dépend de notre prop ou chaque fois que nous mettons en place quelque chose qui persiste, nous avons alors une raison d'appeler la fonction de nettoyage.
+
+Examinons ce scénario : imaginons que nous obtenions une récupération d'un utilisateur particulier par le biais de l'id d'un utilisateur et que, avant que la récupération ne soit terminée, nous changions d'avis et essayions d'obtenir un autre utilisateur. À ce moment-là, la prop, ou dans ce cas, l'id, se met à jour alors que la demande de fetch précédente est toujours en cours.
+
+Il nous faut alors interrompre le fetch à l'aide de la fonction cleanup afin de ne pas exposer notre application à une fuite de mémoire.
+
+## Quand devons-nous utiliser la fonction de nettoyage du `useEffect`
+
+Disons que nous avons un composant React qui récupère et rend des données. Si notre composant se démonte avant que notre promesse ne soit résolue, useEffect tentera de mettre à jour l'état (sur un composant non monté) et enverra une erreur qui ressemble à ceci :
+
+<Image
+  alt={`Nettoyage fonction de retour react`}
+  src={`/images/warning-error.png`}
+  width={730}
+  height={71}
+  priority
+/>
+
+> Warning: Can't perform a React state update on an unmounted component. This is
+> a no-op, but it indicates a memory leak in your application. To fix, cancel all
+> subscriptions and asynchronous tasks in the componentWillUnmount method.
+
+Pour corriger cette erreur, nous utilisons la fonction de nettoyage pour la résoudre.
+
+Selon la documentation officielle de [React](https://reactjs.org/docs/hooks-effect.html),
+
+> React effectue le nettoyage lorsque le composant est démonté. Cependant... les effets s'exécutent pour chaque rendu et pas seulement une fois. C'est pourquoi React nettoie également les effets du rendu précédent avant d'exécuter les effets la fois suivante."
+
+Le nettoyage est couramment utilisé pour annuler tous les abonnements effectués et annuler les requêtes de récupération. Maintenant, écrivons un peu de code et voyons comment nous pouvons accomplir ces annulations.
+
+## Nettoyer un abonnement
+
+Pour commencer à nettoyer un abonnement, nous devons d'abord nous désabonner car nous ne voulons pas exposer notre application à des fuites de mémoire et nous voulons optimiser notre application.
+
+Pour nous désabonner de nos abonnements avant que notre composant ne se démonte, définissons notre variable, _isApiSubscribed_, à _true_ et nous pouvons ensuite la définir à false lorsque nous voulons nous démonter :
+
+```jsx
+useEffect(() => {
+  // Définition isApiSubscribed à true
+  const isApiSubscribed = true;
+  axios.get(API).then((response) => {
+    if (isApiSubscribed) {
+      // gestion en cas de réussite
+    }
+  });
+  return () => {
+    // Annulation de tous les abonnements
+    isApiSubscribed = false;
+  };
+}, []);
+```
+
+Dans le code ci-dessus, nous attribuons la valeur true à la variable `isApiSubscribed` et l'utilisons ensuite comme condition pour traiter notre demande de succès.
+Cependant, nous mettons la variable `isApiSubscribed` à `false` lorsque nous démontons notre composant.
+
+## Annuler une requête `fetch`
+
+Il existe plusieurs façons d'annuler les appels de requête de récupération : soit nous utilisons `AbortController`, soit nous utilisons le jeton d'annulation d'Axios.
+
+Pour utiliser `AbortController`, nous devons créer un contrôleur à l'aide du constructeur `AbortController()`. Ensuite, lorsque notre requête de récupération est lancée, nous passons `AbortSignal` comme option dans l'objet option de la requête.
+
+Cela associe le contrôleur et le signal à la requête de récupération et nous permet de l'annuler à tout moment en utilisant `AbortController.abort()` :
+
+```jsx
+useEffect(() => {
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  fetch(API, {
+    signal: signal,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      // Gestion en cas de succès
+    });
+  return () => {
+    // Annuler la requête avant que le composant soit démonté
+    controller.abort();
+  };
+}, []);
+```
+
+Nous pouvons aller plus loin et ajouter une condition d'erreur dans notre `catch` afin que notre requête de récupération ne génère pas d'erreurs lorsque nous abandonnons. Cette erreur se produit parce que, pendant le démontage, nous essayons toujours de mettre à jour l'état lorsque nous gérons nos erreurs.
+
+Ce que nous pouvons faire, c'est écrire une condition et savoir quel type d'erreur nous obtiendrons ; si nous obtenons une erreur d'abandon, alors nous ne voulons pas mettre à jour l'état :
+
+```jsx
+useEffect(() => {
+  const controller = new AbortController();
+  const signal = controller.signal;
+
+  fetch(API, {
+    signal: signal,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      // handle success
+      console.log(response);
+    })
+    .catch((err) => {
+      if (err.name === 'AbortError') {
+        console.log('successfully aborted');
+      } else {
+        // handle error
+      }
+    });
+  return () => {
+    // cancel the request before component unmounts
+    controller.abort();
+  };
+}, []);
+```
+
+Maintenant, même si nous nous impatientons et naviguons vers une autre page avant que notre requête ne soit résolue, nous n'obtiendrons pas à nouveau cette erreur car la requête sera abandonnée avant que le composant ne soit démonté. Si nous obtenons une erreur d'abandon, l'état ne sera pas mis à jour non plus.
+
+Voyons donc comment nous pouvons faire de même en utilisant l'option d'annulation d'Axios, le jeton d'annulation d'Axios,
+
+Nous stockons d'abord le jeton `CancelToken.source()` d'Axios dans une constante nommée source, nous passons le jeton en tant qu'option Axios, puis nous annulons la requête à tout moment avec source.cancel() :
+
+```jsx
+useEffect(() => {
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+  axios
+    .get(API, {
+      cancelToken: source.token,
+    })
+    .catch((err) => {
+      if (axios.isCancel(err)) {
+        console.log('Annulé avec succès');
+      } else {
+        // Gestion de erreurs
+      }
+    });
+  return () => {
+    // Annulation de la requête avant que le composant soit démonté
+    source.cancel();
+  };
+}, []);
+```
+
+Tout comme nous l'avons fait avec `AbortError` dans `AbortController`, Axios nous fournit une méthode appelée `isCancel` qui nous permet de vérifier la cause de notre erreur et de savoir comment gérer nos erreurs.
+
+Si la demande échoue parce que la source Axios abandonne ou annule, nous ne voulons pas mettre à jour l'état.
+
+## Comment utiliser la fonction de nettoyage `useEffect` ?
+
+Voyons un exemple de cas où l'erreur ci-dessus peut se produire et comment utiliser la fonction de nettoyage lorsqu'elle se produit. Commençons par créer deux fichiers : Post et App. Continuez en écrivant le code suivant :
+
+```jsx:post.jsx
+import React, { useState, useEffect } from "react";
+export default function Post() {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
+      .then((res) => res.json())
+      .then((res) => setPosts(res))
+      .catch((err) => setError(err));
+  }, []);
+  return (
+    <div>
+      {!error ? (
+        posts.map((post) => (
+          <ul key={post.id}>
+            <li>{post.title}</li>
+          </ul>
+        ))
+      ) : (
+        <p>{error}</p>
+      )}
+    </div>
+  );
+}
+```
+
+Il s'agit d'un composant post simple qui obtient des messages à chaque rendu et gère les erreurs de récupération.
+
+Ici, nous importons le composant post dans notre composant principal et affichons les messages chaque fois que nous cliquons sur le bouton. Le bouton affiche et cache les messages, c'est-à-dire qu'il monte et démonte notre composant post :
+
+```jsx:app.jsx
+import React, { useState } from "react";
+import Post from "./Post";
+
+const App = () => {
+  const [show, setShow] = useState(false);
+  const showPost = () => {
+    // toggles posts onclick of button
+    setShow(!show);
+  };
+  return (
+    <div>
+      <button onClick={showPost}>Show Posts</button>
+      {show && <Post />}
+    </div>
+  );
+};
+
+export default App;
+```
+
+<Image
+  alt={`Erreur React Can't perform a react state update`}
+  src={`/images/warning-error-2.png`}
+  width={730}
+  height={121}
+/>
+
+Maintenant, pour supprimer cette erreur et arrêter la fuite de mémoire, nous devons implémenter la fonction de nettoyage en utilisant l'une des solutions ci-dessus.
+Dans cet article, nous allons utiliser `AbortController` :
+
+```jsx:post.jsx
+import React, { useState, useEffect } from "react";
+export default function Post() {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
+      .then((res) => res.json())
+      .then((res) => setPosts(res))
+      .catch((err) => {
+        setError(err);
+      });
+    return () => controller.abort();
+  }, []);
+
+  return (
+    <div>
+      {!error ? (
+        posts.map((post) => (
+          <ul key={post.id}>
+            <li>{post.title}</li>
+          </ul>
+        ))
+      ) : (
+        <p>{error}</p>
+      )}
+    </div>
+  );
+}
+```
+
+Nous voyons toujours dans la console que même après avoir interrompu le signal dans la fonction de nettoyage, le démontage génère une erreur. Comme nous l'avons vu précédemment, cette erreur se produit lorsque nous abandonnons l'appel de récupération.
+
+`useEffect` attrape l'erreur de récupération dans le bloc `catch` et essaie ensuite de mettre à jour l'état d'erreur, ce qui déclenche une erreur. Pour arrêter cette mise à jour, nous pouvons utiliser une condition if else et vérifier le type d'erreur que nous obtenons.
+
+S'il s'agit d'une erreur d'abandon, nous n'avons pas besoin de mettre à jour l'état, sinon nous gérons l'erreur :
+
+```jsx:post.jsx
+mport React, { useState, useEffect } from "react";
+
+export default function Post() {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+      fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
+      .then((res) => res.json())
+      .then((res) => setPosts(res))
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log("successfully aborted");
+        } else {
+          setError(err);
+        }
+      });
+    return () => controller.abort();
+  }, []);
+  return (
+    <div>
+      {!error ? (
+        posts.map((post) => (
+          <ul key={post.id}>
+            <li>{post.title}</li>
+          </ul>
+        ))
+      ) : (
+        <p>{error}</p>
+      )}
+    </div>
+  );
+}
+```
+
+Notez que nous ne devons utiliser `err.name === "AbortError"` que lorsque nous utilisons `fetch` et la méthode `axios.isCancel()` lorsque nous utilisons `Axios`.
+
+Avec cela, nous avons terminé !

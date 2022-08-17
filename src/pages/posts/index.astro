@@ -1,27 +1,49 @@
 ---
-const posts = await Astro.glob('../../../content/*.mdx');
----
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>My Cool Astro Site</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Posts</a>
-      <a href="#">Contact</a>
-    </nav>
-    <article>
-{posts.map(post => (
-  <Fragment>
-    <h2>{post.frontmatter.title}</h2>
-    <time>{post.frontmatter.publishDate}</time>
-  </Fragment>
-))}
+import type { Frontmatter } from "@interfaces/Frontmatter";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import type { MarkdownHeading, MDXInstance } from "astro";
+import type { AstroComponentFactory } from "astro/dist/types/runtime/server";
+import getSchemaBlogListing from "src/helpers/getSchemaBlogListing";
 
-</article>
-</body>
-</html>
+interface Post {
+  MdxContent: AstroComponentFactory
+  frontmatter: Frontmatter
+  getHeadings: () => Promise<MarkdownHeading[]>
+}
+
+const posts = await Astro.glob('../../../content/*.mdx');
+
+console.log(posts.map(post => {
+  const {frontmatter} = post;
+  return frontmatter.date;
+}).reverse())
+
+const [mostRecentDate] = posts.map(post => {
+  const {frontmatter} = post;
+  return frontmatter.date;
+}).reverse();
+
+/* SEO */ 
+const title = "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky"
+const description = "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité"
+const schema = getSchemaBlogListing(mostRecentDate)
+---
+
+<BaseLayout title={title} description={description} schema={schema}>
+  <div class="max-w-5xl mx-auto bg-white relative z-10 px-4 md:px-0">
+    <ul id="#breadcrumb">
+      <li><a href="/" title="Johan Petrikovsky développeur React freelance">Accueil</a></li>
+      <li>Articles</li>
+    </ul>
+    <h1>Articles d'un développeur freelance</h1>
+
+    {posts.sort((a, b) => a.frontmatter.category - b.frontmatter.category).map(post => (
+      <h2>{post.frontmatter.category}</h2>
+      <article>
+        <h3>{post.frontmatter.title}</h3>
+        <time>{post.frontmatter.publishDate}</time>
+      </article>
+    ))}
+  </div>
+</BaseLayout>
 

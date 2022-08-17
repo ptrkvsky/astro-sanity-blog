@@ -8,7 +8,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-semibold;
+  @apply font-semibold text-indigo-700;
 }
 
 h2,
@@ -16,18 +16,23 @@ h3,
 h4,
 h5,
 h6 {
-  @apply mb-3 text-xl md:text-3xl;
+  @apply font-semibold text-indigo-700 mt-10 mb-6 text-2xl md:text-3xl;
 }
 
 p,
 ul,
 li,
 strong {
-  @apply mb-3 text-base;
+  @apply my-6 text-base;
 }
 
 blockquote {
   @apply relative italic my-7 w-fit px-12 py-4 bg-gray-200 border-l-4 border-gray-300;
+}
+
+.post___table-of-content___heading {
+  font-family: 'Polysans', 'sans-serif';
+  @apply text-indigo-700  font-semibold text-xl md:text-3xl;
 }
 
 blockquote p {
@@ -49,38 +54,46 @@ pre {
   @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
 }
 
-.post {
-  @apply relative justify-between  max-w-6xl mx-auto flex;
+.time {
+  @apply mb-4 md:mb-10 text-sm text-gray-800 dark:text-gray-400;
+}
+
+.time .highlight {
+  @apply text-indigo-800 dark:text-gray-400;
+}
+
+.wrapper-post {
+  @apply relative md:justify-between max-w-6xl mx-auto md:flex;
 }
 
 .wrapper-table-of-content {
-  @apply max-w-xs  max-h-screen  sticky order-last top-0;
+  @apply md:max-w-xs  max-h-screen sticky order-last top-0;
 }
 
-.depth {
-  @apply mb-0 text-sm;
+li.depth {
+  @apply my-2 text-sm;
 }
 
-.depth-2 {
-  @apply ml-2;
+li.depth-2 {
+  @apply my-2  ml-2;
+}
+
+li.depth-3 {
+  @apply my-2  ml-4;
 }
 
 .depth-3 {
-  @apply ml-4;
-}
-
-.depth-3 {
-  @apply ml-6;
+  @apply my-2  ml-6;
 }
 
 .depth-4 {
-  @apply ml-8;
+  @apply my-2  ml-8;
 }
 
 .depth-5 {
-  @apply ml-10;
+  @apply my-2  ml-10;
 }
 
 .depth-6 {
-  @apply ml-12;
+  @apply my-2  ml-12;
 }

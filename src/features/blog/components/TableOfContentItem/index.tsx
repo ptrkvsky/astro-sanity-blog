@@ -1,33 +1,22 @@
 import type { MarkdownHeading } from 'astro';
-import { type FC, useRef, useContext, useEffect } from 'react';
-import { TocContext } from '../TableOfContent/context';
+import type { FC } from 'react';
 
 interface PropsTableOfContentItem {
   heading: MarkdownHeading;
-  isActive: boolean;
 }
 
 const TableOfContentItem: FC<PropsTableOfContentItem> = ({
   heading,
-  isActive,
 }: PropsTableOfContentItem) => {
-  const refLi = useRef<HTMLLIElement>(null);
-  const { refs, setRefs } = useContext(TocContext);
-
-  useEffect(() => {
-    setRefs([...refs, { slug: heading.slug, refElement: refLi }]);
-  }, []);
-
   return (
     <li
-      ref={refLi}
       id={`li-${heading.slug}`}
-      className={`mb-0 text-sm depth depth-${heading.depth} ${
-        isActive ? 'text-indigo-800' : ''
-      }`}
+      className={`mb-0 text-sm depth px-2 py-1 m-0 border-l-4 border-purple-100;`}
       key={heading.slug}
     >
-      <a href={`#${heading.slug}`}>{heading.text}</a>
+      <a className={`depth-${heading.depth}`} href={`#${heading.slug}`}>
+        {heading.text}
+      </a>
     </li>
   );
 };

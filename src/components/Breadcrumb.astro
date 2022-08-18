@@ -1,0 +1,22 @@
+---
+export interface BreadcrumbItem{
+    name: string;
+    path: string;
+  }
+
+interface AstroProps {
+  breadcrumbItems: BreadcrumbItem[];
+}
+
+const {breadcrumbItems} = Astro.props as AstroProps
+---
+
+<nav id="breadcrumb" class="mt-6 mb-4">
+  <ul class="flex gap-2">
+    {breadcrumbItems.map(({name, path}) => (
+      <li>
+        <a class="text-gray-500 text-sm" href={path}>{name}</a>
+      </li>
+    ))}
+  </ul>
+</nav>

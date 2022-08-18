@@ -3,7 +3,7 @@ import ListingSection from "@features/blog/components/ListingSection.astro";
 import type { CategoryPosts } from "@features/blog/interfaces/CategoryPosts";
 import type { Frontmatter } from "@interfaces/Frontmatter";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { MarkdownHeading, MDXInstance } from "astro";
+import type { MarkdownHeading } from "astro";
 import type { AstroComponentFactory } from "astro/dist/types/runtime/server";
 import getSchemaBlogListing from "src/helpers/getSchemaBlogListing";
 
@@ -47,7 +47,7 @@ const postsFiltered = frontmatters.reduce((acc, curr) => {
 }, [] as CategoryPosts[] )
 ---
 
-<BaseLayout title={title} description={description} schema={schema}>
+<BaseLayout title={title} description={description} schema={schema} hasGradient={true}>
   <div class="max-w-5xl mx-auto  relative z-10 px-4 md:px-0">
     <ul id="breadcrumb">
       <li><a href="/" title="Johan Petrikovsky développeur React freelance">Accueil</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="Breadcrumbs__Caret-sc-1upqnen-1 dnfuPa"><polyline points="9 18 15 12 9 6"></polyline></svg></li>

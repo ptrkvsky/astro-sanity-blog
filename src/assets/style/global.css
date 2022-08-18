@@ -22,3 +22,7 @@ h1 {
 code {
   overflow: scroll !important;
 }
+
+.gradient-main {
+  @apply bg-gradient-to-b bg-fixed via-purple-100 from-pink-100 to-indigo-50;
+}

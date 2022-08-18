@@ -7,9 +7,10 @@ interface Props {
   title: string;
   description: string;
   schema: WithContext<BlogPosting> | Graph;
+  hasGradient?: boolean;
 }
 
-const { title, schema, description } = Astro.props as Props;
+const { title, schema, description, hasGradient} = Astro.props as Props;
 ---
 <html lang="fr-FR">
 	<head>
@@ -25,7 +26,7 @@ const { title, schema, description } = Astro.props as Props;
     <!-- Add other Head elements here, like styles and meta tags. -->
     <title>{title}</title>
   </head>
-  <body class="bg-gradient-to-b bg-fixed min-h-screen  via-purple-100 from-pink-100 to-indigo-50">
+  <body class={`${hasGradient ? "gradient-main" : "" }`}>
     <!-- 2. Rendered HTML will be passed into the default slot. -->
     <slot />
   </body>

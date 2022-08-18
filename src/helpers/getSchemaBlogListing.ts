@@ -3,7 +3,6 @@ import config from 'src/config';
 import getGraphWebsite from './getGraphWebsite';
 
 const getSchemaBlogListing = (dateModified: string) => {
-  console.log(dateModified);
   const website = getGraphWebsite();
   const datePublishedISO = new Date('01 September 2022').toISOString();
   const dateModifiedISO = new Date(dateModified).toISOString();

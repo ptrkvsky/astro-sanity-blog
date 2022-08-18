@@ -25,6 +25,8 @@
     "@portabletext/react": "^1.0.6",
     "@sanity/block-content-to-react": "^3.0.0",
     "@sanity/client": "^3.3.3",
+    "autoprefixer": "^10.4.8",
+    "cssnano": "^5.1.13",
     "mdast-util-to-string": "^3.1.0",
     "reading-time": "^1.5.0",
     "rehype-autolink-headings": "^6.1.1",

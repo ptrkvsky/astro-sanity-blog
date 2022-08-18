@@ -1,4 +1,6 @@
 ---
+import ListingSection from "@features/blog/components/ListingSection.astro";
+import type { CategoryPosts } from "@features/blog/interfaces/CategoryPosts";
 import type { Frontmatter } from "@interfaces/Frontmatter";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { MarkdownHeading, MDXInstance } from "astro";
@@ -11,12 +13,9 @@ interface Post {
   getHeadings: () => Promise<MarkdownHeading[]>
 }
 
+
 const posts = await Astro.glob('../../../content/*.mdx');
 
-console.log(posts.map(post => {
-  const {frontmatter} = post;
-  return frontmatter.date;
-}).reverse())
 
 const [mostRecentDate] = posts.map(post => {
   const {frontmatter} = post;
@@ -27,23 +26,35 @@ const [mostRecentDate] = posts.map(post => {
 const title = "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky"
 const description = "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité"
 const schema = getSchemaBlogListing(mostRecentDate)
+
+const frontmatters = posts.map( post => post.frontmatter) as Frontmatter[] 
+
+const postsFiltered = frontmatters.reduce((acc, curr) => {
+  // Si la catégorie courante n'est pas présente dans l'élément courant
+  if(acc.findIndex(el => el.category === curr.category) === -1) {
+    // Je vais chercher tous les postes de cette catégorie
+    const postsCategory = frontmatters.filter(frontmatter => frontmatter.category === curr.category)
+    // Je créé un nouvel objet catPost avec la catégorie courante  et un tableau vide
+    const newPostCat: CategoryPosts=  {
+      category: curr.category,
+      posts: postsCategory
+    }
+    return [...acc, newPostCat]
+  } else {
+    // Je retourn un nouveau tableau qui spread acc, et ajoute mon nouvel objet fraichement créé
+    return [...acc]
+  }
+}, [] as CategoryPosts[] )
 ---
 
 <BaseLayout title={title} description={description} schema={schema}>
-  <div class="max-w-5xl mx-auto bg-white relative z-10 px-4 md:px-0">
-    <ul id="#breadcrumb">
-      <li><a href="/" title="Johan Petrikovsky développeur React freelance">Accueil</a></li>
+  <div class="max-w-5xl mx-auto  relative z-10 px-4 md:px-0">
+    <ul id="breadcrumb">
+      <li><a href="/" title="Johan Petrikovsky développeur React freelance">Accueil</a> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="Breadcrumbs__Caret-sc-1upqnen-1 dnfuPa"><polyline points="9 18 15 12 9 6"></polyline></svg></li>
       <li>Articles</li>
     </ul>
-    <h1>Articles d'un développeur freelance</h1>
-
-    {posts.sort((a, b) => a.frontmatter.category - b.frontmatter.category).map(post => (
-      <h2>{post.frontmatter.category}</h2>
-      <article>
-        <h3>{post.frontmatter.title}</h3>
-        <time>{post.frontmatter.publishDate}</time>
-      </article>
-    ))}
+    <h1 class="font-semibold text-purple-900 mt-10 mb-6 text-4xl">Articles</h1>
+    {postsFiltered.map(categoryPosts => <ListingSection categoryPosts={categoryPosts} /> )}
   </div>
 </BaseLayout>
 

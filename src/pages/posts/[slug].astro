@@ -37,7 +37,7 @@ const headings = await getHeadings()
 <BaseLayout title={frontmatter.title} schema={schema} description={frontmatter.description}>
   <div class="wrapper-post">
     <aside class="wrapper-table-of-content px-4 md:px-0">
-      <TableOfContent headings={headings} />
+      <TableOfContent client:load headings={headings} />
     </aside>
     <article class="max-w-2xl bg-white relative z-10 px-4 md:px-0">
       <p class="time">Temps de lecture <span class="highlight font-semibold">{frontmatter.minutesRead} minutes</span></p>

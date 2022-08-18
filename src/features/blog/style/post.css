@@ -30,11 +30,6 @@ blockquote {
   @apply relative italic my-7 w-full px-12 py-4 bg-indigo-50 border-l-4 border-gray-300;
 }
 
-.post___table-of-content___heading {
-  font-family: 'Polysans', 'sans-serif';
-  @apply text-indigo-700  font-semibold text-xl md:text-3xl;
-}
-
 blockquote p {
   @apply m-0;
 }

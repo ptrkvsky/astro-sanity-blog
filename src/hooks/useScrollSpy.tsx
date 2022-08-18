@@ -1,32 +1,31 @@
+import type { RefLi } from '@features/blog/components/TableOfContent/context';
 import { useEffect, useState, useRef } from 'react';
 
 export default function useScrollSpy(
-  slugs: string[],
+  refs: RefLi[],
   options: IntersectionObserverInit
 ) {
   const [activeSlug, setActiveSlug] = useState('');
-  const observer = useRef<any>();
+  const observer = useRef<IntersectionObserver | null>(null);
 
-  console.log('this log into the console');
   useEffect(() => {
-    console.log('this console log is not showing up');
-    const elements = slugs.map((slug) => document.getElementById(`#${slug}`));
-    console.log(elements, slugs);
     observer.current?.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
+    const observerInstance = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry?.isIntersecting) {
           setActiveSlug(entry.target.id);
         }
       });
     }, options);
-    elements.forEach((el) => {
-      if (el) {
-        observer.current?.observe(el);
+    observer.current = observerInstance;
+    refs.forEach((ref) => {
+      if (ref && ref.refElement.current) {
+        console.log(ref.refElement.current);
+        observer.current?.observe(ref.refElement.current);
       }
     });
     return () => observer.current?.disconnect();
-  }, [slugs, options]);
+  }, [refs, options]);
 
   return activeSlug;
 }

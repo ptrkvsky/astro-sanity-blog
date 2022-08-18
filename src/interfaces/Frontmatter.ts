@@ -1,4 +1,5 @@
 export interface Frontmatter {
+  category: string;
   date: string; // '31 October 2021'
   dateModified: string; // '31 October 2021'
   datePublished: string;

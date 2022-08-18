@@ -6,7 +6,7 @@ datePublished: '12 January 2022'
 description: Tout savoir sur la fonction de nettoyage à utiliser dnas le hook useEffect. Elle pourra vous être utile dans bien des situations, notamment si vous rencontrez l'erreur suivante - Warning  Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
 image: '/images/use-effect.webpb'
 layout: '../src/layouts/LayoutPost.astro'
-slug: 'comment-reduire-le-ttfb'
+slug: 'react-use-effect'
 title: React fonction de retour et useEffect
 ---
 
@@ -207,15 +207,16 @@ Si la demande échoue parce que la source Axios abandonne ou annule, nous ne vou
 
 Voyons un exemple de cas où l'erreur ci-dessus peut se produire et comment utiliser la fonction de nettoyage lorsqu'elle se produit. Commençons par créer deux fichiers : Post et App. Continuez en écrivant le code suivant :
 
-```jsx:post.jsx
-import React, { useState, useEffect } from "react";
+```jsx
+import React, { useState, useEffect } from 'react';
+
 export default function Post() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
+    fetch('https://jsonplaceholder.typicode.com/posts', { signal: signal })
       .then((res) => res.json())
       .then((res) => setPosts(res))
       .catch((err) => setError(err));

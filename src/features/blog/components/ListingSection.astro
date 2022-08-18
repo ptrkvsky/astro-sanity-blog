@@ -1,0 +1,36 @@
+---
+import type { CategoryPosts } from "../interfaces/CategoryPosts";
+
+interface AstroProps {
+  categoryPosts : CategoryPosts
+}
+
+const {categoryPosts} = Astro.props as AstroProps;
+---
+
+<style>
+  .post-card h3, .post-card .read-more {
+    transition: color 0.15s linear;
+  }
+  .post-card:hover h3, .post-card:hover .read-more {
+    @apply text-purple-500;
+  }
+</style>
+
+<section class="my-10">
+  <h2 class="font-semibold text-purple-900 mt-10 mb-6 text-3xl">{categoryPosts.category}</h2>
+  <ul class="grid grid-cols-1 gap-16 md:grid-cols-2">
+    {categoryPosts.posts.map(post => (
+      <li class="bg-white rounded-lg p-4 md:p-8">
+        <article class="post-card">
+          <a  href={`/posts/${post.slug}`}>
+          <h3 class="font-semibold text-xl mb-4">{post.title}</h3>
+          <p class="mb-4">{post.description}</p> 
+          <span class="read-more font-semibold tracking-wide">En savoir plus</span>
+          </a>
+        </article>
+      </li>
+    ))}
+  </ul>
+  
+</section>

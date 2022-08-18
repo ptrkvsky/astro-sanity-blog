@@ -12,6 +12,8 @@ title: React fonction de retour et useEffect
 
 import { Image } from '@astrojs/image/components';
 import banner from '@assets/images/use-effect.webp';
+import error1 from '@assets/images/warning-error.webp';
+import error2 from '@assets/images/warning-error-2.webp';
 
 <Image
   alt={`Nettoyage fonction de retour react`}
@@ -70,10 +72,9 @@ Disons que nous avons un composant React qui récupère et rend des données. Si
 
 <Image
   alt={`Nettoyage fonction de retour react`}
-  src={`/images/warning-error.png`}
+  src={error1}
   width={730}
   height={71}
-  priority
 />
 
 > Warning: Can't perform a React state update on an unmounted component. This is
@@ -241,9 +242,9 @@ Il s'agit d'un composant post simple qui obtient des messages à chaque rendu et
 
 Ici, nous importons le composant post dans notre composant principal et affichons les messages chaque fois que nous cliquons sur le bouton. Le bouton affiche et cache les messages, c'est-à-dire qu'il monte et démonte notre composant post :
 
-```jsx:app.jsx
-import React, { useState } from "react";
-import Post from "./Post";
+```jsx
+import React, { useState } from 'react';
+import Post from './Post';
 
 const App = () => {
   const [show, setShow] = useState(false);
@@ -264,7 +265,7 @@ export default App;
 
 <Image
   alt={`Erreur React Can't perform a react state update`}
-  src={`/images/warning-error-2.png`}
+  src={error2}
   width={730}
   height={121}
 />
@@ -272,8 +273,8 @@ export default App;
 Maintenant, pour supprimer cette erreur et arrêter la fuite de mémoire, nous devons implémenter la fonction de nettoyage en utilisant l'une des solutions ci-dessus.
 Dans cet article, nous allons utiliser `AbortController` :
 
-```jsx:post.jsx
-import React, { useState, useEffect } from "react";
+```jsx
+import React, { useState, useEffect } from 'react';
 export default function Post() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
@@ -281,7 +282,7 @@ export default function Post() {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
+    fetch('https://jsonplaceholder.typicode.com/posts', { signal: signal })
       .then((res) => res.json())
       .then((res) => setPosts(res))
       .catch((err) => {

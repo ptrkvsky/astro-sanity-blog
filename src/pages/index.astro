@@ -2,14 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 import Card from '../components/Card.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import imgDevelopper from "@assets/images/developpeur-freelance.jpeg";
+import { Image } from '@astrojs/image/components';
+
 
 const schema :any = {}
 ---
 
 <BaseLayout title="Développeur React et Typescript Freelance" description="lorem" schema={schema}>
 	<main>
-		<h1 class="text-3xl font-bold">Développeur <span class="text-gradient">React</span> Freelance</h1>
-		<p class="instructions">
+		<h1 class="text-3xl font-bold text-center">Développeur <span class="text-gradient">React</span> Freelance</h1>
+		<div class="banner mt-4 mb-2">
+			<Image format="avif" width={200} height={200} src={imgDevelopper} alt="Johan Petrikovsyk développeur freelance" />
+		</div>
+		<p class="instructions mt-6 mb-3">
 			Bonjour, je suis Johan Petrikovsky et je suis un développeur freelance spécialisé en Javascript, plus particulièrement React et Typescript<br />
 			Après avoir travaillé comme développeur PHP/Wordpress en agence et réalisé plus d'une cinquantaine de projets, 
 			je propose aujourd'hui mes compétences de développeur front-end en freelance.
@@ -118,12 +124,19 @@ const schema :any = {}
 		padding: 1em;
 		max-width: 60ch;
 	}
+	.banner {
+		max-width: 200px;;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.banner img {
+		border-radius: 100%;
+	}
 
 	
 
 	.instructions {
 		line-height: 1.6;
-		margin: 1rem 0;
 		background: #4f39fa;
 		padding: 1rem;
 		border-radius: 0.4rem;

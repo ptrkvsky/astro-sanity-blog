@@ -10,7 +10,7 @@ interface Props {
 const TableOfContent: FC<Props> = ({ headings }: Props) => {
   return (
     <div className="toc">
-      <p className="mt-4 mb-3 text-purple-900 font-semibold text-xl md:text-3xl">
+      <p className="mt-4 mb-3 text-purple-900 font-semibold text-xl lg:text-3xl">
         Sommaire
       </p>
       <nav id="table-of-content">

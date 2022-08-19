@@ -37,14 +37,14 @@ const headings = await getHeadings()
 const breadcrumbItems: BreadcrumbItem[] = [
   {
     name: "Accueil",
-    path: "/blog"
+    path: "/"
   },
   {
     name: "Articles",
     path: "/posts"
   },
   {
-    name: "Blog",
+    name: frontmatter.title,
     path: "/blog"
   }
 ]
@@ -60,10 +60,10 @@ const breadcrumbItems: BreadcrumbItem[] = [
   </Header>
   <div class={styles.post}>
     <div class={`${styles["wrapper-post"]}`}>
-      <aside class={`${styles["wrapper-table-of-content"]}  px-4 md:px-0`}>
+      <aside class={`${styles["wrapper-table-of-content"]}  px-4 lg:px-0`}>
         <TableOfContent client:load headings={headings} />
       </aside>
-      <article class={`${styles["post-content"]} max-w-2xl bg-white relative z-10 px-4 md:px-0`}>
+      <article class={`${styles["post-content"]} max-w-2xl bg-white relative z-10 px-4 lg:px-0`}>
         <p class={`${styles.time}`}>Temps de lecture <span class={`${styles.highlight} font-semibold`}>{frontmatter.minutesRead} minutes</span></p>
         <MdxContent />
       </article>

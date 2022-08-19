@@ -11,12 +11,19 @@ interface AstroProps {
 const {breadcrumbItems} = Astro.props as AstroProps
 ---
 
-<nav id="breadcrumb" class="mt-6 mb-4">
-  <ul class="flex gap-2">
+<nav id="breadcrumb" class="breadcrumb mt-6 mb-4">
+  <ul class="flex gap-1">
     {breadcrumbItems.map(({name, path}) => (
-      <li>
-        <a class="text-gray-500 text-sm" href={path}>{name}</a>
+      <li class="flex gap-1 text-gray-500 text-sm">
+        <a class="" href={path}>{name}</a>
+        <svg class="separator relative top-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="Breadcrumbs__Caret-sc-1upqnen-1 dnfuPa"><polyline points="9 18 15 12 9 6"></polyline></svg>
       </li>
     ))}
   </ul>
 </nav>
+
+<style>
+  .breadcrumb li:last-child svg {
+    display: none;
+  }
+</style>

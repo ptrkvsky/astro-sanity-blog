@@ -1,0 +1,46 @@
+---
+---
+
+<script>
+  const handleClick = (e: Event) => {
+    const target = e.target as HTMLLinkElement;
+    const name = target?.getAttribute('data-name');
+    const domain = target?.getAttribute('data-name');
+    const tld = target?.getAttribute('data-name');
+
+    window.location.href =
+      'mailto:' +
+      name +
+      '@' +
+      domain +
+      '.' +
+      tld +
+      '?subject=Contact développeur freelance';
+    return false;
+  };
+
+  document?.querySelectorAll('.cryptedmail').forEach(function (node) {
+    console.log(node);
+    node?.addEventListener('click', handleClick);
+  });
+</script>
+<a
+  class="cryptedmail"
+  href="mailto:mailforthespammers@gmail.com"
+  class="cryptedmail"
+  data-name="johan.petrikovsky"
+  data-domain="gmail"
+  data-tld="com"
+  >par mail à
+</a>
+
+<style>
+  .cryptedmail:after {
+    color: red;
+    content: attr(data-name) '@' attr(data-domain) '.' attr(data-tld);
+  }
+
+  .cryptedmail:hover {
+    text-decoration: underline;
+  }
+</style>

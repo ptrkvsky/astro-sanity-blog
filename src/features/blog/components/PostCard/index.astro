@@ -1,0 +1,24 @@
+---
+import type { Frontmatter } from '@interfaces/Frontmatter';
+
+interface AstroProps {
+  post: Frontmatter;
+}
+
+const { post } = Astro.props as AstroProps;
+---
+
+<li class="bg-white rounded-lg p-4 lg:p-8 drop-shadow-lg overflow-hidden">
+  <article class="post-card h-full">
+    <a
+      class="flex flex-col h-full place-content-between"
+      href={`/posts/${post.slug}`}
+    >
+      <div>
+        <h3 class="font-semibold text-xl mb-4">{post.title}</h3>
+        <p class="mb-4">{post.description}</p>
+      </div>
+      <span class="read-more font-semibold tracking-wide">En savoir plus</span>
+    </a>
+  </article>
+</li>

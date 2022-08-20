@@ -1,34 +1,52 @@
 ---
-import '@assets/style/global.css'
-import type {Graph, WithContext} from 'schema-dts';
-import type {BlogPosting} from 'schema-dts';
+import '@assets/style/global.css';
+import type { Graph, WithContext } from 'schema-dts';
+import type { BlogPosting } from 'schema-dts';
+import Footer from '@components/Footer';
 
 interface Props {
   title: string;
   description: string;
-  schema: WithContext<BlogPosting> | Graph;
+  schema?: WithContext<BlogPosting> | Graph;
   hasGradient?: boolean;
 }
 
-const { title, schema, description, hasGradient} = Astro.props as Props;
+const { title, schema, description, hasGradient } = Astro.props as Props;
 ---
+
 <html lang="fr-FR">
-	<head>
-    <meta name="robots" content="noindex">
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-    <meta name="description" content={description} />
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-	</head>
   <head>
-    <!-- Add other Head elements here, like styles and meta tags. -->
+    <!-- <meta name="robots" content="noindex" /> -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    {
+      schema && (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      )
+    }
   </head>
-  <body class={`${hasGradient ? "gradient-main" : "" }`}>
-    <!-- 2. Rendered HTML will be passed into the default slot. -->
-    <slot />
-  </body>
+  <title>{title}</title>
 </html>
+<body class={`${hasGradient ? 'gradient-main' : ''}`}>
+  <slot name="before-main" />
+  <main>
+    <slot name="main" />
+  </main>
+  {Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="react" />}
+</body>
+<style is:global>
+  body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
+
+  .conteneur {
+    @apply mx-2 md:mx-auto;
+  }
+</style>

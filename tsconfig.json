@@ -18,9 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
-      "@interfaces/*": ["src/interfaces/*"],
       "@components/*": ["src/components/*"],
       "@features/*": ["src/features/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@interfaces/*": ["src/interfaces/*"],
       "@layouts/*": ["src/layouts/*"],
       "@lib/*": ["src/lib/*"],
       "@posts/*": ["src/posts/*"]

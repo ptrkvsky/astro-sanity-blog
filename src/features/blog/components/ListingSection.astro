@@ -1,37 +1,30 @@
 ---
-import type { CategoryPosts } from "../interfaces/CategoryPosts";
+import type { CategoryPosts } from '@features/blog/interfaces/CategoryPosts';
+import PostCard from '@features/blog/components/PostCard/index.astro';
 
 interface AstroProps {
-  categoryPosts : CategoryPosts
+  categoryPosts: CategoryPosts;
 }
 
-const {categoryPosts} = Astro.props as AstroProps;
+const { categoryPosts } = Astro.props as AstroProps;
 ---
 
 <section class="my-10">
-  <h2 class="font-semibold text-purple-900 mt-10 mb-6 text-3xl">{categoryPosts.category}</h2>
+  <h2 class="font-semibold text-purple-900 mt-10 mb-6 text-3xl">
+    {categoryPosts.category}
+  </h2>
   <ul class="grid grid-cols-1 gap-16 lg:grid-cols-2">
-    {categoryPosts.posts.map(post => (
-      <li class="bg-white rounded-lg p-4 lg:p-8">
-        <article class="post-card h-full">
-          <a class="flex flex-col h-full place-content-between"  href={`/posts/${post.slug}`}>
-            <div>
-              <h3 class="font-semibold text-xl mb-4">{post.title}</h3>
-              <p class="mb-4">{post.description}</p> 
-            </div>
-            <span class="read-more font-semibold tracking-wide">En savoir plus</span>
-          </a>
-        </article>
-      </li>
-    ))}
+    {categoryPosts.posts.map((post) => <PostCard post={post} />)}
   </ul>
 </section>
 
 <style>
-  .post-card h3, .post-card .read-more {
+  .post-card h3,
+  .post-card .read-more {
     transition: color 0.15s linear;
   }
-  .post-card:hover h3, .post-card:hover .read-more {
+  .post-card:hover h3,
+  .post-card:hover .read-more {
     @apply text-purple-500;
   }
 </style>

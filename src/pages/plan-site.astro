@@ -1,0 +1,44 @@
+---
+import type { Frontmatter } from '@interfaces/Frontmatter';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Header from '@components/Header.astro';
+import getPostsByCategory from '@helpers/getPostsByCategory';
+
+const posts = await Astro.glob('../../content/*.mdx');
+const frontmatters = posts.map((post) => post.frontmatter) as Frontmatter[];
+const categoriesPosts = getPostsByCategory(frontmatters);
+---
+
+<BaseLayout
+  title="Plan du site"
+  description="Plan du site internet de Johan Petrikovsky, développeur freelance React. Retrouvez une liste de toutes les pages de son site web"
+>
+  <Header slot="before-main" />
+  <section slot="main" class="py-12 max-w-6xl mx-auto">
+    <h1>Plan du site</h1>
+    <ul class="my-6">
+      <li><a href="#">Développeur React Freelance</a></li>
+      <ul>
+        <li>
+          <a href="/posts">Articles</a>
+          <ul>
+            {
+              categoriesPosts.map((categoryPosts) => (
+                <li>
+                  <span>{categoryPosts.category}</span>
+                  <ul>
+                    {categoryPosts.posts.map((post) => (
+                      <li>
+                        <a href={`/posts/${post.slug}`}>{post.title}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))
+            }
+          </ul>
+        </li>
+      </ul>
+    </ul>
+  </section>
+</BaseLayout>

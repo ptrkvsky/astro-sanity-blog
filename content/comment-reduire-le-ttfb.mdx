@@ -5,7 +5,7 @@ dateModified: '31 October 2021'
 datePublished: '31 October 2021'
 description: Découvrez 6 leviers pour optimiser le TTFB de votre application web ou de votre site internet.
 image: '/assets/images/nettoyage.webp'
-layout: '../src/layouts/LayoutPost.astro'
+isHome: true
 slug: 'comment-reduire-le-ttfb'
 title: Comment réduire le TTFB (Time to first bytes)
 ---
@@ -13,7 +13,7 @@ title: Comment réduire le TTFB (Time to first bytes)
 import { Image } from '@astrojs/image/components';
 import banner from '@assets/images/typescript-fonction.jpg';
 
-<Image alt={`Comment optimiser le TTFB`} src={banner} />
+<Image format="avif" alt={`Comment optimiser le TTFB`} src={banner} />
 
 Dans le dernier billet, nous avons parlé du Time To First Byte (TTFB), c'est-à-dire du paramètre utilisé pour mesurer la réactivité du serveur web. En quelques mots, le TTFB est le temps qui s'écoule entre une demande du client HTTP et la réception du premier octet de la page web.
 

@@ -1,60 +1,38 @@
 ---
-import Breadcrumb from "@components/Breadcrumb.astro";
-import Header from "@components/Header.astro";
-import ListingSection from "@features/blog/components/ListingSection.astro";
-import type { CategoryPosts } from "@features/blog/interfaces/CategoryPosts";
-import type { Frontmatter } from "@interfaces/Frontmatter";
-import BaseLayout from "@layouts/BaseLayout.astro";
-import type { MarkdownHeading } from "astro";
-import type { AstroComponentFactory } from "astro/dist/types/runtime/server";
-import getSchemaBlogListing from "src/helpers/getSchemaBlogListing";
-
-interface Post {
-  MdxContent: AstroComponentFactory
-  frontmatter: Frontmatter
-  getHeadings: () => Promise<MarkdownHeading[]>
-}
-
+import Header from '@components/Header.astro';
+import ListingSection from '@features/blog/components/ListingSection.astro';
+import type { Frontmatter } from '@interfaces/Frontmatter';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import getMostRecentDate from 'src/helpers/getMostRecentDate';
+import getPostsByCategory from 'src/helpers/getPostsByCategory';
+import getSchemaBlogListing from 'src/helpers/getSchemaBlogListing';
 
 const posts = await Astro.glob('../../../content/*.mdx');
-
-
-const [mostRecentDate] = posts.map(post => {
-  const {frontmatter} = post;
-  return frontmatter.date;
-}).reverse();
-
-/* SEO */ 
-const title = "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky"
-const description = "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité"
-const schema = getSchemaBlogListing(mostRecentDate)
-
-const frontmatters = posts.map( post => post.frontmatter) as Frontmatter[] 
-
-const postsFiltered = frontmatters.reduce((acc, curr) => {
-  // Si la catégorie courante n'est pas présente dans l'élément courant
-  if(acc.findIndex(el => el.category === curr.category) === -1) {
-    // Je vais chercher tous les postes de cette catégorie
-    const postsCategory = frontmatters.filter(frontmatter => frontmatter.category === curr.category)
-    // Je créé un nouvel objet catPost avec la catégorie courante  et un tableau vide
-    const newPostCat: CategoryPosts=  {
-      category: curr.category,
-      posts: postsCategory
-    }
-    return [...acc, newPostCat]
-  } else {
-    // Je retourn un nouveau tableau qui spread acc, et ajoute mon nouvel objet fraichement créé
-    return [...acc]
-  }
-}, [] as CategoryPosts[] )
+const mostRecentDate = getMostRecentDate(posts);
+/* SEO */
+const title =
+  "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky";
+const description =
+  "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité";
+const schema = getSchemaBlogListing(mostRecentDate);
+const frontmatters = posts.map((post) => post.frontmatter) as Frontmatter[];
+const categoriesPosts = getPostsByCategory(frontmatters);
 ---
 
-<BaseLayout title={title} description={description} schema={schema} hasGradient={true}>
-  <Header />
-  
-  <div class="max-w-5xl mx-auto  relative z-10 px-4 lg:px-0">
+<BaseLayout
+  title={title}
+  description={description}
+  schema={schema}
+  hasGradient={true}
+>
+  <Header slot="before-main" />
+
+  <div slot="main" class="max-w-5xl mx-auto relative z-10 px-4 lg:px-0">
     <h1 class="font-semibold text-purple-900 mt-10 mb-6 text-4xl">Articles</h1>
-    {postsFiltered.map(categoryPosts => <ListingSection categoryPosts={categoryPosts} /> )}
+    {
+      categoriesPosts.map((categoryPosts) => (
+        <ListingSection categoryPosts={categoryPosts} />
+      ))
+    }
   </div>
 </BaseLayout>
-

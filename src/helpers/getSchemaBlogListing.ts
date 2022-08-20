@@ -36,7 +36,7 @@ const getSchemaBlogListing = (dateModified: string) => {
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': '${config.url}/posts/#breadcrumb',
+        '@id': `${config.url}/posts/#breadcrumb`,
         itemListElement: [
           {
             '@type': 'ListItem',

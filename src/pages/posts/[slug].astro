@@ -1,73 +1,147 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
-import type {Frontmatter} from "@interfaces/Frontmatter";
-import styles from "@features/blog/style/post.module.css"
-import TableOfContent from "@features/blog/components/TableOfContent"
-import getSchemaBlogPosting from "src/helpers/getSchemaBlogPosting";
-import type { AstroComponentFactory } from "astro/dist/types/runtime/server";
-import type { MarkdownHeading } from "astro";
-import ObserverTableOfContent from "@features/blog/scripts/ObserverTableOfContent.astro";
-import Header from "@components/Header.astro";
-import Breadcrumb, { BreadcrumbItem } from "@components/Breadcrumb.astro";
+import BaseLayout from '@layouts/BaseLayout.astro';
+import type { Frontmatter } from '@interfaces/Frontmatter';
+import TableOfContent from '@features/blog/components/TableOfContent';
+import getSchemaBlogPosting from 'src/helpers/getSchemaBlogPosting';
+import type { AstroComponentFactory } from 'astro/dist/types/runtime/server';
+import type { MarkdownHeading } from 'astro';
+import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
+import Header from '@components/Header.astro';
+import Breadcrumb, { BreadcrumbItem } from '@components/Breadcrumb.astro';
 
 interface AstroProps {
-  MdxContent: AstroComponentFactory
-  frontmatter: Frontmatter
-  getHeadings: () => Promise<MarkdownHeading[]>
+  MdxContent: AstroComponentFactory;
+  frontmatter: Frontmatter;
+  getHeadings: () => Promise<MarkdownHeading[]>;
 }
 
 export async function getStaticPaths() {
-  return Promise.all((await Astro.glob('../../../content/*.mdx'))
-    // .filter((page) => !page.frontmatter.draft) // skip drafts
-    .map(async ({ default: MdxContent, frontmatter,getHeadings   }) => {
+  return Promise.all(
+    (await Astro.glob('../../../content/*.mdx'))
+      // .filter((page) => !page.frontmatter.draft) // skip drafts
+      .map(async ({ default: MdxContent, frontmatter, getHeadings }) => {
         return {
-          params: { slug: frontmatter.slug || "index" },
-          props: { 
+          params: { slug: frontmatter.slug || 'index' },
+          props: {
             MdxContent,
             getHeadings,
-            frontmatter:  frontmatter,
-          }
-        }
-     })
-  ) 
+            frontmatter: frontmatter,
+          },
+        };
+      })
+  );
 }
 const { MdxContent, frontmatter, getHeadings } = Astro.props as AstroProps;
-const schema = getSchemaBlogPosting(frontmatter)
-const headings = await getHeadings()
+const schema = getSchemaBlogPosting(frontmatter);
+const headings = await getHeadings();
 const breadcrumbItems: BreadcrumbItem[] = [
   {
-    name: "Accueil",
-    path: "/"
+    name: 'Accueil',
+    path: '/',
   },
   {
-    name: "Articles",
-    path: "/posts"
+    name: 'Articles',
+    path: '/posts',
   },
   {
-    name: frontmatter.title,
-    path: "/blog"
-  }
-]
-
-
+    name: frontmatter.category,
+    path: '/',
+  },
+];
 ---
 
-<BaseLayout title={frontmatter.title} schema={schema} description={frontmatter.description} >
+<BaseLayout
+  title={frontmatter.title}
+  schema={schema}
+  description={frontmatter.description}
+>
   <ObserverTableOfContent />
-  <Header>
+  <Header slot="before-main">
     <Breadcrumb breadcrumbItems={breadcrumbItems} />
-    <h1 class="pb-8 font-bold">{frontmatter.title}</h1>
+    <h1 class="pb-8 font-bold conteneur">{frontmatter.title}</h1>
   </Header>
-  <div class={styles.post}>
-    <div class={`${styles["wrapper-post"]}`}>
-      <aside class={`${styles["wrapper-table-of-content"]}  px-4 lg:px-0`}>
+  <div slot="main" class="post">
+    <div class="wrapper-post">
+      <aside class="wrapper-table-of-content px-4 lg:px-0">
         <TableOfContent client:load headings={headings} />
       </aside>
-      <article class={`${styles["post-content"]} max-w-2xl bg-white relative z-10 px-4 lg:px-0`}>
-        <p class={`${styles.time}`}>Temps de lecture <span class={`${styles.highlight} font-semibold`}>{frontmatter.minutesRead} minutes</span></p>
+      <article class="post-content">
+        <p class="time">
+          Temps de lecture <span class="highlight font-semibold"
+            >{frontmatter.minutesRead} minutes
+          </span>
+        </p>
         <MdxContent />
       </article>
     </div>
   </div>
 </BaseLayout>
 
+<style is:global>
+  h1 {
+    @apply mb-3 text-2xl lg:text-4xl;
+  }
+
+  .post-content h1,
+  .post-content h2,
+  .post-content h3,
+  .post-content h4,
+  .post-content h5,
+  .post-content h6 {
+    @apply font-semibold text-purple-900;
+  }
+
+  .post-content h2,
+  .post-content h3,
+  .post-content h4,
+  .post-content h5,
+  .post-content h6 {
+    @apply font-semibold text-purple-900 mt-10 mb-6 text-2xl lg:text-3xl;
+  }
+
+  .post-content p,
+  .post-content ul,
+  .post-content li,
+  .post-content strong {
+    @apply my-6 text-base;
+  }
+
+  .post-content blockquote {
+    @apply relative italic my-7 w-full px-12 py-4 bg-purple-50 border-l-4 border-gray-300;
+  }
+
+  .post-content blockquote p {
+    @apply m-0;
+  }
+
+  .post-content blockquote:before {
+    content: '“';
+    font-family: 'Times New Roman', serif;
+    font-size: 6em;
+    font-weight: bold;
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    opacity: 0.25;
+  }
+
+  pre {
+    @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
+  }
+  .wrapper-post {
+    @apply relative lg:justify-between max-w-6xl mx-auto lg:flex;
+  }
+  .post-content {
+    @apply max-w-2xl bg-white relative z-10 px-4 lg:px-0;
+  }
+  .post-content .time {
+    @apply mt-0 pt-4 mb-4 lg:mb-5 text-sm text-gray-800 dark:text-gray-400;
+  }
+  .post-content .time .highlight {
+    @apply text-purple-800 dark:text-gray-400;
+  }
+
+  .wrapper-table-of-content {
+    @apply lg:max-w-xs max-h-screen sticky order-last top-0;
+  }
+</style>

@@ -5,6 +5,7 @@ export interface Frontmatter {
   datePublished: string;
   description: string;
   image: string;
+  isHome: boolean;
   keywords: string[];
   layout: string;
   minutesRead: number;

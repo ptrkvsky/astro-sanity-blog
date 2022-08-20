@@ -9,6 +9,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://developpeur-web.tech',
   integrations: [
     react(),
     tailwind(),

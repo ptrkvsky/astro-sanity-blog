@@ -18,7 +18,7 @@
 body {
   font-family: 'Polysans', sans-serif;
   color: #2f2d32;
-  @apply bg-white text-gray-900 dark:bg-slate-800  dark:text-white;
+  @apply bg-white text-gray-900;
 }
 
 h1 {

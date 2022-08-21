@@ -8,7 +8,6 @@ import type { MarkdownHeading } from 'astro';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
 import Header from '@components/Header.astro';
 import Breadcrumb, { BreadcrumbItem } from '@components/Breadcrumb.astro';
-import image from '@astrojs/image';
 
 interface AstroProps {
   MdxContent: AstroComponentFactory;
@@ -52,9 +51,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ---
 
 <BaseLayout
-  title={frontmatter.title}
+  title={frontmatter.metaTitle}
   schema={schema}
-  description={frontmatter.description}
+  description={frontmatter.metaDescription}
 >
   <ObserverTableOfContent />
   <Header slot="before-main">
@@ -73,6 +72,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
           </span>
         </p>
         <MdxContent />
+        <div>
+          <a class="py-8" href="/" title="Développeur freelance React"
+            >Johan Petrikovsky - Développeur React freelance
+          </a>
+        </div>
       </article>
     </div>
   </div>
@@ -98,6 +102,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
   .post-content img {
     aspect-ratio: attr(data-width) / attr(data-height);
+  }
+
+  .post-content iframe {
+    @apply mb-4;
+    max-width: calc(100vw - 2rem);
   }
 
   .post-content h1,
@@ -143,9 +152,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
     opacity: 0.25;
   }
 
-  pre {
-    max-width: calc(100vh - 2rem);
+  .post-content pre {
     @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
+    max-width: calc(100vw - 2rem);
   }
   .wrapper-post {
     @apply relative lg:justify-between max-w-6xl mx-auto lg:flex;

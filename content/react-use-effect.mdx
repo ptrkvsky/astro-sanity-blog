@@ -1,357 +1,274 @@
 ---
 category: 'React'
-date: '2022-01-12'
+date: '2021-11-03'
 dateModified: '12 January 2022'
 datePublished: '12 January 2022'
-description: Tout savoir sur la fonction de nettoyage à utiliser dnas le hook useEffect. Elle pourra vous être utile dans bien des situations, notamment si vous rencontrez l'erreur suivante - Warning  Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.
-image: '/images/use-effect.webpb'
+description: Bien comprendre le hook useEffect.
+image: '/images/effet.jpg'
 isHome: true
 slug: 'react-use-effect'
-title: React fonction de retour et useEffect
+title: Guide complet sur le hook d'effet useEffect
+metaTitle: Tutorial React Hook useEffect ✅ tout pour bien comprendre le hook principal de React
+metaDescription: Guide complet sur le hook d'effet useEffect, retrouvez un un tutorial très complet et détaillé sur le hook d'effet useEffect de React.
 ---
-
 import { Image } from '@astrojs/image/components';
-import banner from '@assets/images/use-effect.webp';
-import error1 from '@assets/images/warning-error.webp';
-import error2 from '@assets/images/warning-error-2.webp';
+import hook from "@assets/images/useEffect-hook.svg"
 
-<Image
-  format="avif"
-  alt={`Nettoyage fonction de retour react`}
-  src={banner}
-  width={774}
-  height={1161}
-/>
+Je suis impressionné par l'expressivité des hooks React. Vous pouvez faire tellement de choses en écrivant si peu.
 
-La fonction de nettoyage useEffect de React préserve les applications de comportements indésirables comme les fuites de mémoire en nettoyant les effets. Ce faisant, nous pouvons optimiser les performances de notre application.
+Mais la brièveté des _hooks_ a un prix - ils sont relativement difficiles à appréhender. En particulier `useEffect()` - le hook qui gère les effets de bord dans les composants React fonctionnels.
 
-Pour commencer cet article, vous devez avoir une compréhension de base de ce qu'est `useEffect`, y compris son utilisation pour récupérer des données d'une API.
-Cet article expliquera la fonction de nettoyage du _Hook_ `useEffect` et, si tout va bien, à la fin de cet article, vous devriez être en mesure d'utiliser confortablement la fonction de nettoyage.
+Dans ce billet, vous apprendrez comment et quand utiliser le _hook_ `useEffect()`.
 
-## Qu'est-ce que la fonction de nettoyage `UseEffect` ?
+## 1 - useEffect() est pour les effets de bord
 
-Comme son nom l'indique, la fonction nettoyage de `useEffect` est une fonction du _Hook_ `useEffect` qui nous permet de mettre de l'ordre dans notre code avant que notre composant ne se démonte.
-Lorsque notre code s'exécute et se ré-exécute pour chaque rendu, `useEffect` fait également le ménage après lui-même à l'aide de la fonction cleanup.
+Un composant fonctionnel React utilise des props et/ou un état pour calculer la sortie. Si le composant fonctionnel effectue des calculs qui ne ciblent pas la valeur de sortie, ces calculs sont appelés effets secondaires.
 
-Le Hook `useEffect` est conçu de manière à ce que nous puissions renvoyer une fonction à l'intérieur de celui-ci, et c'est dans cette fonction de retour que s'effectue le nettoyage.
-La fonction de nettoyage évite les fuites de mémoire (_memory leak_) et supprime certains comportements inutiles et indésirables.
+Des exemples d'effets secondaires sont les demandes de récupération, la manipulation directe du DOM, l'utilisation de fonctions de temporisation comme setTimeout(), etc.
 
-Notez que vous ne mettez pas non plus l'état à jour dans la fonction de retour :
+Le rendu du composant et la logique des effets secondaires sont indépendants. Ce serait une erreur d'effectuer des effets secondaires directement dans le corps du composant, qui est principalement utilisé pour calculer la sortie.
+
+La fréquence de rendu du composant n'est pas quelque chose que vous pouvez contrôler - si React veut rendre le composant, vous ne pouvez pas l'arrêter.
 
 ```jsx
-useEffect(() => {
-  effet;
-  return () => {
-    nettoyage;
-  };
-}, [dépendance]);
+function Greet({ name }) {
+  const message = `Hello, ${name}!`; // Calculates output
+  // Bad!
+  document.title = `Greetings to ${name}`; // Side-effect!
+  return <div>{message}</div>; // Calculates output
+}
 ```
 
-## Pourquoi la fonction de nettoyage est-elle utile ?
-
-Comme indiqué précédemment, la fonction de nettoyage useEffect aide les développeurs à nettoyer les effets qui empêchent les comportements indésirables et optimise les performances de l'application.
-
-Cependant, il est pertinent de noter que la fonction de nettoyage useEffect ne s'exécute pas seulement lorsque notre composant veut démonter, elle s'exécute également juste avant l'exécution du prochain effet planifié.
-
-En fait, après l'exécution de notre effet, le prochain effet planifié est généralement basé sur la dépendance (tableau) :
+Comment découpler le rendu de l'effet secondaire ? Bienvenue à useEffect() - le hook qui exécute les effets secondaires indépendamment du rendu.
 
 ```jsx
-useEffect(() => {
-  // La dépendance est un tableau
-  useEffect( callback, dependency )
+import { useEffect } from 'react';
+function Greet({ name }) {
+  const message = `Hello, ${name}!`; // Calculates output
+  useEffect(() => {
+    // Good!
+    document.title = `Greetings to ${name}`; // Side-effect!
+  }, [name]);
+  return <div>{message}</div>; // Calculates output
+}
 ```
 
-Par conséquent, lorsque notre effet dépend de notre prop ou chaque fois que nous mettons en place quelque chose qui persiste, nous avons alors une raison d'appeler la fonction de nettoyage.
+le _hook_ `useEffect` accepte deux arguments - `useEffect(callback[, dependencies])`;
 
-Examinons ce scénario : imaginons que nous obtenions une récupération d'un utilisateur particulier par le biais de l'id d'un utilisateur et que, avant que la récupération ne soit terminée, nous changions d'avis et essayions d'obtenir un autre utilisateur. À ce moment-là, la prop, ou dans ce cas, l'id, se met à jour alors que la demande de fetch précédente est toujours en cours.
+- `callback` est la fonction contenant la logique de l'effet de bord. La _callback_ est exécutée juste après que les changements aient été poussés vers le DOM.
+- `dependencies` est un tableau optionnel de dépendances. `useEffect()` exécute la callback seulement si les dépendances ont changé entre les rendus.
 
-Il nous faut alors interrompre le fetch à l'aide de la fonction cleanup afin de ne pas exposer notre application à une fuite de mémoire.
+_Placez votre logique d'effet secondaire dans la fonction de rappel, puis utilisez l'argument dépendances pour contrôler quand vous voulez que l'effet secondaire s'exécute. C'est le seul but de useEffect()._
 
-## Quand devons-nous utiliser la fonction de nettoyage du `useEffect`
+<img src={hook} alt="illustration useEffect React" />
 
-Disons que nous avons un composant React qui récupère et rend des données. Si notre composant se démonte avant que notre promesse ne soit résolue, useEffect tentera de mettre à jour l'état (sur un composant non monté) et enverra une erreur qui ressemble à ceci :
-
-<Image
-  alt={`Nettoyage fonction de retour react`}
-  src={error1}
-  width={730}
-  height={71}
-/>
-
-> Warning: Can't perform a React state update on an unmounted component. This is
-> a no-op, but it indicates a memory leak in your application. To fix, cancel all
-> subscriptions and asynchronous tasks in the componentWillUnmount method.
-
-Pour corriger cette erreur, nous utilisons la fonction de nettoyage pour la résoudre.
-
-Selon la documentation officielle de [React](https://reactjs.org/docs/hooks-effect.html),
-
-> React effectue le nettoyage lorsque le composant est démonté. Cependant... les effets s'exécutent pour chaque rendu et pas seulement une fois. C'est pourquoi React nettoie également les effets du rendu précédent avant d'exécuter les effets la fois suivante."
-
-Le nettoyage est couramment utilisé pour annuler tous les abonnements effectués et annuler les requêtes de récupération. Maintenant, écrivons un peu de code et voyons comment nous pouvons accomplir ces annulations.
-
-## Nettoyer un abonnement
-
-Pour commencer à nettoyer un abonnement, nous devons d'abord nous désabonner car nous ne voulons pas exposer notre application à des fuites de mémoire et nous voulons optimiser notre application.
-
-Pour nous désabonner de nos abonnements avant que notre composant ne se démonte, définissons notre variable, _isApiSubscribed_, à _true_ et nous pouvons ensuite la définir à false lorsque nous voulons nous démonter :
+Par exemple, dans l'extrait de code précédent, vous avez vu la fonction `useEffect()` en action :
 
 ```jsx
 useEffect(() => {
-  // Définition isApiSubscribed à true
-  const isApiSubscribed = true;
-  axios.get(API).then((response) => {
-    if (isApiSubscribed) {
-      // gestion en cas de réussite
-    }
+  document.title = `Greetings to ${name}`;
+}, [name]);
+```
+
+La mise à jour du titre du document est un effet secondaire car elle ne calcule pas directement la sortie du composant. C'est pourquoi la mise à jour du titre du document est placée dans une callback et fournie à useEffect().
+
+De plus, il n'est pas nécessaire que la mise à jour du titre du document soit exécutée à chaque fois que le composant Greet est rendu. Vous souhaitez simplement qu'elle soit exécutée lorsque le prop de nom change - c'est la raison pour laquelle vous avez fourni name comme dépendance à useEffect(callback, [name]).
+
+## 2. Le tableau de dépendances en argument
+
+L'argument `dependencies` de `useEffect(callback, dependencies)` vous permet de contrôler quand l'effet de bord s'exécute. Lorsque les dépendances sont :
+
+### 2.1 Quand le tableau de dépendances n'est pas donné
+
+Lorsque le tableau de dépendances n'est pas donné, l'effet de bord sera déclenché à chaque rendu
+
+```jsx
+import { useEffect } from 'react';
+function MyComponent() {
+  useEffect(() => {
+    // Runs after EVERY rendering
   });
-  return () => {
-    // Annulation de tous les abonnements
-    isApiSubscribed = false;
-  };
-}, []);
-```
-
-Dans le code ci-dessus, nous attribuons la valeur true à la variable `isApiSubscribed` et l'utilisons ensuite comme condition pour traiter notre demande de succès.
-Cependant, nous mettons la variable `isApiSubscribed` à `false` lorsque nous démontons notre composant.
-
-## Annuler une requête `fetch`
-
-Il existe plusieurs façons d'annuler les appels de requête de récupération : soit nous utilisons `AbortController`, soit nous utilisons le jeton d'annulation d'Axios.
-
-Pour utiliser `AbortController`, nous devons créer un contrôleur à l'aide du constructeur `AbortController()`. Ensuite, lorsque notre requête de récupération est lancée, nous passons `AbortSignal` comme option dans l'objet option de la requête.
-
-Cela associe le contrôleur et le signal à la requête de récupération et nous permet de l'annuler à tout moment en utilisant `AbortController.abort()` :
-
-```jsx
-useEffect(() => {
-  const controller = new AbortController();
-  const signal = controller.signal;
-
-  fetch(API, {
-    signal: signal,
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      // Gestion en cas de succès
-    });
-  return () => {
-    // Annuler la requête avant que le composant soit démonté
-    controller.abort();
-  };
-}, []);
-```
-
-Nous pouvons aller plus loin et ajouter une condition d'erreur dans notre `catch` afin que notre requête de récupération ne génère pas d'erreurs lorsque nous abandonnons. Cette erreur se produit parce que, pendant le démontage, nous essayons toujours de mettre à jour l'état lorsque nous gérons nos erreurs.
-
-Ce que nous pouvons faire, c'est écrire une condition et savoir quel type d'erreur nous obtiendrons ; si nous obtenons une erreur d'abandon, alors nous ne voulons pas mettre à jour l'état :
-
-```jsx
-useEffect(() => {
-  const controller = new AbortController();
-  const signal = controller.signal;
-
-  fetch(API, {
-    signal: signal,
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      // handle success
-      console.log(response);
-    })
-    .catch((err) => {
-      if (err.name === 'AbortError') {
-        console.log('successfully aborted');
-      } else {
-        // handle error
-      }
-    });
-  return () => {
-    // cancel the request before component unmounts
-    controller.abort();
-  };
-}, []);
-```
-
-Maintenant, même si nous nous impatientons et naviguons vers une autre page avant que notre requête ne soit résolue, nous n'obtiendrons pas à nouveau cette erreur car la requête sera abandonnée avant que le composant ne soit démonté. Si nous obtenons une erreur d'abandon, l'état ne sera pas mis à jour non plus.
-
-Voyons donc comment nous pouvons faire de même en utilisant l'option d'annulation d'Axios, le jeton d'annulation d'Axios,
-
-Nous stockons d'abord le jeton `CancelToken.source()` d'Axios dans une constante nommée source, nous passons le jeton en tant qu'option Axios, puis nous annulons la requête à tout moment avec source.cancel() :
-
-```jsx
-useEffect(() => {
-  const CancelToken = axios.CancelToken;
-  const source = CancelToken.source();
-  axios
-    .get(API, {
-      cancelToken: source.token,
-    })
-    .catch((err) => {
-      if (axios.isCancel(err)) {
-        console.log('Annulé avec succès');
-      } else {
-        // Gestion de erreurs
-      }
-    });
-  return () => {
-    // Annulation de la requête avant que le composant soit démonté
-    source.cancel();
-  };
-}, []);
-```
-
-Tout comme nous l'avons fait avec `AbortError` dans `AbortController`, Axios nous fournit une méthode appelée `isCancel` qui nous permet de vérifier la cause de notre erreur et de savoir comment gérer nos erreurs.
-
-Si la demande échoue parce que la source Axios abandonne ou annule, nous ne voulons pas mettre à jour l'état.
-
-## Comment utiliser la fonction de nettoyage `useEffect` ?
-
-Voyons un exemple de cas où l'erreur ci-dessus peut se produire et comment utiliser la fonction de nettoyage lorsqu'elle se produit. Commençons par créer deux fichiers : Post et App. Continuez en écrivant le code suivant :
-
-```jsx
-import React, { useState, useEffect } from 'react';
-
-export default function Post() {
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    fetch('https://jsonplaceholder.typicode.com/posts', { signal: signal })
-      .then((res) => res.json())
-      .then((res) => setPosts(res))
-      .catch((err) => setError(err));
-  }, []);
-  return (
-    <div>
-      {!error ? (
-        posts.map((post) => (
-          <ul key={post.id}>
-            <li>{post.title}</li>
-          </ul>
-        ))
-      ) : (
-        <p>{error}</p>
-      )}
-    </div>
-  );
 }
 ```
 
-Il s'agit d'un composant post simple qui obtient des messages à chaque rendu et gère les erreurs de récupération.
+### 2.2 Quand un tableau vide est passé en argument
 
-Ici, nous importons le composant post dans notre composant principal et affichons les messages chaque fois que nous cliquons sur le bouton. Le bouton affiche et cache les messages, c'est-à-dire qu'il monte et démonte notre composant post :
+Lorsque un tableau vide est passé en argument, le rendu s'effectue une seule fois, après le rendu initial.
 
 ```jsx
-import React, { useState } from 'react';
-import Post from './Post';
-
-const App = () => {
-  const [show, setShow] = useState(false);
-  const showPost = () => {
-    // toggles posts onclick of button
-    setShow(!show);
-  };
-  return (
-    <div>
-      <button onClick={showPost}>Show Posts</button>
-      {show && <Post />}
-    </div>
-  );
-};
-
-export default App;
+import { useEffect } from 'react';
+function MyComponent() {
+  useEffect(() => {
+    // Runs ONCE after initial rendering
+  }, []);
+}
 ```
 
-<Image
-  alt={`Erreur React Can't perform a react state update`}
-  src={error2}
-  width={730}
-  height={121}
+### 2.3 Quand des dépendances sont spécifiées dans le tableau
+
+Lorsque des valeurs sont spécifiées, l'effet de bord sera déclenché lorsque à chaque fois qu'une valeur passé dans le tableau de dépendance est modifiée.
+
+```jsx
+import { useEffect, useState } from 'react';
+function MyComponent({ prop }) {
+  const [state, setState] = useState('');
+  useEffect(() => {
+    // Runs ONCE after initial rendering
+    // and after every rendering ONLY IF `prop` or `state` changes
+  }, [prop, state]);
+}
+```
+
+Regardons en détail l'utilsiation des versions 2.1 et 2.3
+
+## 3. Cycle de vie des composants.
+
+## 3.1 `ComponentDidMount` Est-ce que le composant est monté
+
+Utilisez un tableau de dépendances vide pour invoquer un effet bord une fois après le montage du composant :
+
+```jsx
+import { useEffect } from 'react';
+function Greet({ name }) {
+  const message = `Hello, ${name}!`;
+  useEffect(() => {
+    // Runs once, after mounting
+    document.title = 'Greetings page';
+  }, []);
+  return <div>{message}</div>;
+}
+```
+
+`useEffect(..., [])` était fourni avec un tableau vide comme argument de dépendances. Lorsqu'elle est configurée de cette manière, la fonction `useEffect()` n'exécute le callback qu'une seule fois, après le montage initial.
+
+Même si le composant est rendu à nouveau avec une propriété de nom différente, l'effet secondaire ne s'exécute qu'une seule fois après le premier rendu :
+
+```jsx
+    // First render
+    <Greet name="Eric" />   // Side-effect RUNS
+    // Second render, name prop changes
+    <Greet name="Stan" />   // Side-effect DOES NOT RUN
+    // Third render, name prop changes
+    <Greet name="Butters"/> // Side-effect DOES NOT RUN
+```
+
+<iframe
+  src="https://codesandbox.io/embed/sweet-jepsen-r8m6t?fontsize=14&hidenavigation=1&theme=dark"
+  style={{
+    width: '100%',
+    height: '500px',
+    border: 0,
+    borderRadius: '4px',
+    overflow: 'hidden',
+  }}
+  title="sweet-jepsen-r8m6t"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 />
 
-Maintenant, pour supprimer cette erreur et arrêter la fuite de mémoire, nous devons implémenter la fonction de nettoyage en utilisant l'une des solutions ci-dessus.
-Dans cet article, nous allons utiliser `AbortController` :
+## 3.1 `ComponentDidUpdate` Est-ce que le composant est mis à jour ?
+
+Chaque fois que l'effet de bord utilise des props ou des valeurs d'état, vous devez indiquer ces valeurs comme des dépendances :
 
 ```jsx
-import React, { useState, useEffect } from 'react';
-export default function Post() {
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
-
+import { useEffect } from 'react';
+function MyComponent({ prop }) {
+  const [state, setState] = useState();
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    fetch('https://jsonplaceholder.typicode.com/posts', { signal: signal })
-      .then((res) => res.json())
-      .then((res) => setPosts(res))
-      .catch((err) => {
-        setError(err);
-      });
-    return () => controller.abort();
-  }, []);
+    // Side-effect uses `prop` and `state`
+  }, [prop, state]);
+  return <div>....</div>;
+}
+```
 
+La fonction `useEffect(callback, [prop, state])` invoque le callback après que les modifications ont été enregistrées dans le DOM et si et seulement si une valeur du tableau de dépendances [prop, state] a changé.
+
+En utilisant l'argument dependencies de useEffect(), vous contrôlez quand invoquer l'effet secondaire, indépendamment des cycles de rendu du composant. Encore une fois, c'est l'essence même du hook useEffect().
+
+Améliorons le composant Greet en utilisant la proposition de nom dans le titre du document :
+
+```jsx
+import { useEffect } from 'react';
+function Greet({ name }) {
+  const message = `Hello, ${name}!`;
+  useEffect(() => {
+    document.title = `Greetings to ${name}`;
+  }, [name]);
+  return <div>{message}</div>;
+}
+```
+
+`name` prop est mentionné dans l'argument dependencies de `useEffect(..., [name])`. Le _hook_ `useEffect()` exécute l'effet secondaire après le rendu initial, et lors des rendus ultérieurs seulement si la valeur du nom change.
+
+## 4. La fonction de nettoyage
+
+<a href="/posts/react-fonction-retour">
+  La fonction de nettoyage
+</a>
+est un élément complexe qui mérite son article dédié.
+
+## 5. useEffect en pratique
+
+## 5.1 Récupérer des données
+
+`useEffect()` peut effectuer un effet secondaire de récupération de données.
+
+Le composant suivant, FetchEmployees, récupère la liste des employés sur le réseau :
+
+```jsx
+import { useEffect, useState } from 'react';
+function FetchEmployees() {
+  const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    async function fetchEmployees() {
+      const response = await fetch('/employees');
+      const fetchedEmployees = await response.json(response);
+      setEmployees(fetchedEmployees);
+    }
+    fetchEmployees();
+  }, []);
   return (
     <div>
-      {!error ? (
-        posts.map((post) => (
-          <ul key={post.id}>
-            <li>{post.title}</li>
-          </ul>
-        ))
-      ) : (
-        <p>{error}</p>
-      )}
+      {employees.map((name) => (
+        <div>{name}</div>
+      ))}
     </div>
   );
 }
 ```
 
-Nous voyons toujours dans la console que même après avoir interrompu le signal dans la fonction de nettoyage, le démontage génère une erreur. Comme nous l'avons vu précédemment, cette erreur se produit lorsque nous abandonnons l'appel de récupération.
+useEffect() lance une requête de récupération en appelant la fonction asynchrone fetchEmployees() après le montage initial.
 
-`useEffect` attrape l'erreur de récupération dans le bloc `catch` et essaie ensuite de mettre à jour l'état d'erreur, ce qui déclenche une erreur. Pour arrêter cette mise à jour, nous pouvons utiliser une condition if else et vérifier le type d'erreur que nous obtenons.
+Lorsque la requête est terminée, setEmployees(fetchedEmployees) met à jour l'état employees avec la liste d'employés qui vient d'être récupérée.
 
-S'il s'agit d'une erreur d'abandon, nous n'avons pas besoin de mettre à jour l'état, sinon nous gérons l'erreur :
+Notez que l'argument callback de useEffect(callback) ne peut pas être une fonction asynchrone. Mais vous pouvez toujours définir et invoquer une fonction asynchrone dans le callback lui-même :
 
 ```jsx
-mport React, { useState, useEffect } from "react";
-
-export default function Post() {
-  const [posts, setPosts] = useState([]);
-  const [error, setError] = useState(null);
+function FetchEmployees() {
+  const [employees, setEmployees] = useState([]);
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-      fetch("https://jsonplaceholder.typicode.com/posts", { signal: signal })
-      .then((res) => res.json())
-      .then((res) => setPosts(res))
-      .catch((err) => {
-        if (err.name === "AbortError") {
-          console.log("successfully aborted");
-        } else {
-          setError(err);
-        }
-      });
-    return () => controller.abort();
+    // <--- CANNOT be an async function
+    async function fetchEmployees() {
+      // ...
+    }
+    fetchEmployees(); // <--- But CAN invoke async functions
   }, []);
-  return (
-    <div>
-      {!error ? (
-        posts.map((post) => (
-          <ul key={post.id}>
-            <li>{post.title}</li>
-          </ul>
-        ))
-      ) : (
-        <p>{error}</p>
-      )}
-    </div>
-  );
+  // ...
 }
 ```
 
-Notez que nous ne devons utiliser `err.name === "AbortError"` que lorsque nous utilisons `fetch` et la méthode `axios.isCancel()` lorsque nous utilisons `Axios`.
+Pour exécuter la requête de récupération en fonction d'une valeur de prop ou d'état, il suffit d'indiquer la dépendance requise dans l'argument dépendances : useEffect(fetchSideEffect, [prop, stateValue]).
 
-Avec cela, nous avons terminé !
+## 6. Conclusion
+
+`useEffect(callback, dependencies)` est le hook qui gère les effets secondaires dans les composants fonctionnels. L'argument callback est une fonction pour mettre la logique de l'effet secondaire. `dependencies` est une liste de dépendances de votre effet secondaire : étant des props ou des valeurs d'état.
+
+`useEffect(callback, dependencies)` invoque la callback après le montage initial, et lors des rendus ultérieurs, si une valeur dans les dependencies a changé.
+
+L'étape suivante pour maîtriser useEffect() est de comprendre et d'éviter le piège de la boucle infinie.
+
+Pour approfondir le sujet vous pouvez voir l'excellente vidéo de David Khourshid
+
+<div>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HPoC-k7Rxwo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen/>
+</div>

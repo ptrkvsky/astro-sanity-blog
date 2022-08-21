@@ -11,34 +11,53 @@ const categoriesPosts = getPostsByCategory(frontmatters);
 
 <BaseLayout
   title="Plan du site"
-  description="Plan du site internet de Johan Petrikovsky, développeur freelance React. Retrouvez une liste de toutes les pages de son site web"
+  description="Plan du site internet de Johan Petrikovsky, développeur freelance React. Retrouvez une liste de toutes les pages du site internet"
 >
   <Header slot="before-main" />
   <section slot="main" class="py-12 max-w-6xl mx-auto">
     <h1>Plan du site</h1>
     <ul class="my-6">
-      <li><a href="#">Développeur React Freelance</a></li>
-      <ul>
-        <li>
-          <a href="/posts">Articles</a>
-          <ul>
-            {
-              categoriesPosts.map((categoryPosts) => (
-                <li>
-                  <span>{categoryPosts.category}</span>
-                  <ul>
-                    {categoryPosts.posts.map((post) => (
-                      <li>
-                        <a href={`/posts/${post.slug}`}>{post.title}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))
-            }
-          </ul>
-        </li>
-      </ul>
+      <li class="my-2">
+        <a href="/" title="Johan Petrikovsky, Développeur React Freelance"
+          >Développeur React Freelance
+        </a>
+      </li>
+      <li class="my-2">
+        <a href="/posts">Articles</a>
+        <ul class="ml-4">
+          {
+            categoriesPosts.map((categoryPosts) => (
+              <li>
+                <span class="block my-2">
+                  Catégorie <strong>{categoryPosts.category}</strong>
+                </span>
+                <ul class="mx-4">
+                  {categoryPosts.posts.map((post) => (
+                    <li>
+                      <a href={`/posts/${post.slug}`}>{post.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))
+          }
+        </ul>
+      </li>
     </ul>
   </section>
 </BaseLayout>
+
+<style>
+  ul {
+    margin-bottom: 1rem;
+  }
+  ul > ul {
+    margin-left: 1rem;
+  }
+  a {
+    transition: 0.125s linear;
+  }
+  a:hover {
+    @apply text-pink-500;
+  }
+</style>

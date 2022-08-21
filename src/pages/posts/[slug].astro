@@ -8,6 +8,7 @@ import type { MarkdownHeading } from 'astro';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
 import Header from '@components/Header.astro';
 import Breadcrumb, { BreadcrumbItem } from '@components/Breadcrumb.astro';
+import image from '@astrojs/image';
 
 interface AstroProps {
   MdxContent: AstroComponentFactory;
@@ -95,6 +96,10 @@ const breadcrumbItems: BreadcrumbItem[] = [
     @apply text-pink-600;
   }
 
+  .post-content img {
+    aspect-ratio: attr(data-width) / attr(data-height);
+  }
+
   .post-content h1,
   .post-content h2,
   .post-content h3,
@@ -139,6 +144,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
   }
 
   pre {
+    max-width: calc(100vh - 2rem);
     @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
   }
   .wrapper-post {

@@ -5,7 +5,7 @@
     "email": "johan.Petrikovsky@gmail.com",
     "url": "https://developpeur-web.tech/"
   },
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",

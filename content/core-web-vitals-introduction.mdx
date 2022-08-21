@@ -1,0 +1,200 @@
+---
+category: 'Seo'
+date: '2021-10-31'
+dateModified: '31 October 2021'
+datePublished: '31 October 2021'
+description: Une introduction sur les core webvitals
+image: '/images/google.jpg'
+isHome: false
+slug: 'core-web-vitals-introduction'
+title: Bien comprendre les core webvitals
+
+
+
+
+isHome: true
+
+title: React fonction de retour et useEffect
+---
+
+# Tout savoir sur les Core Web Vitals
+
+<Image
+  alt={`Logo Google`}
+  src={`/images/google.jpg`}
+  width={640}
+  height={480}
+  priority
+/>
+
+Tout ce que j'ai entendu au cours des derniers mois, c'est "core web vitals ? Qu'est-ce que c'est et comment cela va-t-il affecter mon site web ?". En réalité, cela semble plus effrayant que ça ne l'est.
+
+Nous allons voir quelle est la prochaine mise à jour, ce qui est mesuré dans Core Web Vitals, comment tester votre site, et ce qu'il faut faire en fonction de vos résultats.
+
+Je n'insisterai jamais assez sur ce point, et je le répéterai plusieurs fois dans cet article, mais ne vous laissez pas décourager par ces mises à jour.
+
+La meilleure chose que vous puissiez faire pour votre blog est de créer un contenu attrayant et de qualité, mais si vous souhaitez améliorer les paramètres essentiels de votre site Web, procédez par petites étapes. Ne soyez pas obsédé par la vitesse de votre site, ce n'est pas le nerf de la guerre. Prenez donc votre temps, prenez une collation et ne vous précipitez pas pour tout apprendre en même temps.
+
+## Que sont les Core Web Vitals ?
+
+À partir de juin 2021, Google mettra à jour son signal de classement pour y inclure la convivialité mobile, la vitesse du site et l'accessibilité. Cette mise à jour était initialement prévue pour mai 2021, mais Google a annoncé qu'elle serait repoussée à la mi-juin. Vous pouvez lire pourquoi ici.
+
+La mise à jour Core Web Vital est conçue pour vous faire réfléchir à la façon dont un utilisateur voit et navigue sur vos pages Web afin de rendre cette expérience aussi bonne que possible. En tant que service, Google souhaite être axé sur l'utilisateur afin que les chercheurs puissent trouver le contenu qui leur convient le mieux.
+
+Le contenu sera donc toujours roi, mais le fait de veiller à ce que votre site soit aussi convivial que possible vous donnera un petit coup de pouce.
+
+## Quelle est l'importance des Core Web Vitals ?
+
+Je suis sûr que vous avez vu l'attention et le battage médiatique autour de la vitesse du site récemment ? Si ce n'est pas le cas, c'est un sujet très populaire dans le monde des blogs et du référencement en ce moment. C'est très bien, il est important d'avoir un site rapide pour les utilisateurs et les moteurs de recherche. Mais il y a bien d'autres choses à prendre en compte.
+
+Si vous bloguez depuis un certain temps, vous connaissez probablement les bases du référencement ?
+
+- Recherche de mots-clés
+- Créer un contenu de qualité
+- Créer des liens retour vers votre site Web
+
+La vitesse du site est rarement la raison pour laquelle vous n'obtenez pas les classements et le trafic que vous souhaitez. Ce que je veux dire, c'est que oui, la vitesse du site est une bonne chose, mais ce n'est pas la fin du monde.
+
+Un contenu bien écrit sera toujours plus performant. Google accorde plus d'importance à la qualité. Je vous promets que si vous ne comprenez pas les éléments essentiels du Web, ce n'est pas grave et ce n'est pas la fin du monde pour votre blog. Vous pouvez et vous ferez toujours de grandes choses. Ce n'est pas seulement moi qui le dis, c'est aussi Google.
+
+"Bien que l'expérience de la page soit importante, Google cherche toujours à classer les pages contenant les meilleures informations, même si l'expérience de la page est médiocre. Une bonne expérience de la page ne remplace pas un bon contenu de la page. Toutefois, dans les cas où il existe de nombreuses pages dont la pertinence peut être similaire, l'expérience de la page peut être beaucoup plus importante pour la visibilité dans la recherche."
+
+- Google
+
+L'objectif principal de ce billet est d'éduquer et de lutter contre les discours alarmistes qui circulent au sujet de la mise à jour Core Web Vital.
+
+## Quels sont les facteurs pris en compte dans les Core Web Vitals ?
+
+La vitesse peut varier considérablement en fonction de l'utilisateur, de ce qui se passe sur le site au moment du test, des scripts variables (par exemple, les annonces) qui sont chargés, de votre propre vitesse d'accès à Internet, de la qualité de l'optimisation du site, etc.
+
+Google a sélectionné une série de mesures à utiliser dans Core Web Vitals à partir du mois de mai :
+
+- Largest Contentful Paint (LCP)
+- Cumulative Layout Shift (CLS)
+- Total Blocking Time (TBT)
+- First Input Delay (FID)
+
+Jetons un coup d'oeil à ceux-ci.
+
+### Largest Contentful Paint (LCP)
+
+Le tableau le plus large de Contentful est le point où la majorité du contenu principal de votre page a été chargé. Selon Google, il doit être inférieur à 4 secondes (et idéalement inférieur à 2,5 secondes dans la mesure du possible, mais c'est plus facile à dire qu'à faire).
+
+Le LCP est important car il indique au visiteur que la page est en train de se charger. La plupart des visiteurs commenceront à s'intéresser à une page dès qu'ils le pourront, plutôt que d'attendre qu'elle soit entièrement chargée.
+
+Que considère Google comme un bon score LCP ?
+
+Good: 2.5 seconds or less
+Needs improvement: 4 seconds or less
+Poor: More than 4 seconds
+
+## Cumulative Layout Shift (CLS)
+
+Le décalage cumulatif de la mise en page correspond au nombre de sauts de votre page pendant son chargement. Par exemple, l'espace qu'elles occupent doit être pris en compte plutôt que le texte qui saute dans la page lorsque les images sont soudainement chargées. Ce phénomène est assez fréquent sur les sites qui ne sont pas optimisés pour les différents appareils.
+
+Nous sommes tous allés au moins une fois sur un site Web où il y a eu un changement à mi-chemin de la lecture et où vous avez perdu votre place. C'est ennuyeux et cela crée une mauvaise expérience pour l'utilisateur. C'est exactement la raison pour laquelle Google essaie de réduire ce problème.
+
+Si nous examinons les problèmes de CLS sur les blogs, la cause la plus fréquente de mauvais résultats de CLS sont les images ou les publicités mal chargées. Il existe aujourd'hui de nombreux plugins d'optimisation des images qui proposent le chargement paresseux et qui le gèrent très bien, mais si vous voulez améliorer votre score CLS, c'est la première chose à faire.
+
+Que considère Google comme un bon score CLS ?
+
+Contrairement aux autres indicateurs Core Web Vitals, CLS n'est pas basé sur les secondes ou les millisecondes. Au lieu de cela, Google évalue CLS sur la base de son propre système, où 0 signifie qu'il n'y a pas de déplacement du contenu sur la page et 1 signifie un déplacement maximal :
+
+- Bon : 0,1 ou moins
+- Besoin d'amélioration : 0,25 ou moins
+- Mauvais : plus de 0,25
+
+## First Input Delay (FID) and Total Blocking Time (TBT)
+
+Il s'agit de mesures très similaires, mais TBT est une mesure de "laboratoire" (c'est-à-dire des tests que vous exécutez à la demande) et FID est uniquement mesuré en tant que mesure de "terrain" (c'est-à-dire des données agrégées au fil du temps à partir des utilisateurs qui visitent votre site).
+
+Il s'agit de la différence de temps entre un visiteur qui interagit avec votre page, c'est-à-dire qui clique sur un lien, et le navigateur qui répond, c'est-à-dire qui ouvre le lien. Les actions continues telles que le défilement ne sont pas prises en compte dans le calcul du FID ou du TBT.
+
+Si un utilisateur n'a pas d'interaction avec votre site qui soit pertinente pour le FID, il ne fournira aucune valeur FID.
+
+Il est également important de savoir que la première interaction de certains utilisateurs se fera lorsque votre page est encore en train de charger des choses en arrière-plan (plus susceptible d'entraîner un FID élevé), tandis que la première interaction d'autres visiteurs se fera après que votre page ait tout chargé (plus susceptible d'entraîner un FID faible).
+
+En d'autres termes, il est préférable de ne pas trop se focaliser sur les chiffres du FID, surtout si votre site n'accueille pas beaucoup de visiteurs. De nombreux facteurs peuvent fausser les résultats que vous obtiendrez.
+
+Que considère Google comme un bon score TBT/FID ?
+
+Bon : 100 ms ou moins
+A améliorer : 100ms-300ms
+Mauvais : plus de 300 ms
+
+## Comment vérifier vos scores Core Web Vitals
+
+Vous pouvez voir vos scores dans les outils et rapports de vitesse tels que PageSpeed Insights, Google Search Console, WebPageTest.org et GTMetrix.
+
+Il existe de nombreux autres outils de nos jours, mais je me méfierais de ceux qui vous font payer pour vérifier ces vitales. Google fournit ces données gratuitement avec différents outils.
+
+Comme Core Web Vitals est un ensemble de mesures créé par Google, l'idéal serait de l'évaluer à l'aide d'un de ses propres outils. Cependant, il n'existe pas d'outil parfait. Vous pourriez trouver avantageux d'utiliser plus d'un outil.
+
+Google Search Console peut être un excellent outil - il vous donne des signaux détaillés, mais il n'est mis à jour que tous les 28 jours, de sorte que vous devrez attendre de voir comment vos modifications seront reçues. Il vous donne également un rapport Core Web Vitals une fois par mois. Je pense que ce sont les meilleures données à utiliser, mais il est également pénible de les attendre.
+
+PageSpeed Insights est généralement un bon outil mais je recommande de le prendre avec une pincée de sel. Il vous donnera une idée assez claire, mais votre vitesse d'accès à Internet, le nombre d'onglets ouverts, vos plug-ins et l'utilisation ou non du mode incognito auront une incidence sur les résultats obtenus.
+
+Si vous utilisez Page Speed Insights, je vous recommande d'exécuter l'audit au moins trois fois et de calculer un score moyen, car il est probable que vos résultats varient.
+
+Google Search Console dispose également de l'outil d'expérience de la page qui combine le rapport de base des vitaux web avec d'autres mesures comme la vitesse du site.
+
+Google Lighthouse est mon outil de prédilection. J'aime toujours le faire en mode incognito sur Chrome. On y accède en inspectant la page et il évalue la page ouverte dans son ensemble.
+
+<img
+  src="https://billiegeena.co.uk/wp-content/uploads/2021/04/Light-House.png"
+  alt="lighthouse"
+/>
+
+Les scores Core Web Vitals s'affichent dans les résultats de votre test de vitesse après avoir saisi votre URL ; il vous suffit de rechercher "LCP", "CLS" et "FID" ou "TBT" et de saisir les chiffres à côté.
+
+Les tests mobiles sur page speed insights sont effectués sur une connexion 3G lente, donc ne paniquez pas si vous voyez des chiffres qui ne vous plaisent pas. La majorité du monde a des vitesses d'Internet plus rapides qu'une connexion 3G de nos jours.
+
+Ne vous inquiétez pas si vous faites le test et obtenez beaucoup de rouges et d'oranges. Les notes et les couleurs ne sont pas tout.
+
+<img src="https://billiegeena.co.uk/wp-content/uploads/2021/04/Page-speed-insights.png" />
+
+## Comment améliorer les Core Web Vitals ?
+
+Pour améliorer vos scores Core Web Vitals, il y a trois domaines principaux sur lesquels vous pouvez vous concentrer. Ces domaines sont les suivants
+
+- Réduire la taille de vos pages
+- Réduire le nombre de demandes de pages
+- Réduire le temps d'accès au premier octet (TTFB).
+
+Voyons de quoi il s'agit.
+
+### Réduire la taille de votre page (aide vos scores LCP et FID/TBT)
+
+Tout ce que vous ajoutez à votre page, c'est-à-dire les images, les publicités, les vidéos, etc. Tout cela augmente la taille de votre page.
+
+Le contenu de votre blog, c'est-à-dire le texte, n'ajoute qu'une très petite quantité à la taille de votre page, alors ne vous inquiétez pas pour cela. Pour un blog WordPress moyen, la taille de votre page devrait être inférieure à 2 Mo (vous pouvez vérifier la taille de votre page en utilisant WebPageTest.org), en règle générale, le plus petit est toujours le mieux.
+
+### Réduire les demandes de pages (améliore vos scores LCP et FID/TBT)
+
+Les demandes de pages sont tous les fichiers et scripts que votre page demande, comme les polices Google, les images, les iframes, etc.
+
+Une demande externe, c'est lorsque votre site Web demande quelque chose à un autre site Web, par exemple le chargement d'une publicité depuis un réseau publicitaire.
+
+Les requêtes internes sont généralement des choses comme l'ajout d'une image de votre bibliothèque multimédia à votre page ; votre page doit encore la chercher et la trouver pour l'afficher. Toutes les demandes s'ajoutent au temps total de demande de la page, qu'elles soient internes ou externes.
+
+### Réduire le TTFB (Time To First Byte)
+
+Le TTFB, également appelé "Time To First Byte", est le temps nécessaire au serveur pour renvoyer le premier octet de données de votre page, c'est-à-dire le moment où votre page peut commencer à se charger le plus rapidement possible. Cet élément de la vitesse de votre site est lié à votre hébergement, à la mise en cache et à votre thème. Vous ne contrôlez pas tout sur ce point.
+
+Si vous avez des difficultés à cet égard, la plupart des fournisseurs d'hébergement offrent de l'aide, il peut donc être utile de les contacter.
+
+### Qu'en est-il de CLS ?
+
+Vous avez peut-être remarqué que CLS n'est pas du tout mentionné ci-dessus. Ceci pour deux raisons : ce n'est pas directement une mesure de vitesse, et il est généralement assez facile d'améliorer votre score (si nécessaire) en utilisant les tâches mentionnées dans notre liste de contrôle ci-dessous.
+
+## Core Web Vitals, les points clefs
+
+À côté de chaque action se trouve une clé qui vous indique quelles mesures Web Vitals (LCP, CLS et/ou FID/TBT) peuvent être améliorées en effectuant cette action.
+
+## Conclusion
+
+Je sais que tout cela semble beaucoup, mais je vous promets que cette mise à jour n'est pas aussi importante qu'il n'y paraît. Ils ont dit eux-mêmes que la mise à jour sortira en mai mais qu'elle n'affectera pas immédiatement la plupart des sites.
+
+La meilleure chose que vous puissiez faire pour votre blog, c'est de continuer à créer et à partager votre incroyable contenu. Je ne saurais trop insister sur le fait que ce n'est pas quelque chose qui doit vous décourager.
+
+J'espère vraiment que vous avez trouvé cela utile et, comme d'habitude, si vous avez des questions, n'hésitez pas à m'en faire part.

@@ -1,5 +1,10 @@
 {
-  "name": "@example/basics",
+  "name": "@astro/blog",
+  "author": {
+    "name": "Johan Petrikovsky",
+    "email": "johan.Petrikovsky@gmail.com",
+    "url": "https://developpeur-web.tech/"
+  },
   "version": "0.0.1",
   "private": true,
   "scripts": {

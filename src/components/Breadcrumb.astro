@@ -14,34 +14,36 @@ const { breadcrumbItems } = Astro.props as AstroProps;
 <nav id="breadcrumb" class="breadcrumb conteneur mt-6 mb-4">
   <ul class="flex gap-1">
     {
-      breadcrumbItems.map(({ name, path }) => (
-        <li class="flex gap-1 text-gray-500 text-sm">
-          <a class="" href={path}>
-            {name}
-          </a>
-          <svg
-            class="separator relative top-1"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="Breadcrumbs__Caret-sc-1upqnen-1 dnfuPa"
-          >
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </li>
-      ))
+      breadcrumbItems.map(({ name, path }, index) => {
+        const isLastItem = index + 1 === breadcrumbItems.length;
+
+        return isLastItem ? (
+          <li class="flex gap-1 text-gray-500 text-sm">
+            <span>{name}</span>
+          </li>
+        ) : (
+          <li class="flex gap-1 text-gray-500 text-sm">
+            <a class="" href={path}>
+              {name}
+            </a>
+            <svg
+              class="separator relative top-1"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="Breadcrumbs__Caret-sc-1upqnen-1 dnfuPa"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </li>
+        );
+      })
     }
   </ul>
 </nav>
-
-<style>
-  .breadcrumb li:last-child svg {
-    display: none;
-  }
-</style>

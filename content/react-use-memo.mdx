@@ -1,0 +1,100 @@
+---
+category: 'React'
+date: '2021-11-08'
+dateModified: '12 January 2022'
+datePublished: '12 January 2022'
+description: Améliorez les performances d'une application React en utilisant le hook d'effet useMemo()
+image: '/images/memory.jpg'
+isHome: true
+slug: 'react-use-effect'
+title: Améliorez les performances d'une application React en utilisant le hook d'effet useMemo()
+---
+
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/react-usememo-memory.webp';
+
+<Image src={banner} format="avif" alt={`UseMemo React`} ratio="1920:2849" />
+
+Avec la sortie de React 16.8, il existe de nombreux _hooks_ utiles que vous pouvez désormais utiliser dans vos applications React.
+L'un des _hooks_ intégrés qui a été introduit dans la version 16.8 est `useMemo`. Ce _hook_ a le potentiel d'améliorer les performances de votre application.
+
+Cet article explore le fonctionnement du re-rendu dans React, pourquoi c'est une considération importante pour les applications React, et comment le hook useMemo peut l'exploiter pour créer une augmentation des performances dans vos applications. Vous apprendrez également quand `useMemo` peut causer des problèmes de performance.
+
+## Égalité référentielle et opérations coûteuses
+
+Il y a deux problèmes que useMemo cherche à résoudre :
+
+- l'égalité référentielle
+- les opérations coûteuses en termes de calcul
+
+Dans le cycle de vie d'un composant, React refait le rendu du composant lorsqu'une mise à jour est effectuée. Lorsque React vérifie les modifications apportées à un composant, il peut détecter un changement involontaire ou inattendu en raison de la façon dont JavaScript gère les comparaisons d'égalité et superficielles. Ce changement dans l'application React entraînera un nouveau rendu inutile.
+
+De plus, si ce nouveau rendu est une opération coûteuse, comme une longue boucle for, cela peut nuire aux performances. Les opérations onéreuses peuvent être coûteuses en temps, en mémoire ou en traitement. En plus des problèmes techniques potentiels, cela peut conduire à une mauvaise expérience utilisateur.
+
+Si une partie se rend à nouveau, elle rend à nouveau l'ensemble de l'arbre des composants.
+
+Ainsi, React a lancé l'idée du mémo pour résoudre ce problème.
+
+## Qu'est-ce que la Memoization ?
+
+La mémorisation est une technique d'optimisation qui consiste à passer une fonction complexe à mémoriser. Dans la mémorisation, le résultat est "mémorisé" lorsque les mêmes paramètres sont transmis par la suite.
+
+Si nous avons une fonction qui calcule 1 + 1, elle retournera 2. Mais si elle utilise la mémorisation, la prochaine fois que nous passerons des 1 dans la fonction, elle ne les additionnera pas ; elle se souviendra simplement que la réponse est 2 sans exécuter la fonction d'addition.
+
+Dans la documentation officielle de React, la signature de useMemo ressemble à ceci :
+
+```jsx
+const memoizedValue = React.useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+`useMemo` prend en paramètre une fonction et un tableau de dépendances.
+
+Les dépendances agissent comme des arguments dans une fonction. La liste des dépendances est l'élément que useMemo surveille : s'il n'y a pas de changement, le résultat de la fonction restera le même. Sinon, il réexécutera la fonction. S'ils ne changent pas, peu importe que tout notre composant soit modifié, la fonction ne sera pas ré-exécutée mais retournera le résultat stocké. Cela peut être optimal si la fonction enveloppée est grande et coûteuse. _C'est l'utilisation principale de `useMemo`_.
+
+## Exemple d'utilisation de useMemo ?
+
+Voici un exemple abstrait d'utilisation de `useMemo` pour un tableau d'éléments qui utilise deux fonctions coûteuses en termes de calcul :
+
+```jsx
+const List = React.useMemo(
+  () =>
+    listOfItems.map((item) => ({
+      ...item,
+      itemProp1: expensiveFunction(props.first),
+      itemProp2: anotherPriceyFunction(props.second),
+    })),
+  [listOfItems]
+);
+```
+
+Dans l'exemple ci-dessus, la fonction `useMemo` s'exécuterait au premier rendu. Elle bloquerait le thread jusqu'à ce que les fonctions coûteuses soient terminées, car `useMemo` s'exécute lors du premier rendu.
+
+Au départ, cela n'aura pas l'air aussi propre que `useEffect`, puisque `useEffect` peut rendre une roue de chargement jusqu'à ce que les fonctions coûteuses se terminent et que les effets se déclenchent.
+
+Cependant, dans les rendus suivants, les fonctions coûteuses n'auront pas besoin d'être exécutées à nouveau tant que listOfItems ne change pas. `useMemo` se "souviendra" de la valeur de retour de chaque fonction.
+
+Ces fonctions coûteuses donneraient l'impression d'être rendues instantanément. C'est idéal si vous avez une ou deux fonctions coûteuses et synchrones.
+
+## Quand utiliser useMemo ?
+
+Écrivez d'abord le code, puis revisitez-le pour voir si vous pouvez l'optimiser. Si vous implémentez `useMemo` trop souvent dans une application, cela peut nuire aux performances.
+
+Lorsque vous envisagez de mettre en œuvre `useMemo`, vous pouvez utiliser des outils de profilage pour identifier les problèmes de performance coûteux. Un problème coûteux signifie que l'application utilise beaucoup de ressources (comme la mémoire). Si vous définissez un bon nombre de variables dans une fonction au rendu, il est logique de mémoriser avec `useMemo`.
+
+## Utiliser le bon hook pour le travail
+
+En plus de `useMemo`, il existe également `useCallback`, `useRef` et `useEffect`.
+
+Le _hook_ `useCallback` est similaire à `useMemo`, mais il renvoie une fonction mémorisée, alors que `useMemo` a une fonction qui renvoie une valeur.
+
+Si votre tableau de dépendances n'est pas fourni, il n'y a aucune possibilité de mémorisation, et il calculera une nouvelle valeur à chaque rendu. Vous pouvez utiliser le hook useRef dans ce cas. L'avantage de `useMemo` par rapport à `useRef` est une re-mémorisation si les dépendances changent.
+
+Vous ne voudrez pas que `useMemo` déclenche des effets secondaires ou des appels asynchrones. Dans ces cas, vous devriez utiliser `useEffect`.
+
+## Conclusion
+
+Cet article a exploré le hook `useMemo` et quand il est approprié de l'utiliser dans une application React.
+
+`useMemo` peut améliorer les performances d'une application en "mémorisant" les fonctions coûteuses et en évitant un nouveau rendu à chaque fois qu'un changement est apporté à l'application.
+
+Bien que les performances puissent être améliorées en utilisant ce hook, il peut également ralentir votre application si vous l'utilisez trop. Plus vous utilisez ce crochet, plus votre application doit allouer de la mémoire.

@@ -82,13 +82,26 @@ const breadcrumbItems: BreadcrumbItem[] = [
     @apply mb-3 text-2xl lg:text-4xl;
   }
 
+  .post-content {
+    @apply pb-8;
+  }
+  .post-content ul {
+    @apply list-disc ml-6;
+  }
+  .post-content ul li {
+    @apply m-0;
+  }
+  .post-content a {
+    @apply text-pink-600;
+  }
+
   .post-content h1,
   .post-content h2,
   .post-content h3,
   .post-content h4,
   .post-content h5,
   .post-content h6 {
-    @apply font-semibold text-purple-900;
+    @apply font-semibold text-indigo-600;
   }
 
   .post-content h2,
@@ -96,7 +109,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
   .post-content h4,
   .post-content h5,
   .post-content h6 {
-    @apply font-semibold text-purple-900 mt-10 mb-6 text-2xl lg:text-3xl;
+    @apply font-semibold text-indigo-600 mt-10 mb-6 text-2xl lg:text-3xl;
   }
 
   .post-content p,
@@ -134,14 +147,38 @@ const breadcrumbItems: BreadcrumbItem[] = [
   .post-content {
     @apply max-w-2xl bg-white relative z-10 px-4 lg:px-0;
   }
+  .post-content strong {
+    @apply text-pink-500;
+  }
   .post-content .time {
     @apply mt-0 pt-4 mb-4 lg:mb-5 text-sm text-gray-800;
   }
   .post-content .time .highlight {
-    @apply text-purple-800;
+    @apply text-pink-500;
   }
 
   .wrapper-table-of-content {
     @apply lg:max-w-xs max-h-screen sticky order-last top-0;
+  }
+
+  .toc ul {
+    max-height: calc(100vh - 45px);
+    overflow: auto;
+  }
+  .toc ul::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  li.active {
+    @apply border-pink-500;
+  }
+  li.active:hover {
+    @apply border-pink-600;
+  }
+  li.active:hover a {
+    @apply text-pink-600;
+  }
+  li.active a {
+    @apply text-pink-500 font-bold;
   }
 </style>

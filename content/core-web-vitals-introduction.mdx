@@ -3,28 +3,24 @@ category: 'Seo'
 date: '2021-10-31'
 dateModified: '31 October 2021'
 datePublished: '31 October 2021'
-description: Une introduction sur les core webvitals
+description: Une introduction sur les core webvitals pour avoir une vue d'ensemble des différents indicateurs de performance web (FCP, TTFB, Speed Index, etc.)
 image: '/images/google.jpg'
 isHome: false
 slug: 'core-web-vitals-introduction'
 title: Bien comprendre les core webvitals
-
-
-
-
-isHome: true
-
-title: React fonction de retour et useEffect
 ---
 
-# Tout savoir sur les Core Web Vitals
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/google.jpg';
+import scoreLighthouse from '@assets/images/score-light-house.png';
+import badLighthouse from '@assets/images/bad-lighthouse.png';
 
 <Image
+  format="avif"
   alt={`Logo Google`}
-  src={`/images/google.jpg`}
+  src={banner}
   width={640}
   height={480}
-  priority
 />
 
 Tout ce que j'ai entendu au cours des derniers mois, c'est "core web vitals ? Qu'est-ce que c'est et comment cela va-t-il affecter mon site web ?". En réalité, cela semble plus effrayant que ça ne l'est.
@@ -140,9 +136,12 @@ Google Search Console dispose également de l'outil d'expérience de la page qui
 
 Google Lighthouse est mon outil de prédilection. J'aime toujours le faire en mode incognito sur Chrome. On y accède en inspectant la page et il évalue la page ouverte dans son ensemble.
 
-<img
-  src="https://billiegeena.co.uk/wp-content/uploads/2021/04/Light-House.png"
-  alt="lighthouse"
+<Image
+  alt={`Bon score Core Web Vitals`}
+  src={scoreLighthouse}
+  width={640}
+  height={480}
+  format="avif"
 />
 
 Les scores Core Web Vitals s'affichent dans les résultats de votre test de vitesse après avoir saisi votre URL ; il vous suffit de rechercher "LCP", "CLS" et "FID" ou "TBT" et de saisir les chiffres à côté.
@@ -151,7 +150,13 @@ Les tests mobiles sur page speed insights sont effectués sur une connexion 3G l
 
 Ne vous inquiétez pas si vous faites le test et obtenez beaucoup de rouges et d'oranges. Les notes et les couleurs ne sont pas tout.
 
-<img src="https://billiegeena.co.uk/wp-content/uploads/2021/04/Page-speed-insights.png" />
+<Image
+  alt={`Mauvais score Core Web Vitals`}
+  src={badLighthouse}
+  width={990}
+  height={964}
+  format="avif"
+/>
 
 ## Comment améliorer les Core Web Vitals ?
 
@@ -183,6 +188,8 @@ Le TTFB, également appelé "Time To First Byte", est le temps nécessaire au se
 
 Si vous avez des difficultés à cet égard, la plupart des fournisseurs d'hébergement offrent de l'aide, il peut donc être utile de les contacter.
 
+Consulter mon article <a href="https://developpeur-web.tech/posts/comment-reduire-ttfb">comment réduire le TTFB (Time to first byte)</a> pour plus d'informations
+
 ### Qu'en est-il de CLS ?
 
 Vous avez peut-être remarqué que CLS n'est pas du tout mentionné ci-dessus. Ceci pour deux raisons : ce n'est pas directement une mesure de vitesse, et il est généralement assez facile d'améliorer votre score (si nécessaire) en utilisant les tâches mentionnées dans notre liste de contrôle ci-dessous.
@@ -198,3 +205,5 @@ Je sais que tout cela semble beaucoup, mais je vous promets que cette mise à jo
 La meilleure chose que vous puissiez faire pour votre blog, c'est de continuer à créer et à partager votre incroyable contenu. Je ne saurais trop insister sur le fait que ce n'est pas quelque chose qui doit vous décourager.
 
 J'espère vraiment que vous avez trouvé cela utile et, comme d'habitude, si vous avez des questions, n'hésitez pas à m'en faire part.
+
+<a href="/">Johan Petrikovsky développeur React Freelance</a>

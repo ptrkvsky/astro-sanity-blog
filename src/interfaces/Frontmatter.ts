@@ -4,6 +4,7 @@ export interface Frontmatter {
   dateModified: string; // '31 October 2021'
   datePublished: string;
   description: string;
+  metaDescription: string;
   image: string;
   isHome: boolean;
   keywords: string[];

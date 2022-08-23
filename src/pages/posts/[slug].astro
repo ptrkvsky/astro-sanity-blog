@@ -62,9 +62,13 @@ const breadcrumbItems: BreadcrumbItem[] = [
   </Header>
   <div slot="main" class="post">
     <div class="wrapper-post">
-      <aside class="wrapper-table-of-content px-4 lg:px-0">
-        <TableOfContent client:load headings={headings} />
-      </aside>
+      {
+        frontmatter.category !== 'Définition' && (
+          <aside class="wrapper-table-of-content px-4 lg:px-0">
+            <TableOfContent client:load headings={headings} />
+          </aside>
+        )
+      }
       <article class="post-content">
         <p class="time">
           Temps de lecture <span class="highlight font-semibold"

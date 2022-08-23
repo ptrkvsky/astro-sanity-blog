@@ -1,24 +1,109 @@
 ---
-category: 'Définition'
-date: '2022-08-22'
-dateModified: '22 August 2022'
-datePublished: '22 August 2022'
-description: Définition de Javascript
-image: '/javascript-logo.png'
+category: 'Tutoriel'
+date: '2022-08-23'
+dateModified: '23 August 2022'
+datePublished: '23 August 2022'
+description: Comment installer PostegreSQL sur un ordinateur sous MacOS
+image: '/postgresql_elephant.svg.png'
 isHome: false
-slug: 'definition-javascript'
-title: Qu'est ce que Javascript ?
-metaTitle: Définition de Javascript
-metaDescription: Retrouvez la définition de Javascript
+slug: 'installer-postgresql-mac'
+title: Comment installer PostegreSQL sur un ordinateur sous MacOS ?
+metaTitle: Tout savoir pour installer PostgreSQL sur Mac OS
+metaDescription: Informations et conseils pratiques pour installer PostgreSQL sur MacOs rapidepement
 ---
 
 import { Image } from '@astrojs/image/components';
-import javascriptLogo from '@assets/images/javascript-logo.png';
+import postgreLogo from '@assets/images/postgresql_elephant.svg.png';
 
-JavaScript est un **langage de programmation textuel** utilisé à la fois du **côté client** et du **côté serveur**, qui permet de rendre les pages Web **interactives**. Alors que HTML et CSS sont des langages qui donnent une structure et un style aux pages Web, JavaScript donne aux pages Web des éléments interactifs qui font participer l'utilisateur.
+Il s'agit d'un tutoriel pour la mise en place de PostgreSQL sur MacOS. Vous vous demandez peut-être pourquoi il est nécessaire d'élaborer un autre guide de configuration pour Postgres, puisqu'il en existe plusieurs sur le web.
 
-<Image alt="Logo Javascript" src={javascriptLogo} />
+J'ai trouvé de nombreux tutoriels et guides sur la façon de le configurer, mais j'ai trouvé que la plupart d'entre eux étaient peu clairs et dépassés, basés sur d'anciennes versions de PostgreSQL.
 
-## Est-ce que le JavaScript est difficile à apprendre ?
+La liste de contrôle n'est pas exhaustive, mais comme elle est utilisée pour plusieurs tutoriels sur mon site web, je la tiens à jour avec les versions récentes de PostgreSQL.
 
-On peut dire que JavaScript est l'un des langages de programmation les plus faciles à apprendre, ce qui en fait un excellent premier langage pour toute personne qui s'initie au codage. Même les lignes de code JavaScript les plus complexes peuvent être écrites une par une, par fragments. Il peut également être testé dans le navigateur Web en même temps.
+<Image alt="Logo PostgreSQL" src={postgreLogo} />
+
+## Le guide pour installer PostgreSQL
+
+Si vous remarquez des défauts dans ce guide, un commentaire ci-dessous serait très utile pour le tenir à jour pour les autres développeurs.
+
+### Étape 1 - Installer Homebrew
+
+Je recommande Homebrew pour l'installation et la gestion des applications sur MacOS. Il s'installe à l'aide de la commande suivante dans le terminal MacOS :
+
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+Le terminal effectue une série d'opérations d'installation et créera probablement des dossiers dans votre machine locale pour répondre aux besoins de stockage des Homebrews. Vous trouverez des instructions plus détaillées ici.
+
+### Étape 2 - Installer PostegreSQL
+
+Après l'installation, mettez à jour les dépendances de Homebrew et installez PostgreSQL en ligne de commande :
+
+```
+brew update
+brew install postgresql
+```
+
+## Étape 3 - Vérifier l'installation
+
+```
+postgres --version
+postgres (PostgreSQL) 13.1
+```
+
+Les résultats de la ligne de commande indiqueront la version que vous avez installée sur votre machine locale. Je recommande d'utiliser la dernière version des bibliothèques et des logiciels chaque fois que cela est possible pour éviter les problèmes de compatibilité avec les applications côté client.
+
+## Comment créer physiquement une base de données PostgreSQL
+
+Vous pouvez maintenant initialiser l'espace physique sur votre disque dur pour allouer les bases de données. Pour ce faire, créez une base de données Postgres par défaut sur la ligne de commande au cas où cela ne se ferait pas automatiquement :
+
+```
+initdb /usr/local/var/postgres
+```
+
+Vous verrez le message d'erreur : "initdb : le répertoire "/usr/local/var/postgres" existe mais n'est pas vide" si la base de données a déjà été créée lors de l'installation de PostgreSQL. Cela signifie que le dossier dans lequel vous essayez de créer un emplacement physique pour la base de données en possède déjà un. Dans tous les cas, vous pouvez passer à l'étape suivante.
+
+Lorsque vous vous connecterez à cette base de données physique plus tard, vous verrez une base de données qui est également appelée postgres. La base de données postgres est censée être la base de données par défaut pour tout outil tiers que vous utilisez en combinaison avec PostgreSQL. Ces outils tentent d'établir la connexion par défaut à cette base de données par défaut, vous ne devez donc pas la supprimer.
+
+## Comment démarrer/arrêter une base de données PostgreSQL
+
+Voyons maintenant comment vous pouvez interagir avec la base de données actuelle. Démarrez et arrêtez manuellement votre serveur de base de données Postgres à l'aide des commandes suivantes :
+
+```
+pg_ctl -D /usr/local/var/postgres start
+pg_ctl -D /usr/local/var/postgres stop
+```
+
+Le terminal confirmera ces opérations avec les indications "serveur démarré" et "serveur arrêté". Vous pouvez également mettre en place un script pour démarrer le serveur à chaque démarrage de la machine, mais j'aime avoir le contrôle sur le moment où je démarre et arrête mon serveur de base de données pour éviter les complications.
+
+## Comment créer VOTRE base de données PostgreSQL
+
+Ensuite, passons en revue les étapes de la mise en place d'une base de données qui peut être utilisée pour l'une de vos applications. Assurez-vous d'abord que le serveur Postgre est démarré, puis tapez ces commandes dans la ligne de commande pour créer et supprimer une base de données :
+
+```
+createdb mydatabasename
+dropdb mydatabasename
+```
+
+Vous pouvez également vous connecter à des bases de données pour exécuter des instructions SQL. Utilisez la commande psql, ou spécifiez une base de données telle que la base de données postgres par défaut pour vous connecter :
+
+```
+psql mydatabasename
+```
+
+La commande vous conduit au shell psql, que vous pouvez quitter en tapant CTRL + d. Dans le shell psql, vous pouvez également créer et supprimer des bases de données :
+
+```
+CREATE DATABASE mydatabasename;
+DROP DATABASE mydatabasename;
+```
+
+Pour lister toutes vos bases de données, vous pouvez taper `\list`. Vous verrez alors apparaître la liste de toutes les nouvelles bases de données, ainsi que deux bases de données par défaut fournies avec PostgreSQL, appelées template0 et template1. Les modèles doivent rester dans votre liste de bases de données même si vous ne les utilisez pas, car ils peuvent être utiles plus tard.
+
+- \list - Voir toutes vos base de données.
+- \c mydatabasename - Vous connecter à une autre base de données.
+- \d - Voir les tables de votre base de données.
+- \d mytablename - Voir les informations de votre base de données.
+- \? - Pour voir toutes les commandes

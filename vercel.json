@@ -4,6 +4,11 @@
       "source": "/blog/postgresql/installer-mac/",
       "destination": "/posts/installer-postgresql-mac",
       "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/posts",
+      "permanent": true
     }
   ]
 }

@@ -1,0 +1,40 @@
+---
+category: Définition
+date: '2021-12-14'
+dateModified: 25 August 2022
+datePublished: 25 August 2022
+description: Qu'est-ce que le JSX, informations et définitions.
+image: /images/logo-jsx.png
+isHome: true
+slug: definition-react-jsx
+title: Qu'est-ce que le JSX en React ?
+metaTitle: React JSX définition
+metaDescription: Qu'est-ce que le JSX en React ?
+---
+
+import { Image } from '@astrojs/image/components';
+import banner from '@assets/images/logo-jsx.png';
+
+<Image alt={`Logo JSX`} src={banner} format="avif" />
+
+## Définition React JSX ?
+
+En React le JSX c'est :
+
+- Le JSX c'est l'abréviation de JavaScript XML.
+- JSX permet d'écrire du HTML dans React.
+- JSX facilite l'écriture et l'ajout de HTML dans React.
+
+## Coder avec du JSX
+
+- JSX nous permet d'écrire des éléments HTML en JavaScript et de les placer dans le DOM sans avoir recours aux méthodes createElement() et/ou appendChild().
+- JSX convertit les balises HTML en éléments réactifs.
+
+## Exemple
+
+```jsx
+const myElement = <h1>I Love JSX!</h1>;
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(myElement);
+```

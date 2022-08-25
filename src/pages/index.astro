@@ -1,4 +1,5 @@
 ---
+//@ts-ignore
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@features/blog/components/PostCard/index.astro';
 import imgDevelopper from '@assets/images/developpeur-freelance.jpeg';
@@ -14,13 +15,183 @@ const description =
   'Développeur React freelance et créateur de site internet depuis 2012. Spécialisé dans le développement front de site web en Javascript avec React.';
 ---
 
-<BaseLayout
+<script>
+  //@ts-ignore
+  import { Curtains, Plane, RenderTarget, ShaderPass } from 'curtainsjs';
+  import { TextTexture } from '@lib/curtainjs/TextTexture';
+
+  import { fs, scrollFs, vs } from '@lib/curtainjs/glFragment';
+
+  window.addEventListener('load', () => {
+    // create curtains instance
+    const curtains = new Curtains({
+      container: 'canvas',
+      pixelRatio: Math.min(1.5, window.devicePixelRatio),
+    });
+
+    // track scroll values
+    const scroll = {
+      value: 0,
+      lastValue: 0,
+      effect: 0,
+      delta: 0,
+    };
+
+    // on success
+    curtains.onSuccess(() => {
+      const fonts = {
+        list: [
+          'normal 400 1em "Polysans", sans-serif',
+          'normal 300 1em "Merriweather Sans", sans-serif',
+        ],
+        loaded: 0,
+      };
+
+      // load the fonts first
+      fonts.list.forEach((font) => {
+        document.fonts.load(font).then(() => {
+          fonts.loaded++;
+
+          if (fonts.loaded === fonts.list.length) {
+            // create our shader pass
+            const scrollPass = new ShaderPass(curtains, {
+              fragmentShader: scrollFs,
+              depth: false,
+              uniforms: {
+                scrollEffect: {
+                  name: 'uScrollEffect',
+                  type: '1f',
+                  value: scroll.effect,
+                },
+                scrollStrength: {
+                  name: 'uScrollStrength',
+                  type: '1f',
+                  value: 2.5,
+                },
+              },
+            });
+
+            // calculate the lerped scroll effect
+            scrollPass.onRender(() => {
+              scroll.lastValue = scroll.value;
+              scroll.value = curtains.getScrollValues().y;
+
+              // clamp delta
+              scroll.delta = Math.max(
+                -30,
+                Math.min(30, scroll.lastValue - scroll.value)
+              );
+
+              scroll.effect = curtains.lerp(scroll.effect, scroll.delta, 0.05);
+              scrollPass.uniforms.scrollEffect.value = scroll.effect;
+            });
+
+            // create our text planes
+            const textEls = document.querySelectorAll('.text-plane');
+            textEls.forEach((textEl) => {
+              const textPlane = new Plane(curtains, textEl, {
+                vertexShader: vs,
+                fragmentShader: fs,
+              });
+
+              // create the text texture and... that's it!
+              const textTexture = new TextTexture({
+                plane: textPlane,
+                textElement: textPlane.htmlElement,
+                sampler: 'uTexture',
+                resolution: 1.5,
+                skipFontLoading: true, // we've already loaded the fonts
+              });
+            });
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<!-- <BaseLayout
   title="Développeur React et Typescript Freelance"
   description={description}
   schema={schema}
->
-  <div slot="main">
-    <h1 class="text-3xl font-bold text-center">
+> -->
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="generator" content={Astro.generator} />
+<title>Développeur React et Typescript Freelance</title>
+<meta name="description" content={description} />
+{
+  schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )
+}
+
+<div id="canvas"></div>
+<div id="content" slot="main">
+  <h1 class="text-3xl font-bold text-center text-plane">
+    Développeur <br />React<br /> Freelance
+  </h1>
+
+  <h2>
+    <span class="text-plane">
+      Je m'appelle Johan Petrikovsky et je suis un développeur freelance<br />
+      spécialisé en Javascript, plus particulièrement React et Typescript
+    </span>
+  </h2>
+
+  <div id="process" class="text-block">
+    <p>
+      <span class="text-plane">
+        This is an example of how we can render whole blocks of text to WebGL
+        thanks to curtains.js and the TextTexture class.
+      </span>
+    </p>
+    <p>
+      <span class="text-plane">
+        A WebGL plane is created for all elements that have a "text-plane" class
+        and their text contents are drawn inside a 2D canvas, which is then used
+        as a WebGL texture.
+      </span>
+    </p>
+  </div>
+
+  <div id="scroll" class="text-block">
+    <p>
+      <span class="text-plane">
+        We're using an additional shader pass to add a cool effect on scroll
+        that makes you feel like the content is actually dragged.
+      </span>
+    </p>
+    <p>
+      <span class="text-plane"> Try to scroll down to see what happens!</span>
+    </p>
+  </div>
+
+  <div id="lipsum" class="text-block">
+    <p>
+      <span class="text-plane">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a
+        dolor posuere nisi tempus rhoncus. Curabitur venenatis velit a tellus
+        porttitor, sed efficitur ipsum volutpat. Nunc ante ante, convallis in
+        commodo eget, semper ac ex. Fusce lobortis risus vel nisl interdum
+        imperdiet. Nulla facilisi
+      </span>
+    </p>
+    <p>
+      <span class="text-plane">
+        Cras hendrerit iaculis est at vestibulum. Integer tincidunt mi id metus
+        mollis, in fermentum odio sagittis. Vestibulum ante ipsum primis in
+        faucibus orci luctus et ultrices posuere cubilia curae; Phasellus in
+        efficitur diam.
+      </span>
+    </p>
+  </div>
+</div>
+
+<!-- <div slot="main">
+    <h1 class="text-3xl font-bold text-center text-plane">
       Développeur <span class="text-gradient">React</span> Freelance
     </h1>
     <div class="max-w-xl mx-4 md:mx-auto">
@@ -265,10 +436,73 @@ const description =
         </p>
       </div>
     </section>
-  </div>
-</BaseLayout>
+  </div> -->
+<!-- </BaseLayout> -->
 
 <style>
+  body {
+    overflow-x: hidden;
+  }
+  #canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+  }
+
+  .text-plane {
+    display: inline-block;
+
+    /* apply negative margins and padding to avoid chars from being cropped */
+    margin: -1em;
+    padding: 1em;
+
+    /* hide the original text content */
+    opacity: 0;
+  }
+
+  #content {
+    width: 100%;
+    padding: 2.5vw;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+  }
+
+  #content h1 {
+    text-align: left;
+    margin: 25vh 0;
+    font-size: 8vw;
+    text-transform: uppercase;
+    font-family: 'Polysans', sans-serif;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  #content h2 {
+    width: 50%;
+    margin: 15vh 0 15vh 50%;
+    font-size: 4vw;
+    font-family: 'Polysans', sans-serif;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .text-block {
+    width: 50%;
+    margin: 15vh 0;
+  }
+
+  #scroll {
+    margin-left: 25%;
+  }
+
+  #lipsum {
+    margin-left: 50%;
+  }
+
   .list {
     list-style-type: disc;
   }

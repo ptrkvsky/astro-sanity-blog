@@ -1,109 +1,62 @@
 ---
-category: 'Tutoriel'
-date: '2022-08-23'
-dateModified: '23 August 2022'
-datePublished: '23 August 2022'
-description: Comment installer PostegreSQL sur un ordinateur sous MacOS
-image: '/postgresql_elephant.svg.png'
+category: 'Définition'
+date: '2022-08-22'
+dateModified: '22 August 2022'
+datePublished: '22 August 2022'
+description: Définition de Javascript
+image: '/javascript-logo'
 isHome: false
-slug: 'installer-postgresql-mac'
-title: Comment installer PostegreSQL sur un ordinateur sous MacOS ?
-metaTitle: Tout savoir pour installer PostgreSQL sur Mac OS
-metaDescription: Informations et conseils pratiques pour installer PostgreSQL sur MacOs rapidepement
+slug: 'definition-javascript'
+title: À quoi sert JavaScript ? ?
+metaTitle: Définition de Javascript. Qu'est-ce que Javascript ?
+metaDescription: Qu'est-ce que Javascript ? Retrouvez une définition simple et précise de Javascript
 ---
 
 import { Image } from '@astrojs/image/components';
-import postgreLogo from '@assets/images/postgresql_elephant.svg.png';
+import javascriptLogo from '@assets/images/javascript-logo.png';
 
-Il s'agit d'un tutoriel pour la mise en place de PostgreSQL sur MacOS. Vous vous demandez peut-être pourquoi il est nécessaire d'élaborer un autre guide de configuration pour Postgres, puisqu'il en existe plusieurs sur le web.
+## Qu'est-ce que JavaScript ?
 
-J'ai trouvé de nombreux tutoriels et guides sur la façon de le configurer, mais j'ai trouvé que la plupart d'entre eux étaient peu clairs et dépassés, basés sur d'anciennes versions de PostgreSQL.
+JavaScript est un langage de programmation textuel utilisé à la fois du côté client et du côté serveur, qui vous permet de rendre les pages Web interactives. Alors que HTML et CSS sont des langages qui donnent une structure et un style aux pages Web, JavaScript donne aux pages Web des éléments interactifs qui interpellent l'utilisateur. Parmi les exemples courants de JavaScript que vous utilisez tous les jours, citons le champ de recherche sur Amazon, une vidéo récapitulative intégrée au New York Times ou l'actualisation de votre flux Twitter.
 
-La liste de contrôle n'est pas exhaustive, mais comme elle est utilisée pour plusieurs tutoriels sur mon site web, je la tiens à jour avec les versions récentes de PostgreSQL.
+L'incorporation de JavaScript améliore l'expérience utilisateur de la page Web en la transformant d'une page statique en une page interactive. Pour résumer, JavaScript ajoute du comportement aux pages Web.
 
-<Image alt="Logo PostgreSQL" src={postgreLogo} />
+<Image alt="Logo Javascript" src={javascriptLogo} />
 
-## Le guide pour installer PostgreSQL
+## Pourquoi utilise t-on javascript ?
 
-Si vous remarquez des défauts dans ce guide, un commentaire ci-dessous serait très utile pour le tenir à jour pour les autres développeurs.
+JavaScript est principalement utilisé pour les applications basées sur le Web et les navigateurs Web. Mais JavaScript est également utilisé au-delà du Web dans les logiciels, les serveurs et les contrôles matériels intégrés. Voici quelques exemples d'utilisation de base de JavaScript :
 
-### Étape 1 - Installer Homebrew
+### 1. - Ajouter de l'interactivité
 
-Je recommande Homebrew pour l'installation et la gestion des applications sur MacOS. Il s'installe à l'aide de la commande suivante dans le terminal MacOS :
+JavaScript permet aux utilisateurs d'interagir avec les pages Web. Il n'y a pratiquement aucune limite aux choses que vous pouvez faire avec JavaScript sur une page Web - ce ne sont que quelques exemples :
+Afficher ou masquer plus d'informations en cliquant sur un bouton
 
-```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
+- Changez la couleur d'un bouton lorsque la souris le survole.
+- Faire défiler un carrousel d'images sur la page d'accueil
+- Faire un zoom avant ou un zoom arrière sur une image
+- Afficher une minuterie ou un compte à rebours sur un site web
+- Lecture de fichiers audio et vidéo dans une page Web
+- Afficher des animations
+- Utiliser un menu hamburger déroulant
 
-Le terminal effectue une série d'opérations d'installation et créera probablement des dossiers dans votre machine locale pour répondre aux besoins de stockage des Homebrews. Vous trouverez des instructions plus détaillées ici.
+### 2. - Création d'applications web et mobiles
 
-### Étape 2 - Installer PostegreSQL
+Les développeurs peuvent utiliser différents frameworks JavaScript pour développer et créer des applications Web et mobiles. Les frameworks JavaScript sont des collections de bibliothèques de code JavaScript qui fournissent aux développeurs du code pré-écrit à utiliser pour les fonctions et les tâches de programmation de routine - littéralement, un cadre autour duquel construire des sites Web ou des applications Web.
 
-Après l'installation, mettez à jour les dépendances de Homebrew et installez PostgreSQL en ligne de commande :
+Les frameworks JavaScript frontaux les plus populaires sont React, React Native, Angular et Vue. De nombreuses entreprises utilisent Node.js, un environnement d'exécution JavaScript basé sur le moteur JavaScript V8 de Google Chrome. Parmi les exemples célèbres, citons Paypal, LinkedIn, Netflix et Uber !
 
-```
-brew update
-brew install postgresql
-```
+### 3. - Construire des serveurs web et développer des applications serveur
+Au-delà des sites Web et des applications, les développeurs peuvent également utiliser JavaScript pour construire des serveurs Web simples et développer l'infrastructure back-end à l'aide de Node.js.
 
-## Étape 3 - Vérifier l'installation
+### 4. -Développement de jeux
+Bien entendu, vous pouvez également utiliser JavaScript pour créer des jeux sur navigateur. Ces jeux sont un excellent moyen pour les développeurs débutants de mettre en pratique leurs compétences en JavaScript.
 
-```
-postgres --version
-postgres (PostgreSQL) 13.1
-```
+## Pourquoi utiliser JavaScript plutôt que d'autres langages de programmation ?
 
-Les résultats de la ligne de commande indiqueront la version que vous avez installée sur votre machine locale. Je recommande d'utiliser la dernière version des bibliothèques et des logiciels chaque fois que cela est possible pour éviter les problèmes de compatibilité avec les applications côté client.
+Outre les possibilités illimitées, les développeurs Web ont de nombreuses raisons d'utiliser JavaScript plutôt que d'autres langages de programmation :
 
-## Comment créer physiquement une base de données PostgreSQL
-
-Vous pouvez maintenant initialiser l'espace physique sur votre disque dur pour allouer les bases de données. Pour ce faire, créez une base de données Postgres par défaut sur la ligne de commande au cas où cela ne se ferait pas automatiquement :
-
-```
-initdb /usr/local/var/postgres
-```
-
-Vous verrez le message d'erreur : "initdb : le répertoire "/usr/local/var/postgres" existe mais n'est pas vide" si la base de données a déjà été créée lors de l'installation de PostgreSQL. Cela signifie que le dossier dans lequel vous essayez de créer un emplacement physique pour la base de données en possède déjà un. Dans tous les cas, vous pouvez passer à l'étape suivante.
-
-Lorsque vous vous connecterez à cette base de données physique plus tard, vous verrez une base de données qui est également appelée postgres. La base de données postgres est censée être la base de données par défaut pour tout outil tiers que vous utilisez en combinaison avec PostgreSQL. Ces outils tentent d'établir la connexion par défaut à cette base de données par défaut, vous ne devez donc pas la supprimer.
-
-## Comment démarrer/arrêter une base de données PostgreSQL
-
-Voyons maintenant comment vous pouvez interagir avec la base de données actuelle. Démarrez et arrêtez manuellement votre serveur de base de données Postgres à l'aide des commandes suivantes :
-
-```
-pg_ctl -D /usr/local/var/postgres start
-pg_ctl -D /usr/local/var/postgres stop
-```
-
-Le terminal confirmera ces opérations avec les indications "serveur démarré" et "serveur arrêté". Vous pouvez également mettre en place un script pour démarrer le serveur à chaque démarrage de la machine, mais j'aime avoir le contrôle sur le moment où je démarre et arrête mon serveur de base de données pour éviter les complications.
-
-## Comment créer VOTRE base de données PostgreSQL
-
-Ensuite, passons en revue les étapes de la mise en place d'une base de données qui peut être utilisée pour l'une de vos applications. Assurez-vous d'abord que le serveur Postgre est démarré, puis tapez ces commandes dans la ligne de commande pour créer et supprimer une base de données :
-
-```
-createdb mydatabasename
-dropdb mydatabasename
-```
-
-Vous pouvez également vous connecter à des bases de données pour exécuter des instructions SQL. Utilisez la commande psql, ou spécifiez une base de données telle que la base de données postgres par défaut pour vous connecter :
-
-```
-psql mydatabasename
-```
-
-La commande vous conduit au shell psql, que vous pouvez quitter en tapant CTRL + d. Dans le shell psql, vous pouvez également créer et supprimer des bases de données :
-
-```
-CREATE DATABASE mydatabasename;
-DROP DATABASE mydatabasename;
-```
-
-Pour lister toutes vos bases de données, vous pouvez taper `\list`. Vous verrez alors apparaître la liste de toutes les nouvelles bases de données, ainsi que deux bases de données par défaut fournies avec PostgreSQL, appelées template0 et template1. Les modèles doivent rester dans votre liste de bases de données même si vous ne les utilisez pas, car ils peuvent être utiles plus tard.
-
-- \list - Voir toutes vos base de données.
-- \c mydatabasename - Vous connecter à une autre base de données.
-- \d - Voir les tables de votre base de données.
-- \d mytablename - Voir les informations de votre base de données.
-- \? - Pour voir toutes les commandes
+- JavaScript est le seul langage de programmation natif du navigateur Web.
+- JavaScript est le langage le plus populaire
+- Le seuil de démarrage est faible
+- C'est un langage amusant à apprendre

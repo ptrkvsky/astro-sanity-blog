@@ -9,19 +9,22 @@ interface Props {
   description: string;
   schema?: WithContext<BlogPosting> | Graph;
   hasGradient?: boolean;
+  image?: string;
 }
 
-const { title, schema, description, hasGradient } = Astro.props as Props;
+const { title, schema, description, hasGradient, image } = Astro.props as Props;
 ---
 
 <html lang="fr-FR">
   <head>
     <meta charset="UTF-8" />
+    <meta property="og:locale" content="fr_FR" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {image && <meta property="og:image" content={image} />}
     {
       schema && (
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />

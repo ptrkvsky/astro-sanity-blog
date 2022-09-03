@@ -26,6 +26,6 @@
       "@lib/*": ["src/lib/*"],
       "@posts/*": ["src/posts/*"]
     },
-    "types": ["@astrojs/image/client"]
+    "types": ["@astrojs/image/client", "astro/client"]
   }
 }

@@ -1,16 +1,25 @@
 import { defineConfig } from 'astro/config';
+import compress from 'astro-compress';
+import { VitePWA } from 'vite-plugin-pwa';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import image from '@astrojs/image';
-import { remarkReadingTime } from './lib/remark-reading-time.mjs';
-
+import { remarkReadingTime } from './lib/remark-reading-time.js';
 import sitemap from '@astrojs/sitemap';
+import { manifest } from './src/config';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://developpeur-web.tech',
   integrations: [
+    tailwind({
+      config: {
+        applyBaseStyles: false,
+        path: './tailwind.config.js',
+      },
+    }),
+    compress(),
     react(),
     tailwind(),
     mdx({
@@ -32,5 +41,18 @@ export default defineConfig({
       wrap: false,
     },
   },
-  tailwindConfig: './tailwind.config.js',
+  vite: {
+    plugins: [
+      VitePWA({
+        registerType: 'autoUpdate',
+        manifest,
+        workbox: {
+          globDirectory: 'dist',
+          globPatterns: [
+            '**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico,html}',
+          ],
+        },
+      }),
+    ],
+  },
 });

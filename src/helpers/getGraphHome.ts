@@ -5,7 +5,7 @@ import type {
   CreativeWorkSeries,
   BreadcrumbList,
 } from 'schema-dts';
-import config from 'src/config';
+import { seoConfig } from 'src/config';
 import getGraphPlace from './getGraphPlace';
 import getGraphWebsite from './getGraphWebsite';
 
@@ -33,43 +33,43 @@ const getGraphHome = () => {
         '@type': 'ListItem',
         position: 1,
         name: 'Johan Petrikovsky développeur React freelance',
-        item: config.url,
+        item: seoConfig.baseURL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: '🚀',
-        item: config.url,
+        item: seoConfig.baseURL,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Développeur React freelance à Toulouse',
-        item: config.url,
+        item: seoConfig.baseURL,
       },
     ],
   };
 
   const webpage: WebPage = {
     '@type': 'WebPage',
-    '@id': `${config.url}/`,
-    url: `${config.url}/posts/`,
+    '@id': `${seoConfig.baseURL}/`,
+    url: `${seoConfig.baseURL}/posts/`,
     name: 'Johan Petrikovsky développeur frontend spécialisé en React  (Nexjs, Gatsby, GraphQL...)',
     isPartOf: {
-      '@id': `${config.url}/#website`,
+      '@id': `${seoConfig.baseURL}/#website`,
     },
     datePublished: datePublishedISO,
     dateModified: dateModifiedISO,
     description:
       "Développeur React depuis 3ans j'aide les entreprises dans le développement de site internet et d'application web performantes",
     breadcrumb: {
-      '@id': `${config.url}/posts/#breadcrumb`,
+      '@id': `${seoConfig.baseURL}/posts/#breadcrumb`,
     },
     inLanguage: 'fr-FR',
     potentialAction: [
       {
         '@type': 'ReadAction',
-        target: [`${config.url}/posts/`],
+        target: [`${seoConfig.baseURL}/posts/`],
       },
     ],
   };

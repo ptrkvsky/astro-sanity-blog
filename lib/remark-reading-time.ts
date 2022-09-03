@@ -1,6 +1,6 @@
 import { toString } from 'mdast-util-to-string';
 
-function getReadingTime(text) {
+function getReadingTime(text: string) {
   const wpm = 225;
   const words = text.trim().split(/\s+/).length;
   const time = Math.ceil(words / wpm);
@@ -9,7 +9,7 @@ function getReadingTime(text) {
 }
 
 export function remarkReadingTime() {
-  return function (tree, { data }) {
+  return function (tree: any, { data }: any) {
     const textOnPage = toString(tree);
     const readingTime = getReadingTime(textOnPage);
     // readingTime.text will give us minutes read as a friendly string,

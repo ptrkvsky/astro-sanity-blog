@@ -1,6 +1,6 @@
 import type { Frontmatter } from './../interfaces/Frontmatter';
 import type { WithContext, BlogPosting } from 'schema-dts';
-import config from 'src/config';
+import { seoConfig } from 'src/config';
 
 const getSchemaBlogPosting = ({
   dateModified,
@@ -20,7 +20,7 @@ const getSchemaBlogPosting = ({
     '@type': 'BlogPosting',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${config.url}/posts/${slug}`,
+      '@id': `${seoConfig.baseURL}/posts/${slug}`,
     },
     headline: title,
     image: {
@@ -32,8 +32,8 @@ const getSchemaBlogPosting = ({
     dateModified: dateModifiedISO,
     author: {
       '@type': 'Person',
-      name: config.author,
-      url: config.url,
+      name: seoConfig.author,
+      url: seoConfig.baseURL,
     },
     description: description,
     articleBody: rawText,

@@ -37,6 +37,7 @@ const { title, schema, description, hasGradient, image } = Astro.props as Props;
     <Favicons />
     <script is:inline src="/registerSW.js"></script>
     <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#30E130" />
     <title>{title}</title>
   </head>
 
@@ -58,5 +59,6 @@ const { title, schema, description, hasGradient, image } = Astro.props as Props;
       @apply mx-2 md:mx-auto;
     }
   </style>
+
 
 </html>

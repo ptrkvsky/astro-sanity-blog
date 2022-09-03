@@ -46,11 +46,15 @@ export default defineConfig({
       VitePWA({
         registerType: 'autoUpdate',
         manifest,
+        strategies: 'generateSW',
         workbox: {
           globDirectory: 'dist',
           globPatterns: [
-            '**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico,html}',
+            '**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico}',
           ],
+          // Don't fallback on document based (e.g. `/some-page`) requests
+          // Even though this says `null` by default, I had to set this specifically to `null` to make it work
+          navigateFallback: null,
         },
       }),
     ],

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import { toHTML } from '@portabletext/to-html';
 import type { Frontmatter } from '@interfaces/Frontmatter';
 import TableOfContent from '@features/blog/components/TableOfContent';
 import getSchemaBlogPosting from 'src/helpers/getSchemaBlogPosting';
@@ -12,36 +13,57 @@ import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import getPostsUrlParams from '@features/blog/functions/getPostsUrlParams';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
+import type { BlockContent, Post } from '@interfaces/SanitySchema';
 
 interface AstroProps {
-  MdxContent: AstroComponentFactory;
-  frontmatter: Frontmatter;
-  getHeadings: () => Promise<MarkdownHeading[]>;
+  post: Post;
+  params: {
+    slug: {
+      current: string;
+    };
+  };
 }
 
 export async function getStaticPaths() {
   const sanityProjects = await fetchSanity<SanityAllPost>(queryAllPosts);
   const params = sanityProjects && getPostsUrlParams(sanityProjects);
 
-  return Promise.all(
-    (await Astro.glob('../../../content/*.mdx'))
-      // .filter((page) => !page.frontmatter.draft) // skip drafts
-      .map(async ({ default: MdxContent, frontmatter, getHeadings }) => {
-        return {
-          params: { slug: frontmatter.slug || 'index' },
-          props: {
-            MdxContent,
-            getHeadings,
-            frontmatter: frontmatter,
-          },
-        };
-      })
-  );
+  return params;
 }
-const { MdxContent, frontmatter, getHeadings } = Astro.props as AstroProps;
-const schema = getSchemaBlogPosting(frontmatter);
-const hasFooterLink = frontmatter.hasFooterLink;
-const headings = await getHeadings();
+
+const { post } = Astro.props as AstroProps;
+
+const schema = getSchemaBlogPosting(post);
+
+function getHeadins(text: BlockContent) {
+  return text
+    .map((textItem) => {
+      if (
+        textItem.style === 'h2' ||
+        textItem.style === 'h3' ||
+        textItem.style === 'h4' ||
+        textItem.style === 'h5' ||
+        textItem.style === 'h6'
+      ) {
+        return {
+          text: textItem.children[0].text,
+          hn: textItem.style,
+        };
+      }
+    })
+    .filter((element) => element !== undefined);
+}
+
+const postContent = toHTML(post.bodyRaw, {
+  components: {
+    /* optional object of custom components to use */
+  },
+});
+
+const toootoyyoy = getHeadins(post.bodyRaw || []);
+console.log(toootoyyoy);
+// const hasFooterLink = frontmatter.hasFooterLink;
+
 const breadcrumbItems: BreadcrumbItem[] = [
   {
     name: 'Accueil',
@@ -52,24 +74,32 @@ const breadcrumbItems: BreadcrumbItem[] = [
     path: '/posts',
   },
   {
-    name: frontmatter.category,
+    name: post?.categories ? post?.categories[0]?._key : '',
     path: '/',
   },
 ];
 ---
 
 <BaseLayout
-  title={frontmatter.metaTitle}
+  title={post?.seoTitle || ''}
   schema={schema}
-  description={frontmatter.metaDescription}
-  image={frontmatter.image}
+  description={post?.seoDescription || ''}
+  image={post.seoImage?.asset.url}
 >
-  <ObserverTableOfContent />
-  <Header slot="before-main">
-    <Breadcrumb breadcrumbItems={breadcrumbItems} />
-    <h1 class="pb-8 font-bold conteneur">{frontmatter.title}</h1>
-  </Header>
   <div slot="main" class="post">
+    <ObserverTableOfContent />
+    <Header slot="before-main">
+      <Breadcrumb breadcrumbItems={breadcrumbItems} />
+      <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
+    </Header>
+    <div class="wrapper-post">
+      <aside class="wrapper-table-of-content px-4 lg:px-0">
+        <!-- <TableOfContent client:load headings={headings} /> -->
+      </aside>
+      <article class="post-content" set:html={postContent}></article>
+    </div>
+  </div>
+  <!-- <div slot="main" class="post">
     <div class="wrapper-post">
       {
         frontmatter.category !== 'Définition' && (
@@ -99,7 +129,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
         }
       </article>
     </div>
-  </div>
+  </div> -->
 </BaseLayout>
 
 <style is:global>

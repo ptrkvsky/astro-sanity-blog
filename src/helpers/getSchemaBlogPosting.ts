@@ -1,31 +1,32 @@
-import type { Frontmatter } from './../interfaces/Frontmatter';
+import type { Post } from './../interfaces/SanitySchema';
+
 import type { WithContext, BlogPosting } from 'schema-dts';
 import { seoConfig } from 'src/config';
 
 const getSchemaBlogPosting = ({
-  dateModified,
-  datePublished,
+  _updatedAt,
+  _createdAt,
   description,
-  image,
-  keywords,
-  rawText,
+  seoImage,
+  // keywords,
+  // body,
   slug,
   title,
-}: Frontmatter) => {
-  const dateModifiedISO = new Date(dateModified).toISOString();
-  const datePublishedISO = new Date(datePublished).toISOString();
+}: Post) => {
+  const dateModifiedISO = new Date(_updatedAt).toISOString();
+  const datePublishedISO = new Date(_createdAt).toISOString();
 
   const schema: WithContext<BlogPosting> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${seoConfig.baseURL}/posts/${slug}`,
+      '@id': `${seoConfig.baseURL}/posts/${slug?.current}`,
     },
     headline: title,
     image: {
       '@type': 'ImageObject',
-      url: image,
+      url: seoImage?.asset.url,
     },
     inLanguage: 'fr-FR',
     datePublished: datePublishedISO,
@@ -36,8 +37,8 @@ const getSchemaBlogPosting = ({
       url: seoConfig.baseURL,
     },
     description: description,
-    articleBody: rawText,
-    keywords,
+    // articleBody: body,
+    // keywords,
   };
 
   return schema;

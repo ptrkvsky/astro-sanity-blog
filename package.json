@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@portabletext/react": "^1.0.6",
+    "@portabletext/to-html": "^1.0.3",
     "@sanity/block-content-to-react": "^3.0.0",
     "@sanity/client": "^3.3.3",
     "autoprefixer": "^10.4.8",
@@ -49,6 +50,7 @@
     "rehype-toc": "^3.0.2",
     "remark": "^14.0.2",
     "remark-toc": "^8.0.1",
+    "sanity-codegen": "^0.9.8",
     "schema-dts": "^1.1.0"
   }
 }

@@ -22,7 +22,7 @@ export const queryAllPosts = `query allPosts {
         }
       }
     }
-    content{
+    questionsAnswers{
       question
       answer
     }

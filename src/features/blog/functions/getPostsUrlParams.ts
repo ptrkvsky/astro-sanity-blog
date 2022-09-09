@@ -6,8 +6,7 @@ import type { SanityAllPost } from '../interfaces/SanityAllPost';
  * @param sanityPosts
  * @returns object
  */
-const getPostsUrlParams = (sanityPosts: SanityAllPost) => {
-  console.dir(sanityPosts, { depth: null });
+export function getPostsUrlParams(sanityPosts: SanityAllPost) {
   return sanityPosts.allPost.map((post) => {
     const param = {
       params: {
@@ -19,6 +18,4 @@ const getPostsUrlParams = (sanityPosts: SanityAllPost) => {
     };
     return param;
   });
-};
-
-export default getPostsUrlParams;
+}

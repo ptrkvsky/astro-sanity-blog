@@ -1,19 +1,25 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
 import { toHTML } from '@portabletext/to-html';
-import type { Frontmatter } from '@interfaces/Frontmatter';
-import TableOfContent from '@features/blog/components/TableOfContent';
-import getSchemaBlogPosting from 'src/helpers/getSchemaBlogPosting';
-import type { AstroComponentFactory } from 'astro/dist/types/runtime/server';
-import type { MarkdownHeading } from 'astro';
+import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
+import type { Post, BreadcrumbGraphItem, FAQItem } from '@interfaces/index';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { TableOfContent } from '@features/blog/components/TableOfContent/';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
 import Header from '@components/Header.astro';
-import Breadcrumb, { BreadcrumbItem } from '@components/Breadcrumb.astro';
+import Breadcrumb from '@components/Breadcrumb.astro';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
-import getPostsUrlParams from '@features/blog/functions/getPostsUrlParams';
-import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
-import type { BlockContent, Post } from '@interfaces/SanitySchema';
+import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
+import { getHeadings } from '@features/blog/functions/getHeadings';
+import { portableTextComponents } from '@helpers/portableTextComponents';
+import {
+  getGraphBlogPost,
+  ParamsGetGraphBlogPost,
+} from '@helpers/getGraphBlogPost';
+import {
+  getGraphBreadcrumbItems,
+  getBreadcrumbItems,
+} from '@features/blog/functions';
 
 interface AstroProps {
   post: Post;
@@ -33,56 +39,29 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props as AstroProps;
 
-const schema = getSchemaBlogPosting(post);
+if (!post) return;
+const graphBreadcrumbItems: BreadcrumbGraphItem[] =
+  getGraphBreadcrumbItems(post);
 
-function getHeadins(text: BlockContent) {
-  return text
-    .map((textItem) => {
-      if (
-        textItem.style === 'h2' ||
-        textItem.style === 'h3' ||
-        textItem.style === 'h4' ||
-        textItem.style === 'h5' ||
-        textItem.style === 'h6'
-      ) {
-        return {
-          text: textItem.children[0].text,
-          hn: textItem.style,
-        };
-      }
-    })
-    .filter((element) => element !== undefined);
-}
-
+const paramsGetGraphBlogPost: ParamsGetGraphBlogPost = {
+  slug: '',
+  datePublishedISO: post._createdAt,
+  dateModifiedISO: post._updatedAt,
+  breadcrumbId: '#breadcrumb',
+  faqItems: post.questionsAnswers as FAQItem[],
+  breadcrumbItems: graphBreadcrumbItems as any,
+};
+const graphPost = getGraphBlogPost(paramsGetGraphBlogPost);
 const postContent = toHTML(post.bodyRaw, {
-  components: {
-    /* optional object of custom components to use */
-  },
+  components: portableTextComponents,
 });
-
-const toootoyyoy = getHeadins(post.bodyRaw || []);
-console.log(toootoyyoy);
-// const hasFooterLink = frontmatter.hasFooterLink;
-
-const breadcrumbItems: BreadcrumbItem[] = [
-  {
-    name: 'Accueil',
-    path: '/',
-  },
-  {
-    name: 'Articles',
-    path: '/posts',
-  },
-  {
-    name: post?.categories ? post?.categories[0]?._key : '',
-    path: '/',
-  },
-];
+const headings = getHeadings(post.bodyRaw || []);
+const breadcrumbItems = getBreadcrumbItems(post);
 ---
 
 <BaseLayout
   title={post?.seoTitle || ''}
-  schema={schema}
+  schema={graphPost}
   description={post?.seoDescription || ''}
   image={post.seoImage?.asset.url}
 >
@@ -94,42 +73,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
     </Header>
     <div class="wrapper-post">
       <aside class="wrapper-table-of-content px-4 lg:px-0">
-        <!-- <TableOfContent client:load headings={headings} /> -->
+        <TableOfContent headings={headings} />
       </aside>
       <article class="post-content" set:html={postContent}></article>
     </div>
   </div>
-  <!-- <div slot="main" class="post">
-    <div class="wrapper-post">
-      {
-        frontmatter.category !== 'Définition' && (
-          <aside class="wrapper-table-of-content px-4 lg:px-0">
-            <TableOfContent client:load headings={headings} />
-          </aside>
-        )
-      }
-      <article class="post-content">
-        <p class="time">
-          Temps de lecture <span class="highlight font-semibold"
-            >{frontmatter.minutesRead} minutes
-          </span>
-        </p>
-        <MdxContent />
-        {
-          !hasFooterLink && (
-            <p>
-              N'hésitez pas à me faire vos retours en commentaire et m'envoyer
-              un message si vous recherchez
-              <a class="py-8" href="/" title="Développeur freelance React">
-                développeur React freelance
-              </a>
-              .
-            </p>
-          )
-        }
-      </article>
-    </div>
-  </div> -->
 </BaseLayout>
 
 <style is:global>
@@ -193,12 +141,13 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
   .post-content blockquote:before {
     content: '“';
-    font-family: 'Times New Roman', serif;
-    font-size: 6em;
-    font-weight: bold;
     position: absolute;
     left: -8px;
     top: 4px;
+    font-family: 'Times New Roman', serif;
+    font-size: 6em;
+    line-height: 1;
+    font-weight: bold;
     opacity: 0.25;
   }
 

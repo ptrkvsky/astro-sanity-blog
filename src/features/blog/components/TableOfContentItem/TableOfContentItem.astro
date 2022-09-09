@@ -1,0 +1,18 @@
+---
+import type { Heading } from '@features/blog/interfaces/Heading';
+
+interface AstroProps {
+  heading: Heading;
+}
+
+const { heading } = Astro.props as AstroProps;
+---
+
+<li
+  id={`li-${heading.id}`}
+  class={`mb-0 text-sm depth px-2 py-1 m-0 border-l-4 border-purple-100`}
+>
+  <a class={`depth-${heading.hn}`} href={`#${heading.id}`}>
+    {heading.text}
+  </a>
+</li>

@@ -82,7 +82,7 @@ export interface Post extends SanityDocument {
    *
    * Questions and answers for SEO graph
    */
-  content?: Array<SanityKeyed<QuestionsAnswers>>;
+  questionsAnswers?: Array<SanityKeyed<QuestionsAnswers>>;
 
   /**
    * Title — `string`

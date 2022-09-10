@@ -1,8 +1,8 @@
 ---
-import type { Frontmatter } from '@interfaces/Frontmatter';
+import type { Post } from '@interfaces/SanitySchema';
 
 interface AstroProps {
-  post: Frontmatter;
+  post: Post;
 }
 
 const { post } = Astro.props as AstroProps;

@@ -22,6 +22,7 @@ export const queryAllPosts = `query allPosts {
         }
       }
     }
+    type
     questionsAnswers{
       question
       answer

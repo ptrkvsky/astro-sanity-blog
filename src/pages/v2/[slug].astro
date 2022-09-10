@@ -61,11 +61,16 @@ const breadcrumbItems = getBreadcrumbItems(post);
     <Header slot="before-main">
       <Breadcrumb breadcrumbItems={breadcrumbItems} />
       <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
-    </Header>
+    </Header>{}
     <div class="wrapper-post">
-      <aside class="wrapper-table-of-content px-4 lg:px-0">
-        <TableOfContent headings={headings} />
-      </aside>
+      {
+        headings.length > 0 && (
+          <aside class="wrapper-table-of-content px-4 lg:px-0">
+            <TableOfContent headings={headings} />
+          </aside>
+        )
+      }
+
       <article class="post-content" set:html={postContent}></article>
     </div>
   </div>

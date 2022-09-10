@@ -39,6 +39,21 @@ const { title, schema, description, hasGradient, image } = Astro.props as Props;
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#30E130" />
     <title>{title}</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=UA-42665818-2"
+    ></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-42665818-2');
+    </script>
   </head>
 
   <slot name="before-main" />

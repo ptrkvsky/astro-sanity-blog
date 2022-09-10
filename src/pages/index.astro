@@ -5,9 +5,12 @@ import imgDevelopper from '@assets/images/developpeur-freelance.jpeg';
 import { Image } from '@astrojs/image/components';
 import SafeMail from '@components/SafeMail.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
+import fetchSanity from '@helpers/fetchSanity';
+import { queryPostsHome } from '@features/home/queries/queryPostsHome';
+import type { Post } from '@interfaces/SanitySchema';
 
-const posts = await Astro.glob('../../content/*.mdx');
-const postsHome = posts.filter((post) => post.frontmatter.isHome);
+const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
+console.log(postsHome);
 const schema = getGraphHome();
 const description =
   'Développeur React freelance et créateur de site internet depuis 2012. Spécialisé dans le développement front de site web en Javascript avec React.';
@@ -244,7 +247,7 @@ const description =
       <ul
         class="max-w-7xl mx-4 md:mx-auto grid grid-cols-1 gap-16 lg:grid-cols-3"
       >
-        {postsHome.map((post) => <PostCard post={post.frontmatter} />)}
+        {postsHome && postsHome.allPost.map((post) => <PostCard post={post} />)}
       </ul>
     </section>
 

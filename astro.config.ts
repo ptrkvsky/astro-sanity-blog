@@ -5,29 +5,29 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import image from '@astrojs/image';
+import partytown from '@astrojs/partytown';
 import { remarkReadingTime } from './lib/remark-reading-time.js';
 import sitemap from '@astrojs/sitemap';
 import { manifest } from './src/config';
 
+import prefetch from "@astrojs/prefetch";
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://developpeur-web.tech',
-  integrations: [
-    tailwind({
-      config: {
-        applyBaseStyles: false,
-        path: './tailwind.config.js',
-      },
-    }),
-    compress(),
-    react(),
-    tailwind(),
-    mdx({
-      remarkPlugins: [remarkReadingTime],
-    }),
-    image(),
-    sitemap(),
-  ],
+  integrations: [tailwind({
+    config: {
+      applyBaseStyles: false,
+      path: './tailwind.config.js'
+    }
+  }), compress(), react(), tailwind(), mdx({
+    remarkPlugins: [remarkReadingTime]
+  }), image(), sitemap(), partytown({
+    // Adds dataLayer.push as a forwarding-event.
+    config: {
+      forward: ['dataLayer.push']
+    }
+  }), prefetch()],
   markdown: {
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
@@ -38,25 +38,21 @@ export default defineConfig({
       // https://github.com/shikijs/shiki/blob/main/docs/languages.md
       langs: [],
       // Enable word wrap to prevent horizontal scrolling
-      wrap: false,
-    },
+      wrap: false
+    }
   },
   vite: {
-    plugins: [
-      VitePWA({
-        registerType: 'autoUpdate',
-        manifest,
-        strategies: 'generateSW',
-        workbox: {
-          globDirectory: 'dist',
-          globPatterns: [
-            '**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico}',
-          ],
-          // Don't fallback on document based (e.g. `/some-page`) requests
-          // Even though this says `null` by default, I had to set this specifically to `null` to make it work
-          navigateFallback: null,
-        },
-      }),
-    ],
-  },
+    plugins: [VitePWA({
+      registerType: 'autoUpdate',
+      manifest,
+      strategies: 'generateSW',
+      workbox: {
+        globDirectory: 'dist',
+        globPatterns: ['**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico}'],
+        // Don't fallback on document based (e.g. `/some-page`) requests
+        // Even though this says `null` by default, I had to set this specifically to `null` to make it work
+        navigateFallback: null
+      }
+    })]
+  }
 });

@@ -10,7 +10,6 @@ import { queryPostsHome } from '@features/home/queries/queryPostsHome';
 import type { Post } from '@interfaces/SanitySchema';
 
 const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
-console.log(postsHome);
 const schema = getGraphHome();
 const description =
   'Développeur React freelance et créateur de site internet depuis 2012. Spécialisé dans le développement front de site web en Javascript avec React.';

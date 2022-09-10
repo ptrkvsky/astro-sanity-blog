@@ -37,7 +37,9 @@ const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
                 <ul class="mx-4">
                   {categoryPosts.posts.map((post) => (
                     <li>
-                      <a href={`/v2/${post?.slug?.current}`}>{post?.title}</a>
+                      <a href={`/posts/${post?.slug?.current}`}>
+                        {post?.title}
+                      </a>
                     </li>
                   ))}
                 </ul>

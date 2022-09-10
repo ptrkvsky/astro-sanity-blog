@@ -2,6 +2,7 @@ import { Image } from '@astrojs/image/components';
 import { client } from '@lib/sanityClient';
 import { slugify } from '@lib/slugify';
 import type { PortableTextHtmlComponents } from '@portabletext/to-html';
+import hljs from 'highlight.js';
 //@ts-ignore
 import imageUrlBuilder from '@sanity/image-url';
 
@@ -27,6 +28,18 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
           />
         </picture>
       `;
+    },
+    code: (elem) => {
+      const code = hljs.highlight(elem.value.code, {
+        language: elem.value.language,
+      }).value;
+      return `<pre class="language-${elem.value.language}"><code>${code}</code></pre>`;
+    },
+  },
+  marks: {
+    internalLink: ({ children, value }) => {
+      const href = value.href || '';
+      return `<a href="${href}" class="internalLink">${children}</a>`;
     },
   },
 

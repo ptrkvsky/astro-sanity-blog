@@ -6,10 +6,14 @@ export interface ParamsGetWebPage {
   datePublishedISO: string;
   dateModifiedISO: string;
   breadcrumbId: '#breadcrumb';
+  name: string;
+  description: string;
 }
 
 export function getWebPage({
   url,
+  name,
+  description,
   datePublishedISO,
   dateModifiedISO,
 }: ParamsGetWebPage) {
@@ -17,14 +21,13 @@ export function getWebPage({
     '@type': 'WebPage',
     '@id': `${seoConfig.baseURL}/`,
     url: `${seoConfig.baseURL}${url}`,
-    name: 'Johan Petrikovsky développeur frontend spécialisé en React  (Nexjs, Gatsby, GraphQL...)',
+    name,
     isPartOf: {
       '@id': `${seoConfig.baseURL}/#website`,
     },
     datePublished: datePublishedISO,
     dateModified: dateModifiedISO,
-    description:
-      "Développeur React depuis 3ans j'aide les entreprises dans le développement de site internet et d'application web performantes",
+    description,
     breadcrumb: {
       '@id': `${seoConfig.baseURL}${url}#breadcrumb`,
     },

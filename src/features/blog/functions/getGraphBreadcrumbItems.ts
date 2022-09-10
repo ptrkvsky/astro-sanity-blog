@@ -12,13 +12,13 @@ export function getGraphBreadcrumbItems(post: Post) {
       //@ts-ignore
       label: post.categories[0]?.title,
       //@ts-ignore
-      slug: `/${slugify(post?.categories[0]?.title)}/`,
+      slug: `/categorie/${slugify(post?.categories[0]?.title)}/`,
     },
     {
       //@ts-ignore
       label: post.title,
       //@ts-ignore
-      slug: `/${slugify(post?.slug?.current)}/`,
+      slug: `/posts/${slugify(post?.slug?.current)}/`,
     },
   ];
   return breadcrumbItems;

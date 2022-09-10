@@ -2,19 +2,18 @@ import type { FAQItem } from './../interfaces/FAQItem';
 import type {
   Graph,
   WebPage,
-  FAQPage,
   CreativeWorkSeries,
   BreadcrumbList,
 } from 'schema-dts';
-import { seoConfig } from 'src/config';
 import getGraphPlace from './getGraphPlace';
 import getGraphWebsite from './getGraphWebsite';
 import { getFaq } from './getFaq';
 import { getWebPage, ParamsGetWebPage } from './getWebPage';
 import { getBreadcrumb } from './getBreadcrumb';
-import type { Breadcrumb } from '@interfaces/Breadcrumb';
 
-const getGraphHome = () => {
+import type { BreadcrumbGraphItem } from '@interfaces/BreadcrumbGraphItem';
+
+export function getGraphHome() {
   const website = getGraphWebsite();
   const datePublishedISO = new Date('01 September 2022').toISOString();
   const dateModifiedISO = new Date('01 September 2022').toISOString();
@@ -30,7 +29,7 @@ const getGraphHome = () => {
     },
   };
 
-  const paramsGetBreadcrumb: Breadcrumb[] = [
+  const paramsGetBreadcrumb: BreadcrumbGraphItem[] = [
     {
       label: 'Johan Petrikovsky développeur React freelance',
       slug: '/',
@@ -48,6 +47,9 @@ const getGraphHome = () => {
   const breadcrumbList: BreadcrumbList = getBreadcrumb(paramsGetBreadcrumb);
   const paramsGetWebPage: ParamsGetWebPage = {
     url: '/',
+    name: 'Johan Petrikovsky développeur frontend spécialisé en React  (Nexjs, Gatsby, GraphQL...)',
+    description:
+      "Développeur React depuis 3ans j'aide les entreprises dans le développement de site internet et d'application web performantes",
     datePublishedISO,
     dateModifiedISO,
     breadcrumbId: '#breadcrumb',
@@ -87,6 +89,4 @@ const getGraphHome = () => {
   };
 
   return schema;
-};
-
-export default getGraphHome;
+}

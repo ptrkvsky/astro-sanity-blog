@@ -4,7 +4,7 @@ import PostCard from '@features/blog/components/PostCard/index.astro';
 import imgDevelopper from '@assets/images/developpeur-freelance.jpeg';
 import { Image } from '@astrojs/image/components';
 import SafeMail from '@components/SafeMail.astro';
-import getGraphHome from '@helpers/getGraphHome';
+import { getGraphHome } from '@helpers/getGraphHome';
 
 const posts = await Astro.glob('../../content/*.mdx');
 const postsHome = posts.filter((post) => post.frontmatter.isHome);

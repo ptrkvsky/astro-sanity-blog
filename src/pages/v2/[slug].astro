@@ -12,10 +12,7 @@ import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
 import { getHeadings } from '@features/blog/functions/getHeadings';
 import { portableTextComponents } from '@helpers/portableTextComponents';
-import {
-  getGraphBlogPost,
-  ParamsGetGraphBlogPost,
-} from '@helpers/getGraphBlogPost';
+import { getGraphBlogPost } from '@helpers/getGraphBlogPost';
 import {
   getGraphBreadcrumbItems,
   getBreadcrumbItems,
@@ -38,26 +35,20 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props as AstroProps;
-
 if (!post) return;
-const graphBreadcrumbItems: BreadcrumbGraphItem[] =
-  getGraphBreadcrumbItems(post);
 
-const paramsGetGraphBlogPost: ParamsGetGraphBlogPost = {
-  slug: '',
-  datePublishedISO: post._createdAt,
-  dateModifiedISO: post._updatedAt,
-  breadcrumbId: '#breadcrumb',
-  faqItems: post.questionsAnswers as FAQItem[],
-  breadcrumbItems: graphBreadcrumbItems as any,
-};
-const graphPost = getGraphBlogPost(paramsGetGraphBlogPost);
+const graphPost = getGraphBlogPost(post);
 const postContent = toHTML(post.bodyRaw, {
   components: portableTextComponents,
 });
 const headings = getHeadings(post.bodyRaw || []);
 const breadcrumbItems = getBreadcrumbItems(post);
 ---
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"
+/>
 
 <BaseLayout
   title={post?.seoTitle || ''}

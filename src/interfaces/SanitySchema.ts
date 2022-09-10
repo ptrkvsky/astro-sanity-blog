@@ -49,21 +49,21 @@ export interface Post extends SanityDocument {
    *
    *
    */
-  seoTitle?: string;
+  seoTitle: string;
 
   /**
    * SEO description — `string`
    *
    *
    */
-  seoDescription?: string;
+  seoDescription: string;
 
   /**
    * Keywords — `string`
    *
    *
    */
-  seoKeywords?: string;
+  seoKeywords: string;
 
   /**
    * SEO Image — `image`
@@ -89,42 +89,42 @@ export interface Post extends SanityDocument {
    *
    *
    */
-  title?: string;
+  title: string;
 
   /**
    * Description — `text`
    *
    *
    */
-  description?: string;
+  description: string;
 
   /**
    * Type — `string`
    *
    *
    */
-  type?: 'definition' | 'post';
+  type: 'definition' | 'post';
 
   /**
    * Display on Homepage — `boolean`
    *
    *
    */
-  isHome?: boolean;
+  isHome: boolean;
 
   /**
    * Slug — `slug`
    *
    *
    */
-  slug?: { _type: 'slug'; current: string };
+  slug: { _type: 'slug'; current: string };
 
   /**
    * Main image — `image`
    *
    *
    */
-  mainImage?: {
+  mainImage: {
     _type: 'image';
     asset: SanityReference<SanityImageAsset>;
     crop?: SanityImageCrop;
@@ -136,28 +136,28 @@ export interface Post extends SanityDocument {
    *
    *
    */
-  categories?: Array<SanityKeyedReference<Category>>;
+  categories: Array<Category>;
 
   /**
    * Published at — `datetime`
    *
    *
    */
-  publishedAt?: string;
+  publishedAt: string;
 
   /**
    * Edited at — `datetime`
    *
    *
    */
-  editedAt?: string;
+  editedAt: string;
 
   /**
    * Body — `blockContent`
    *
    *
    */
-  bodyRaw?: BlockContent;
+  bodyRaw: BlockContent;
 }
 
 /**
@@ -173,14 +173,14 @@ export interface Category extends SanityDocument {
    *
    *
    */
-  title?: string;
+  title: string;
 
   /**
    * Description — `text`
    *
    *
    */
-  description?: string;
+  description: string;
 }
 
 export type QuestionsAnswers = {

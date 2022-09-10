@@ -3,14 +3,16 @@ import type { Frontmatter } from '@interfaces/Frontmatter';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Header from '@components/Header.astro';
 import getPostsByCategory from '@helpers/getPostsByCategory';
+import fetchSanity from '@helpers/fetchSanity';
+import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
+import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
 
-const posts = await Astro.glob('../../content/*.mdx');
-const frontmatters = posts.map((post) => post.frontmatter) as Frontmatter[];
-const categoriesPosts = getPostsByCategory(frontmatters);
+const sanityPosts = await fetchSanity<SanityAllPost>(queryAllPosts);
+const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
 ---
 
 <BaseLayout
-  title="Plan du site"
+  title="Plan du site | Johan Petrikovsky développeur React freelance"
   description="Plan du site internet de Johan Petrikovsky, développeur freelance React. Retrouvez une liste de toutes les pages du site internet"
 >
   <Header slot="before-main" />
@@ -26,6 +28,7 @@ const categoriesPosts = getPostsByCategory(frontmatters);
         <a href="/posts">Articles</a>
         <ul class="ml-4">
           {
+            categoriesPosts &&
             categoriesPosts.map((categoryPosts) => (
               <li>
                 <span class="block my-2">
@@ -34,7 +37,7 @@ const categoriesPosts = getPostsByCategory(frontmatters);
                 <ul class="mx-4">
                   {categoryPosts.posts.map((post) => (
                     <li>
-                      <a href={`/posts/${post.slug}`}>{post.title}</a>
+                      <a href={`/v2/${post?.slug?.current}`}>{post?.title}</a>
                     </li>
                   ))}
                 </ul>

@@ -1,0 +1,63 @@
+---
+import type { Heading } from '@features/blog/interfaces/Heading';
+import { TableOfContentItem } from '@features/blog/components/TableOfContentItem';
+
+interface AstroProps {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props as AstroProps;
+---
+
+<div class="toc">
+  <p class="mt-4 mb-3 text-indigo-700 font-semibold text-xl lg:text-3xl">
+    Sommaire
+  </p>
+  <nav id="table-of-content">
+    <ul>
+      {headings.map((heading) => <TableOfContentItem heading={heading} />)}
+    </ul>
+  </nav>
+</div>
+
+<style lang="scss">
+  nav li.active {
+    @apply bg-purple-200 font-semibold border-l-4 border-purple-800;
+  }
+
+  nav li a {
+    @apply text-gray-600;
+  }
+
+  nav li:hover a {
+    @apply text-gray-900;
+  }
+
+  .depth {
+    @apply text-sm;
+  }
+
+  .depth-h2 {
+    @apply block pl-2;
+  }
+
+  .depth-h3 {
+    @apply block pl-3;
+  }
+
+  .depth-h4 {
+    @apply block pl-4;
+  }
+
+  .depth-h5 {
+    @apply block pl-5;
+  }
+
+  .depth-h6 {
+    @apply block pl-6;
+  }
+
+  .depth-7 {
+    @apply block pl-12;
+  }
+</style>

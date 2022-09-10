@@ -1,28 +1,28 @@
 ---
-
 ---
+
 <script>
   window.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!document) return;
+        const id = entry.target.getAttribute('id');
+        if (entry.intersectionRatio > 0) {
+          document
+            .querySelectorAll(`#table-of-content li.active`)
+            ?.forEach((el) => {
+              el.classList.remove('active');
+            });
+          document
+            .querySelector(`#table-of-content li a[href="#${id}"]`)
+            ?.parentElement?.classList.add('active');
+        }
+      });
+    });
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(!document) return
-      const id = entry.target.getAttribute('id');
-      if (entry.intersectionRatio > 0) {
-        document.querySelectorAll(`#table-of-content li.active`)?.forEach(el => {
-          console.log(el)
-          el.classList.remove('active')
-        
-        });
-        document.querySelector(`#table-of-content li a[href="#${id}"]`)?.parentElement?.classList.add('active');
-      } 
+    // Track all sections that have an `id` applied
+    document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((hn) => {
+      observer.observe(hn);
     });
   });
-
-  // Track all sections that have an `id` applied
-  document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((hn) => {
-    observer.observe(hn);
-	});
-	
-});
 </script>

@@ -14,4 +14,5 @@ export interface Frontmatter {
   rawText: string;
   slug: string;
   title: string;
+  hasFooterLink?: boolean;
 }

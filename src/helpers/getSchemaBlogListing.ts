@@ -1,5 +1,5 @@
 import type { Graph, WebSite } from 'schema-dts';
-import config from 'src/config';
+import { seoConfig } from 'src/config';
 import getGraphWebsite from './getGraphWebsite';
 
 const getSchemaBlogListing = (dateModified: string) => {
@@ -13,36 +13,36 @@ const getSchemaBlogListing = (dateModified: string) => {
       website,
       {
         '@type': 'WebPage',
-        '@id': `${config.url}/posts/#webpage`,
-        url: `${config.url}/posts/`,
+        '@id': `${seoConfig.baseURL}/posts/#webpage`,
+        url: `${seoConfig.baseURL}/posts/`,
         name: 'Blog de développeur spécialisé en React, Javascript, et SEO | Johan Petrikovsky',
         isPartOf: {
-          '@id': `${config.url}/#website`,
+          '@id': `${seoConfig.baseURL}/#website`,
         },
         datePublished: datePublishedISO,
         dateModified: dateModifiedISO,
         description:
           'Le Blog de Johan Petrikovsky développeur React, vous donne chaque semaine des conseils pour avoir un code toujours plus performant',
         breadcrumb: {
-          '@id': `${config.url}/posts/#breadcrumb`,
+          '@id': `${seoConfig.baseURL}/posts/#breadcrumb`,
         },
         inLanguage: 'fr-FR',
         potentialAction: [
           {
             '@type': 'ReadAction',
-            target: [`${config.url}/posts/`],
+            target: [`${seoConfig.baseURL}/posts/`],
           },
         ],
       },
       {
         '@type': 'BreadcrumbList',
-        '@id': `${config.url}/posts/#breadcrumb`,
+        '@id': `${seoConfig.baseURL}/posts/#breadcrumb`,
         itemListElement: [
           {
             '@type': 'ListItem',
             position: 1,
             name: 'Accueil',
-            item: `${config.url}/`,
+            item: `${seoConfig.baseURL}/`,
           },
           {
             '@type': 'ListItem',

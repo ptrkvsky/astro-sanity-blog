@@ -3,49 +3,78 @@ import '@assets/style/global.css';
 import type { Graph, WithContext } from 'schema-dts';
 import type { BlogPosting } from 'schema-dts';
 import Footer from '@components/Footer';
+import Favicons from '@components/Favicons.astro';
 
 interface Props {
   title: string;
   description: string;
   schema?: WithContext<BlogPosting> | Graph;
   hasGradient?: boolean;
+  image?: string;
 }
 
-const { title, schema, description, hasGradient } = Astro.props as Props;
+const { title, schema, description, hasGradient, image } = Astro.props as Props;
 ---
 
 <html lang="fr-FR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta
+      name="google-site-verification"
+      content="hYnFEHeU0yp9Wsa8c3QfTnVFqMAuCsAk-y6qF0A_XjQ"
+    />
+    {image && <meta property="og:image" content={image} />}
     {
       schema && (
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       )
     }
+    <Favicons />
+    <script is:inline src="/registerSW.js"></script>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#30E130" />
+    <title>{title}</title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=UA-42665818-2"
+    ></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'UA-42665818-2');
+    </script>
   </head>
-  <title>{title}</title>
-</html>
-<body class={`${hasGradient ? 'gradient-main' : ''}`}>
+
   <slot name="before-main" />
   <main>
     <slot name="main" />
   </main>
   {Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="react" />}
-</body>
-<style is:global>
-  body {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
-  }
 
-  .conteneur {
-    @apply mx-2 md:mx-auto;
-  }
-</style>
+  <style is:global>
+    body {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+
+    .conteneur {
+      @apply mx-2 md:mx-auto;
+    }
+  </style>
+
+
+</html>

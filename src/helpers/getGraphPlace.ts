@@ -1,10 +1,10 @@
 import type { Place } from 'schema-dts';
-import config from 'src/config';
+import { seoConfig } from 'src/config';
 
 const getGraphPlace = () => {
   const place: Place = {
     '@type': 'Place',
-    '@id': `${config.url}/#place`,
+    '@id': `${seoConfig.baseURL}/#place`,
     geo: {
       '@type': 'GeoCoordinates',
       latitude: '43.58336473672046',

@@ -1,3 +1,4 @@
+import type { Post } from '@interfaces/SanitySchema';
 import type { MDXInstance } from 'astro';
 
 /**
@@ -5,11 +6,10 @@ import type { MDXInstance } from 'astro';
  * @param posts
  * @returns
  */
-const getMostRecentDate = (posts: MDXInstance<Record<string, any>>[]) => {
+const getMostRecentDate = (posts: Post[]) => {
   const [mostRecentDate] = posts
     .map((post) => {
-      const { frontmatter } = post;
-      return frontmatter.date;
+      return post._updatedAt;
     })
     .reverse();
 

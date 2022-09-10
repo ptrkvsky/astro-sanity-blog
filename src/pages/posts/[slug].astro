@@ -1,89 +1,77 @@
 ---
+import { toHTML } from '@portabletext/to-html';
+import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
+import type { Post, BreadcrumbGraphItem, FAQItem } from '@interfaces/index';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import type { Frontmatter } from '@interfaces/Frontmatter';
-import TableOfContent from '@features/blog/components/TableOfContent';
-import getSchemaBlogPosting from 'src/helpers/getSchemaBlogPosting';
-import type { AstroComponentFactory } from 'astro/dist/types/runtime/server';
-import type { MarkdownHeading } from 'astro';
+import { TableOfContent } from '@features/blog/components/TableOfContent/';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
 import Header from '@components/Header.astro';
-import Breadcrumb, { BreadcrumbItem } from '@components/Breadcrumb.astro';
+import Breadcrumb from '@components/Breadcrumb.astro';
+import fetchSanity from '@helpers/fetchSanity';
+import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
+import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
+import { getHeadings } from '@features/blog/functions/getHeadings';
+import { portableTextComponents } from '@helpers/portableTextComponents';
+import { getGraphBlogPost } from '@helpers/getGraphBlogPost';
+import {
+  getGraphBreadcrumbItems,
+  getBreadcrumbItems,
+} from '@features/blog/functions';
 
 interface AstroProps {
-  MdxContent: AstroComponentFactory;
-  frontmatter: Frontmatter;
-  getHeadings: () => Promise<MarkdownHeading[]>;
+  post: Post;
+  params: {
+    slug: {
+      current: string;
+    };
+  };
 }
 
 export async function getStaticPaths() {
-  return Promise.all(
-    (await Astro.glob('../../../content/*.mdx'))
-      // .filter((page) => !page.frontmatter.draft) // skip drafts
-      .map(async ({ default: MdxContent, frontmatter, getHeadings }) => {
-        return {
-          params: { slug: frontmatter.slug || 'index' },
-          props: {
-            MdxContent,
-            getHeadings,
-            frontmatter: frontmatter,
-          },
-        };
-      })
-  );
+  const sanityProjects = await fetchSanity<SanityAllPost>(queryAllPosts);
+  const params = sanityProjects && getPostsUrlParams(sanityProjects);
+
+  return params;
 }
-const { MdxContent, frontmatter, getHeadings } = Astro.props as AstroProps;
-const schema = getSchemaBlogPosting(frontmatter);
-const headings = await getHeadings();
-const breadcrumbItems: BreadcrumbItem[] = [
-  {
-    name: 'Accueil',
-    path: '/',
-  },
-  {
-    name: 'Articles',
-    path: '/posts',
-  },
-  {
-    name: frontmatter.category,
-    path: '/',
-  },
-];
+
+const { post } = Astro.props as AstroProps;
+if (!post) return;
+
+const graphPost = getGraphBlogPost(post);
+const postContent = toHTML(post.bodyRaw, {
+  components: portableTextComponents,
+});
+const headings = getHeadings(post.bodyRaw || []);
+const breadcrumbItems = getBreadcrumbItems(post);
 ---
 
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"
+/>
+
 <BaseLayout
-  title={frontmatter.metaTitle}
-  schema={schema}
-  description={frontmatter.metaDescription}
+  title={post?.seoTitle || ''}
+  schema={graphPost}
+  description={post?.seoDescription || ''}
+  image={post.seoImage?.asset.url}
 >
-  <ObserverTableOfContent />
-  <Header slot="before-main">
-    <Breadcrumb breadcrumbItems={breadcrumbItems} />
-    <h1 class="pb-8 font-bold conteneur">{frontmatter.title}</h1>
-  </Header>
   <div slot="main" class="post">
+    <ObserverTableOfContent />
+    <Header slot="before-main">
+      <Breadcrumb breadcrumbItems={breadcrumbItems} />
+      <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
+    </Header>{}
     <div class="wrapper-post">
       {
-        frontmatter.category !== 'Définition' && (
+        headings.length > 0 && (
           <aside class="wrapper-table-of-content px-4 lg:px-0">
-            <TableOfContent client:load headings={headings} />
+            <TableOfContent headings={headings} />
           </aside>
         )
       }
-      <article class="post-content">
-        <p class="time">
-          Temps de lecture <span class="highlight font-semibold"
-            >{frontmatter.minutesRead} minutes
-          </span>
-        </p>
-        <MdxContent />
-        <p>
-          N'hésitez pas à me faire vos retours en commentaire et m'envoyer un
-          message si vous recherchez
-          <a class="py-8" href="/" title="Développeur freelance React"
-            >développeur React freelance
-          </a>.
-        </p>
-      </article>
+
+      <article class="post-content" set:html={postContent}></article>
     </div>
   </div>
 </BaseLayout>
@@ -149,12 +137,13 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
   .post-content blockquote:before {
     content: '“';
-    font-family: 'Times New Roman', serif;
-    font-size: 6em;
-    font-weight: bold;
     position: absolute;
     left: -8px;
     top: 4px;
+    font-family: 'Times New Roman', serif;
+    font-size: 6em;
+    line-height: 1;
+    font-weight: bold;
     opacity: 0.25;
   }
 

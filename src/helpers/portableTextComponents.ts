@@ -69,5 +69,8 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
         value.children[0].text
       }</h2>`;
     },
+    code: ({ value }: any) => {
+      return `<code>${value.children[0].text}</code>`;
+    },
   },
 };

@@ -16,33 +16,42 @@ interface Props {
 const { title, schema, description, hasGradient, image } = Astro.props as Props;
 ---
 
-<html lang="fr-FR">
-  <head>
-    <meta charset="utf-8" />
-    <meta property="og:locale" content="fr_FR" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta
-      name="google-site-verification"
-      content="hYnFEHeU0yp9Wsa8c3QfTnVFqMAuCsAk-y6qF0A_XjQ"
-    />
-    {image && <meta property="og:image" content={image} />}
-    {
-      schema && (
-        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-      )
-    }
-    <Favicons />
-    <script is:inline src="/registerSW.js"></script>
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#30E130" />
-    <title>{title}</title>
+<script>
+  //@ts-ignore
+  import Swup from 'swup';
+  import SwupHeadPlugin from '@swup/head-plugin';
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- <script
+  new Swup({
+    //@ts-ignore
+    plugins: [new SwupHeadPlugin()],
+  });
+</script>
+
+<meta charset="utf-8" />
+<meta property="og:locale" content="fr_FR" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta
+  name="google-site-verification"
+  content="hYnFEHeU0yp9Wsa8c3QfTnVFqMAuCsAk-y6qF0A_XjQ"
+/>
+{image && <meta property="og:image" content={image} />}
+{
+  schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )
+}
+<Favicons />
+<script is:inline src="/registerSW.js"></script>
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#30E130" />
+<title>{title}</title>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script
       type="text/partytown"
       src="https://www.googletagmanager.com/gtag/js?id=UA-42665818-2"
     ></script>
@@ -54,26 +63,31 @@ const { title, schema, description, hasGradient, image } = Astro.props as Props;
       gtag('js', new Date());
       gtag('config', 'UA-42665818-2');
     </script> -->
-  </head>
 
-  <slot name="before-main" />
-  <main>
-    <slot name="main" />
-  </main>
-  {Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="react" />}
+<slot name="before-main" />
+<main id="swup" class="transition-fade">
+  <slot name="main" />
+</main>
+{Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="react" />}
 
-  <style is:global>
-    body {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr auto;
-      min-height: 100vh;
-    }
+<style is:global>
+  .transition-fade {
+    transition: 0.25s;
+    opacity: 1;
+  }
 
-    .conteneur {
-      @apply mx-2 md:mx-auto;
-    }
-  </style>
+  html.is-animating .transition-fade {
+    opacity: 0;
+  }
 
+  body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+  }
 
-</html>
+  .conteneur {
+    @apply mx-2 md:mx-auto;
+  }
+</style>

@@ -38,6 +38,7 @@ const { post } = Astro.props as AstroProps;
 if (!post) return;
 
 const graphPost = getGraphBlogPost(post);
+
 const postContent = toHTML(post.bodyRaw, {
   components: portableTextComponents,
 });

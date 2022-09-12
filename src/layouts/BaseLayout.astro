@@ -4,21 +4,25 @@ import type { Graph, WithContext } from 'schema-dts';
 import type { BlogPosting } from 'schema-dts';
 import Footer from '@components/Footer';
 import Favicons from '@components/Favicons.astro';
+import { seoConfig } from '../config';
 
 interface Props {
   title: string;
   description: string;
+  canonical: string;
   schema?: WithContext<BlogPosting> | Graph;
   hasGradient?: boolean;
   image?: string;
 }
 
-const { title, schema, description, hasGradient, image } = Astro.props as Props;
+const { title, schema, description, hasGradient, image, canonical } =
+  Astro.props as Props;
 ---
 
 <script>
   //@ts-ignore
   import Swup from 'swup';
+  //@ts-ignore
   import SwupHeadPlugin from '@swup/head-plugin';
 
   new Swup({
@@ -45,8 +49,13 @@ const { title, schema, description, hasGradient, image } = Astro.props as Props;
 }
 <Favicons />
 <script is:inline src="/registerSW.js"></script>
+{
+  canonical && (
+    <link rel="canonical" href={`${seoConfig.baseURL}${canonical}`} />
+  )
+}
 <link rel="manifest" href="/manifest.webmanifest" />
-<meta name="theme-color" content="#30E130" />
+<meta name="theme-color" content="#4f39fa" />
 <title>{title}</title>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->

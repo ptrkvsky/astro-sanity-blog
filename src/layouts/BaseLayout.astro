@@ -77,7 +77,7 @@ const { title, schema, description, hasGradient, image, canonical } =
 <main id="swup" class="transition-fade">
   <slot name="main" />
 </main>
-{Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="react" />}
+{Astro.url.pathname === '/' ? <Footer /> : <Footer client:only="preact" />}
 
 <style is:global>
   .transition-fade {

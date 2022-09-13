@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
 import compress from 'astro-compress';
 import { VitePWA } from 'vite-plugin-pwa';
-import react from '@astrojs/react';
+import preact from '@astrojs/preact';
 import tailwind from '@astrojs/tailwind';
 import image from '@astrojs/image';
 import partytown from '@astrojs/partytown';
@@ -21,7 +21,7 @@ export default defineConfig({
       },
     }),
     compress(),
-    react(),
+    preact({ compat: true }),
     tailwind(),
     image(),
     sitemap(),

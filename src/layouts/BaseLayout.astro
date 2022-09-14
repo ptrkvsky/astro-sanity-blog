@@ -58,20 +58,12 @@ const { title, schema, description, hasGradient, image, canonical } =
 <meta name="theme-color" content="#4f39fa" />
 <title>{title}</title>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<!-- <script
-      type="text/partytown"
-      src="https://www.googletagmanager.com/gtag/js?id=UA-42665818-2"
-    ></script>
-    <script type="text/partytown">
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'UA-42665818-2');
-    </script> -->
+<script
+  type="text/partytown"
+  src="https://unpkg.com/@tinybirdco/flock.js"
+  data-host="https://api.tinybird.co"
+  data-token="p.eyJ1IjogImFhNGYyNzMzLTQ5MWUtNDA2ZS1iYjVmLTI3NzUzYjRhMjk2OCIsICJpZCI6ICI1ZGY0MmYxOC0zNDQyLTRkZmUtOGUxMC05NzZkM2I1OTY4MTkifQ.yV405Lc-YqoXf4lwD63SZ2fifVmKMLvsMNdoKFQqOGE"
+></script>
 
 <slot name="before-main" />
 <main id="swup" class="transition-fade">

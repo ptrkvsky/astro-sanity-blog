@@ -18,6 +18,7 @@ import {
   getBreadcrumbItems,
 } from '@features/blog/functions';
 import FormComment from '@features/blog/components/FormComment/FormComment';
+import getPostComments from '@features/blog/functions/getPostsComments';
 
 interface AstroProps {
   post: Post;
@@ -37,9 +38,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props as AstroProps;
 if (!post) return;
-
+const comments = getPostComments(post._id);
+console.log(comments);
 const graphPost = getGraphBlogPost(post);
-
 const postContent = toHTML(post.bodyRaw, {
   components: portableTextComponents,
 });

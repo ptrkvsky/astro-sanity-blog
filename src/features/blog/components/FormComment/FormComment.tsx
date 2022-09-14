@@ -57,10 +57,9 @@ export default function FormComment({ postId }: FormComment) {
         if (result) {
           setIsSuccess(true);
         }
-        console.log(result);
       })
       .catch((err) => {
-        console.log('err', err);
+        console.error('👨‍🚒 err', err);
       })
       .finally(() => {
         setIsLoading(false);

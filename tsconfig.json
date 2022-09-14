@@ -20,9 +20,10 @@
     // Preact specific settings
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "react": ["./node_modules/preact/compat/"],
-      "react-dom": ["./node_modules/preact/compat/"],
+      // "react": ["./node_modules/preact/compat/"],
+      // "react-dom": ["./node_modules/preact/compat/"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@features/*": ["src/features/*"],

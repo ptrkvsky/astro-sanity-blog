@@ -17,6 +17,7 @@ import {
   getGraphBreadcrumbItems,
   getBreadcrumbItems,
 } from '@features/blog/functions';
+import FormComment from '@features/blog/components/FormComment/FormComment';
 
 interface AstroProps {
   post: Post;
@@ -72,8 +73,12 @@ const breadcrumbItems = getBreadcrumbItems(post);
           </aside>
         )
       }
-
-      <article class="post-content" set:html={postContent}></article>
+      <div>
+        <article class="post-content" set:html={postContent}></article>
+        <div class="px-4">
+          <FormComment client:visible postId={post._id} />
+        </div>
+      </div>
     </div>
   </div>
 </BaseLayout>

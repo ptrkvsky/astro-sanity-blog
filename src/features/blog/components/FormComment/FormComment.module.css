@@ -1,0 +1,59 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+input {
+  display: block;
+  padding: 4px;
+  width: 100%;
+  min-height: 48px;
+  outline: 0;
+  border-radius: 3px;
+  border: 1px solid #000;
+}
+
+form textarea {
+  display: block;
+  padding: 4px;
+  width: 100%;
+  min-height: 300px;
+  outline: 0;
+  border-radius: 3px;
+  border: 1px solid #000;
+}
+
+form input[type='submit']:hover {
+  cursor: pointer;
+  transition: 0.17s linear;
+  color: #fff;
+  background-color: #000;
+}
+
+form .loader {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+form .loader:after {
+  content: ' ';
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #000;
+  border-color: #000 transparent #000 transparent;
+  animation: loader 1.2s linear infinite;
+}
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

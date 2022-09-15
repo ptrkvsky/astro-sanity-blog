@@ -1,4 +1,10 @@
 {
+  "functions": {
+    "src/api/createComment.ts": {
+      "memory": 3008,
+      "maxDuration": 30
+    }
+  },
   "redirects": [
     {
       "source": "/blog/postgresql/installer-mac/",

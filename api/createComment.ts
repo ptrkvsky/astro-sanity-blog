@@ -1,4 +1,14 @@
-import { client } from '../src/lib/sanityClient';
+import sanityClient from '@sanity/client';
+
+const config = {
+  projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.PUBLIC_SANITY_DATASET,
+  token: process.env.SANITY_READ_TOKEN,
+  apiVersion: '2021-03-25',
+  useCdn: true,
+};
+
+export const client = sanityClient(config);
 
 export async function createComment({ _id, comment, pseudo }: any) {
   try {

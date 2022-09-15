@@ -12,6 +12,7 @@ import type { ManifestOptions } from 'vite-plugin-pwa';
 export const seoConfig = {
   author: 'Johan Petrikovsky',
   baseURL: import.meta.env.PUBLIC_URL, // Change this to your production URL.
+  productionURL: 'https://developpeur-web.tech', // Change this to your production URL.
   description:
     'Astro PWA Starter is an opionated Astro starter for building robust static websites.', // Change this to be your website's description.
   type: 'website',

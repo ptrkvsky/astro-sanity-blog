@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { seoConfig } from 'src/config';
 // import { createComment } from 'src/functions/createComment';
 import './FormComment.module.css';
 interface IFormComment {
@@ -40,33 +41,32 @@ export default function FormComment({ postId }: FormComment) {
   function handleSubmit(event: any) {
     event.preventDefault();
     setIsLoading(true);
-    // createComment(formState);
-    // fetch('/createComment', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ ...formState }),
-    // })
-    //   .then((response) => {
-    //     if (response.status !== 200) {
-    //       setIsSuccess(false);
-    //       setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
-    //     } else {
-    //       setErrorsForm([]);
-    //       setIsSuccess(true);
-    //       return response.json();
-    //     }
-    //   })
-    //   .then((result) => {
-    //     if (result) {
-    //       console.log(result);
-    //       setIsSuccess(true);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error('👨‍🚒 err', err);
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+    fetch(`${seoConfig.productionURL}/api/createComment`, {
+      method: 'POST',
+      body: JSON.stringify({ ...formState }),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          setIsSuccess(false);
+          setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
+        } else {
+          setErrorsForm([]);
+          setIsSuccess(true);
+          return response.json();
+        }
+      })
+      .then((result) => {
+        if (result) {
+          console.log(result);
+          setIsSuccess(true);
+        }
+      })
+      .catch((err) => {
+        console.error('👨‍🚒 err', err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   if (isSuccess) {

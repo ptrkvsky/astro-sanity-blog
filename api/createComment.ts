@@ -1,8 +1,6 @@
 import { client } from '@lib/sanityClient';
-import type { APIContext } from 'astro';
 
 export async function createComment({ _id, comment, pseudo }: any) {
-  console.log(_id, comment, pseudo);
   try {
     const newComment = {
       _type: 'comment',
@@ -25,12 +23,4 @@ export async function createComment({ _id, comment, pseudo }: any) {
       status: 500,
     });
   }
-}
-export async function get({ request }: APIContext) {
-  return new Response(JSON.stringify({ tooo: 'ttt' }), {
-    status: 500,
-  });
-  // return new Response(JSON.stringify({ test: 'test' }), {
-  //   status: 500,
-  // });
 }

@@ -1,13 +1,9 @@
 import sanityClient from '@sanity/client';
 
 const config = {
-  projectId:
-    process.env.PUBLIC_SANITY_PROJECT_ID ||
-    import.meta?.env?.PUBLIC_SANITY_PROJECT_ID,
-  dataset:
-    process.env.PUBLIC_SANITY_DATASET ||
-    import.meta?.env?.PUBLIC_SANITY_DATASET,
-  token: import.meta.env.SANITY_READ_TOKEN || process.env.SANITY_READ_TOKEN,
+  projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.PUBLIC_SANITY_DATASET,
+  token: process.env.SANITY_READ_TOKEN,
   apiVersion: '2021-03-25',
   useCdn: true,
 };

@@ -1,8 +1,8 @@
 import sanityClient from '@sanity/client';
 
-export const config = {
-  runtime: 'experimental-edge',
-};
+// export const config = {
+//   runtime: 'experimental-edge',
+// };
 
 const sanityConfig = {
   projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
@@ -14,7 +14,10 @@ const sanityConfig = {
 
 export const client = sanityClient(sanityConfig);
 
-export async function createComment({ _id, comment, pseudo }: any) {
+export default async function createComment(
+  { _id, comment, pseudo }: any,
+  response: any
+) {
   try {
     const newComment = {
       _type: 'comment',
@@ -28,13 +31,38 @@ export async function createComment({ _id, comment, pseudo }: any) {
     };
     const commentCreated = await client.create(newComment);
 
-    return new Response(JSON.stringify(commentCreated), {
+    response.status(JSON.stringify(commentCreated), {
       status: 200,
     });
   } catch (err) {
     console.error('👩‍🚒', err);
-    return new Response(JSON.stringify(err), {
+    response.status(JSON.stringify(err), {
       status: 500,
     });
   }
 }
+
+// export async function createComment({ _id, comment, pseudo }: any) {
+//   try {
+//     const newComment = {
+//       _type: 'comment',
+//       post: {
+//         _type: 'reference',
+//         _ref: _id,
+//       },
+//       pseudo,
+//       content: comment,
+//       isActive: false,
+//     };
+//     const commentCreated = await client.create(newComment);
+
+//     return new Response(JSON.stringify(commentCreated), {
+//       status: 200,
+//     });
+//   } catch (err) {
+//     console.error('👩‍🚒', err);
+//     return new Response(JSON.stringify(err), {
+//       status: 500,
+//     });
+//   }
+// }

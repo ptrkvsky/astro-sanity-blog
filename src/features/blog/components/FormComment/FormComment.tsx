@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// import { createComment } from 'src/functions/createComment';
 import './FormComment.module.css';
 interface IFormComment {
   _id: string;
@@ -39,31 +40,37 @@ export default function FormComment({ postId }: FormComment) {
   function handleSubmit(event: any) {
     event.preventDefault();
     setIsLoading(true);
-    fetch('/api/createComment', {
-      method: 'POST',
-      body: JSON.stringify({ ...formState }),
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          setIsSuccess(false);
-          setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
-        } else {
-          setErrorsForm([]);
-          setIsSuccess(true);
-          return response.json();
-        }
-      })
-      .then((result) => {
-        if (result) {
-          setIsSuccess(true);
-        }
-      })
-      .catch((err) => {
-        console.error('👨‍🚒 err', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    // createComment(formState);
+    // fetch('/createComment', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ ...formState }),
+    // })
+    //   .then((response) => {
+    //     if (response.status !== 200) {
+    //       setIsSuccess(false);
+    //       setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
+    //     } else {
+    //       setErrorsForm([]);
+    //       setIsSuccess(true);
+    //       return response.json();
+    //     }
+    //   })
+    //   .then((result) => {
+    //     if (result) {
+    //       console.log(result);
+    //       setIsSuccess(true);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.error('👨‍🚒 err', err);
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
+  }
+
+  if (isSuccess) {
+    sessionStorage.setItem('dateComment', `${Date.now()}`);
   }
 
   return (
@@ -93,7 +100,7 @@ export default function FormComment({ postId }: FormComment) {
           />
         </label>
         {isLoading ? (
-          <div class="loader"></div>
+          <div className="loader"></div>
         ) : (
           <input type="submit" value="Envoyer" />
         )}

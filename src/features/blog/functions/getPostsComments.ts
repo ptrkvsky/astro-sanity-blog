@@ -1,7 +1,7 @@
 import { client } from '@lib/sanityClient';
 
 export default async function getPostComments(refPost: string) {
-  const query = `*[_type == "comment" && isActive === true && references($refPost)]`;
+  const query = `*[_type == "comment" && isActive == true && references($refPost)]`;
   const params = {
     refPost,
   };

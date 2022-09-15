@@ -38,7 +38,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props as AstroProps;
 if (!post) return;
-const comments = getPostComments(post._id);
+const comments = await getPostComments(post._id);
 console.log(comments);
 const graphPost = getGraphBlogPost(post);
 const postContent = toHTML(post.bodyRaw, {

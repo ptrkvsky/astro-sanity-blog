@@ -1,4 +1,4 @@
-import { client } from '@lib/sanityClient';
+import { client } from '../src/lib/sanityClient';
 
 export async function createComment({ _id, comment, pseudo }: any) {
   try {

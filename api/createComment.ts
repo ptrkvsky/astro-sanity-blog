@@ -1,6 +1,10 @@
 import sanityClient from '@sanity/client';
 
-const config = {
+export const config = {
+  runtime: 'experimental-edge',
+};
+
+const sanityConfig = {
   projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.PUBLIC_SANITY_DATASET,
   token: process.env.SANITY_READ_TOKEN,
@@ -8,7 +12,7 @@ const config = {
   useCdn: true,
 };
 
-export const client = sanityClient(config);
+export const client = sanityClient(sanityConfig);
 
 export async function createComment({ _id, comment, pseudo }: any) {
   try {

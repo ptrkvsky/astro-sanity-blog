@@ -1,8 +1,5 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import sanityClient from '@sanity/client';
-
-// export const config = {
-//   runtime: 'experimental-edge',
-// };
 
 const sanityConfig = {
   projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
@@ -15,10 +12,11 @@ const sanityConfig = {
 export const client = sanityClient(sanityConfig);
 
 export default async function createComment(
-  { _id, comment, pseudo }: any,
-  response: any
+  request: VercelRequest,
+  response: VercelResponse
 ) {
   try {
+    const { _id, comment, pseudo } = request.body;
     const newComment = {
       _type: 'comment',
       post: {
@@ -31,38 +29,9 @@ export default async function createComment(
     };
     const commentCreated = await client.create(newComment);
 
-    response.status(JSON.stringify(commentCreated), {
-      status: 200,
-    });
+    return response.status(200).json(commentCreated);
   } catch (err) {
     console.error('👩‍🚒', err);
-    response.status(JSON.stringify(err), {
-      status: 500,
-    });
+    return response.status(500).json(err);
   }
 }
-
-// export async function createComment({ _id, comment, pseudo }: any) {
-//   try {
-//     const newComment = {
-//       _type: 'comment',
-//       post: {
-//         _type: 'reference',
-//         _ref: _id,
-//       },
-//       pseudo,
-//       content: comment,
-//       isActive: false,
-//     };
-//     const commentCreated = await client.create(newComment);
-
-//     return new Response(JSON.stringify(commentCreated), {
-//       status: 200,
-//     });
-//   } catch (err) {
-//     console.error('👩‍🚒', err);
-//     return new Response(JSON.stringify(err), {
-//       status: 500,
-//     });
-//   }
-// }

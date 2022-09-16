@@ -41,9 +41,12 @@ export default function FormComment({ postId }: FormComment) {
   function handleSubmit(event: any) {
     event.preventDefault();
     setIsLoading(true);
-    fetch(`${seoConfig.productionURL}/api/createComment`, {
+    fetch(`${seoConfig.baseURL}/api/createComment`, {
       method: 'POST',
       body: JSON.stringify({ ...formState }),
+      headers: new Headers({
+        'Content-Type': 'application/json; charset=UTF-8',
+      }),
     })
       .then((response) => {
         if (response.status !== 200) {

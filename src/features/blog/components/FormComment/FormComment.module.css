@@ -32,17 +32,24 @@ form input[type='submit']:hover {
   background-color: #000;
 }
 
-form .loader {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
+.success {
+  padding: 4px 8px;
+  border: 1px solid #000;
+  border-radius: 3px;
 }
 
-form .loader:after {
+.loader {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto;
+}
+
+.loader:after {
   content: ' ';
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   margin: 8px;
   border-radius: 50%;
   border: 6px solid #000;

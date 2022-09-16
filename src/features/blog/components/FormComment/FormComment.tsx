@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { seoConfig } from 'src/config';
 // import { createComment } from 'src/functions/createComment';
-import './FormComment.module.css';
+import styles from './FormComment.module.css';
 interface IFormComment {
   _id: string;
   pseudo: string;
@@ -79,7 +79,6 @@ export default function FormComment({ postId }: FormComment) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {isSuccess && <p>Votre message a été envoyé avec succès. Merci !</p>}
         {errorsForm.map((errorForm) => (
           <p>{errorForm}</p>
         ))}
@@ -102,8 +101,15 @@ export default function FormComment({ postId }: FormComment) {
             value={formState.comment}
           />
         </label>
+
+        {isSuccess && (
+          <p class={styles.success}>
+            Votre message a été envoyé avec succès. Merci !
+          </p>
+        )}
+
         {isLoading ? (
-          <div className="loader"></div>
+          <div className={styles.loader} />
         ) : (
           <input type="submit" value="Envoyer" />
         )}

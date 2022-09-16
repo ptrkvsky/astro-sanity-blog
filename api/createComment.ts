@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import sanityClient from '@sanity/client';
+import sendMail from '../src/features/blog/functions/sendMail';
 
 const sanityConfig = {
   projectId: process.env.PUBLIC_SANITY_PROJECT_ID,
@@ -9,7 +10,7 @@ const sanityConfig = {
   useCdn: true,
 };
 
-export const client = sanityClient(sanityConfig);
+export const sanity = sanityClient(sanityConfig);
 
 export default async function createComment(
   request: VercelRequest,
@@ -27,8 +28,8 @@ export default async function createComment(
       content: comment,
       isActive: false,
     };
-    const commentCreated = await client.create(newComment);
-
+    const commentCreated = await sanity.create(newComment);
+    await sendMail();
     return response.status(200).json(commentCreated);
   } catch (err) {
     console.error('👩‍🚒', err);

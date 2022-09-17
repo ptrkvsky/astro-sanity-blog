@@ -10,9 +10,10 @@ interface IFormComment {
 
 interface FormComment {
   postId: string;
+  postTitle: string;
 }
 
-export default function FormComment({ postId }: FormComment) {
+export default function FormComment({ postId, postTitle }: FormComment) {
   const initForm: IFormComment = {
     _id: postId,
     pseudo: '',
@@ -38,12 +39,21 @@ export default function FormComment({ postId }: FormComment) {
     setFormState({ ...formState, comment: e.currentTarget.value });
   }
 
+  function cleanForm() {
+    const cleanFormState = {
+      ...formState,
+      pseudo: '',
+      comment: '',
+    };
+    setFormState(cleanFormState);
+  }
+
   function handleSubmit(event: any) {
     event.preventDefault();
     setIsLoading(true);
     fetch(`${seoConfig.baseURL}/api/createComment`, {
       method: 'POST',
-      body: JSON.stringify({ ...formState }),
+      body: JSON.stringify({ ...formState, postTitle }),
       headers: new Headers({
         'Content-Type': 'application/json; charset=UTF-8',
       }),
@@ -54,6 +64,7 @@ export default function FormComment({ postId }: FormComment) {
           setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
         } else {
           setErrorsForm([]);
+          cleanForm();
           setIsSuccess(true);
           return response.json();
         }
@@ -103,7 +114,7 @@ export default function FormComment({ postId }: FormComment) {
         </label>
 
         {isSuccess && (
-          <p class={styles.success}>
+          <p className={styles.success}>
             Votre message a été envoyé avec succès. Merci !
           </p>
         )}

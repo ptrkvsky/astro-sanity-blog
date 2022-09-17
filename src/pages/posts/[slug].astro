@@ -19,6 +19,8 @@ import {
 } from '@features/blog/functions';
 import FormComment from '@features/blog/components/FormComment/FormComment';
 import getPostComments from '@features/blog/functions/getPostsComments';
+import CommentCard from '@features/blog/components/CommentCard.astro';
+import SectionComments from '@features/blog/components/SectionComments.astro';
 
 interface AstroProps {
   post: Post;
@@ -75,9 +77,8 @@ const breadcrumbItems = getBreadcrumbItems(post);
       }
       <div>
         <article class="post-content" set:html={postContent}></article>
-        <div class="px-4">
-          <FormComment client:visible postId={post._id} />
-        </div>
+        <FormComment client:visible postId={post._id} postTitle={post.title} />
+        <SectionComments postTitle={post.title} comments={comments} />
       </div>
     </div>
   </div>
@@ -197,5 +198,9 @@ const breadcrumbItems = getBreadcrumbItems(post);
   }
   li.active a {
     @apply text-pink-500 font-bold;
+  }
+
+  .secondary-title {
+    @apply text-4xl mb-4;
   }
 </style>

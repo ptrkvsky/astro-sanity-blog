@@ -1,7 +1,7 @@
 //@ts-ignore
 import Sib from 'sib-api-v3-sdk';
 
-export default async function sendMail() {
+export default async function sendMail(postTitle: string) {
   const sibClient = Sib.ApiClient.instance;
   const apiKey = sibClient.authentications['api-key'];
   apiKey.apiKey = process.env.SENDIN_BLUE;
@@ -9,7 +9,7 @@ export default async function sendMail() {
   const tranEmailApi = new Sib.TransactionalEmailsApi();
 
   const sender = {
-    email: 'johan.petrikovskyn@gmail.com',
+    email: 'johan@developpeur-web.tech',
     name: 'Johan',
   };
 
@@ -19,28 +19,26 @@ export default async function sendMail() {
     },
   ];
 
-  const test = await tranEmailApi
+  await tranEmailApi
     .sendTransacEmail({
       sender,
       to: receivers,
-      subject: 'Subscribe to Cules Coding to become a developer',
+      subject: 'Nouveau commentaire sur le post {{params.title}} ',
       textContent: `
-        Cules Coding will teach you how to become {{params.role}} a developer.
+        Un nouveau commentaire a été laissé sur le site.
         `,
       htmlContent: `
-        <h1>Cules Coding</h1>
-        <a href="https://cules-coding.vercel.app/">Visit</a>
-                `,
+        <h1>Nouveau commentaire</h1>
+        <a href="https://developpeur-web.sanity.studio/">Voir le commentaire</a>`,
+
       params: {
-        role: 'Frontend',
+        title: postTitle,
       },
     })
     .then((result: any) => {
-      console.log('〽️', result);
+      console.log('✅', 'comment succeed');
     })
     .catch((error: any) => {
       console.log('🔥', error);
     });
-
-  console.log('test -->', test);
 }

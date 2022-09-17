@@ -37,6 +37,43 @@ export type {
 };
 
 /**
+ * Comment
+ *
+ *
+ */
+export interface Comment extends SanityDocument {
+  _type: 'comment';
+
+  /**
+   * Pseudo — `string`
+   *
+   *
+   */
+  pseudo: string;
+
+  /**
+   * Content — `text`
+   *
+   *
+   */
+  content: string;
+
+  /**
+   * Active — `boolean`
+   *
+   *
+   */
+  isActive: boolean;
+
+  /**
+   * post — `reference`
+   *
+   *
+   */
+  post: SanityReference<Post>;
+}
+
+/**
  * Post
  *
  *
@@ -211,7 +248,7 @@ export type BlockContent = Array<
   | SanityKeyed<Code>
 >;
 
-export type Documents = Post | Category;
+export type Documents = Post | Category | Comment;
 
 /**
  * This interface is a stub. It was referenced in your sanity schema but

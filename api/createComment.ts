@@ -19,24 +19,6 @@ export default async function createComment(
   try {
     const { _id, comment, pseudo, postTitle } = request.body;
 
-    // Delete all
-    // Without params
-    sanity
-      .delete({ query: '*[_type == "comment"]' })
-      .then(() => {
-        console.log('The document matching *[_type == "comment"] was deleted');
-      })
-      .then((test) => {
-        console.log(test);
-      })
-      .catch((err) => {
-        console.error('Delete failed: ', err.message);
-      });
-
-    sanity.getDocument(`${_id}`).then((post) => {
-      console.log('post -->', post);
-    });
-
     const newComment = {
       _type: 'comment',
       post: {
@@ -48,7 +30,7 @@ export default async function createComment(
       isActive: false,
     };
 
-    // await sendMail(postTitle);
+    await sendMail(postTitle);
     return response.status(200).json(newComment);
   } catch (err) {
     console.error('👩‍🚒', err);

@@ -13,8 +13,8 @@ const dateComment = getFrenchDate(comment._createdAt);
 
 <article class="comment">
   <p class="pseudo">
-    {capitalizeFirstLetter(comment.pseudo)}
-    <span class="date">, le {dateComment}</span>
+    {capitalizeFirstLetter(comment.pseudo)}<span class="separator">,</span>
+    <span class="date"> le {dateComment}</span>
   </p>
   <p class="content">{comment.content}</p>
 </article>
@@ -26,7 +26,8 @@ const dateComment = getFrenchDate(comment._createdAt);
   .pseudo {
     font-weight: bold;
   }
-  .date {
+  .date,
+  .separator {
     @apply font-normal text-sm;
   }
   .content {

@@ -31,7 +31,8 @@ export default async function createComment(
     };
 
     await sendMail(postTitle);
-    return response.status(200).json(newComment);
+    const commentCreated = await sanity.create(newComment);
+    return response.status(200).json(commentCreated);
   } catch (err) {
     console.error('👩‍🚒', err);
     return response.status(500).json(err);

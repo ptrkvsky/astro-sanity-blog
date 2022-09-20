@@ -39,10 +39,8 @@ if (!posts) return;
 const mostRecentDate = getMostRecentDate(posts);
 
 /* SEO */
-const title =
-  "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky";
-const description =
-  "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité";
+const title = `Liste d'articles dans la catégorie ${category.title} écrit par Johan Petrikovsky`;
+const description = `${category.title} - Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité`;
 const schema = getSchemaBlogListing(mostRecentDate);
 ---
 

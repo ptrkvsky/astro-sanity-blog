@@ -6,7 +6,8 @@ const getPostsByCategory = (posts: Post[]) => {
   const postsByCategory = posts.reduce((acc, curr) => {
     // Si la catégorie courante n'est pas présente dans l'élément courant
     if (
-      acc.findIndex((el) => el.category === curr.categories[0].title) === -1
+      acc.findIndex((el) => el.category.title === curr.categories[0].title) ===
+      -1
     ) {
       // Je vais chercher tous les postes de cette catégorie
       const postsCategory = posts.filter(
@@ -14,7 +15,7 @@ const getPostsByCategory = (posts: Post[]) => {
       );
       // Je créé un nouvel objet catPost avec la catégorie courante  et un tableau vide
       const newPostCat: CategoryPosts = {
-        category: curr.categories[0].title,
+        category: curr.categories[0],
         posts: postsCategory,
       };
       return [...acc, newPostCat];

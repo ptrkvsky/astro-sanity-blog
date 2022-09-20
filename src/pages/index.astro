@@ -8,7 +8,6 @@ import { getGraphHome } from '@helpers/getGraphHome';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryPostsHome } from '@features/home/queries/queryPostsHome';
 import type { Post } from '@interfaces/SanitySchema';
-
 const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
 const schema = getGraphHome();
 const description =

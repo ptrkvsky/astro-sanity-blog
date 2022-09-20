@@ -1,0 +1,71 @@
+---
+import Header from '@components/Header.astro';
+import PostCard from '@features/blog/components/PostCard/index.astro';
+import { getCategoriesUrlParams } from '@features/blog/functions/getCategoriesUrlParams';
+import type { Category } from '@features/blog/interfaces/Category';
+import type { SanityAllCategories } from '@features/blog/interfaces/SanityAllCategories';
+import { queryAllCategories } from '@features/blog/queries/queryAllCategories';
+import fetchSanity from '@helpers/fetchSanity';
+import type { Post } from '@interfaces/SanitySchema';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { client } from '@lib/sanityClient';
+import getMostRecentDate from 'src/helpers/getMostRecentDate';
+import getSchemaBlogListing from 'src/helpers/getSchemaBlogListing';
+
+interface AstroProps {
+  category: Category;
+  params: {
+    slug: {
+      current: string;
+    };
+  };
+}
+
+export async function getStaticPaths() {
+  const sanityCategories = await fetchSanity<SanityAllCategories>(
+    queryAllCategories
+  );
+  const params = sanityCategories && getCategoriesUrlParams(sanityCategories);
+  console.log('🔥', params);
+  return params;
+}
+
+const { category } = Astro.props as AstroProps;
+const queryPostByCat = `*[_type == "post"  && references($categorieId)]`;
+const params = { categorieId: category._id };
+const posts = await client.fetch<Post[]>(queryPostByCat, params);
+
+if (!posts) return;
+const mostRecentDate = getMostRecentDate(posts);
+
+/* SEO */
+const title =
+  "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky";
+const description =
+  "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité";
+const schema = getSchemaBlogListing(mostRecentDate);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  schema={schema}
+  hasGradient={true}
+  canonical={`/categorie/${category.slug.current}`}
+>
+  <Header slot="before-main" />
+  <div slot="main" class="wrapper">
+    <h1 class="font-semibold text-purple-900 mt-10 mb-6 text-4xl">
+      {category.title}
+    </h1>
+    <ul class="grid grid-cols-1 gap-16 lg:grid-cols-2">
+      {posts.map((post) => <PostCard post={post} />)}
+    </ul>
+  </div>
+</BaseLayout>
+
+<style lang="scss">
+  .wrapper {
+    @apply mx-auto lg:px-0 max-w-5xl px-4 relative z-10;
+  }
+</style>

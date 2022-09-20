@@ -43,6 +43,9 @@ export const queryAllPosts = `query allPosts {
     }
     categories{
       title
+      slug {
+        current
+      }
     }
     bodyRaw
   }

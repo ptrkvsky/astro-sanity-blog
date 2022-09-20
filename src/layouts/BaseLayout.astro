@@ -24,10 +24,12 @@ const { title, schema, description, hasGradient, image, canonical } =
   import Swup from 'swup';
   //@ts-ignore
   import SwupHeadPlugin from '@swup/head-plugin';
+  //@ts-ignore
+  import SwupScrollPlugin from '@swup/scroll-plugin';
 
   new Swup({
     //@ts-ignore
-    plugins: [new SwupHeadPlugin()],
+    plugins: [new SwupHeadPlugin(), SwupScrollPlugin()],
   });
 </script>
 
@@ -64,24 +66,22 @@ const { title, schema, description, hasGradient, image, canonical } =
   data-host="https://api.tinybird.co"
   data-token="p.eyJ1IjogImFhNGYyNzMzLTQ5MWUtNDA2ZS1iYjVmLTI3NzUzYjRhMjk2OCIsICJpZCI6ICI1ZGY0MmYxOC0zNDQyLTRkZmUtOGUxMC05NzZkM2I1OTY4MTkifQ.yV405Lc-YqoXf4lwD63SZ2fifVmKMLvsMNdoKFQqOGE"
 ></script>
-
-<slot name="before-main" />
-<main id="swup" class="transition-fade">
-  <slot name="main" />
-</main>
-
-{
-  Astro.url.pathname === '/' ? (
-    <Footer client:visible />
-  ) : (
-    <Footer client:only="react" />
-  )
-}
+<div id="swup" class="grid-layout transition-fade">
+  <slot name="before-main" />
+  <main>
+    <slot name="main" />
+  </main>
+  {
+    Astro.url.pathname === '/' ? (
+      <Footer client:visible />
+    ) : (
+      // <Footer client:only="react" />
+      <Footer client:visible />
+    )
+  }
+</div>
 
 <style is:global>
-  body {
-    overflow-x: hidden;
-  }
   .transition-fade {
     transition: 0.25s;
     opacity: 1;
@@ -92,10 +92,14 @@ const { title, schema, description, hasGradient, image, canonical } =
   }
 
   body {
+    overflow-x: hidden;
+  }
+
+  .grid-layout {
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
   }
 
   .conteneur {

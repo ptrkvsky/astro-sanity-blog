@@ -1,7 +1,7 @@
-import type { Post } from '@interfaces/SanitySchema';
+import type { Category, Post } from '@interfaces/SanitySchema';
 import type { Frontmatter } from '@interfaces/Frontmatter';
 
 export interface CategoryPosts {
-  category: string;
+  category: Category;
   posts: Post[];
 }

@@ -218,6 +218,10 @@ export interface Category extends SanityDocument {
    *
    */
   description: string;
+
+  slug: {
+    current: string;
+  };
 }
 
 export type QuestionsAnswers = {

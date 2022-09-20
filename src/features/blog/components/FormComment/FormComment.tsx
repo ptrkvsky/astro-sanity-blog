@@ -71,7 +71,6 @@ export default function FormComment({ postId, postTitle }: FormComment) {
       })
       .then((result) => {
         if (result) {
-          console.log(result);
           setIsSuccess(true);
         }
       })

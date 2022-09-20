@@ -1,7 +1,7 @@
 ---
 import { toHTML } from '@portabletext/to-html';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
-import type { Post, BreadcrumbGraphItem, FAQItem } from '@interfaces/index';
+import type { Post } from '@interfaces/index';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { TableOfContent } from '@features/blog/components/TableOfContent/';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
@@ -13,13 +13,9 @@ import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
 import { getHeadings } from '@features/blog/functions/getHeadings';
 import { portableTextComponents } from '@helpers/portableTextComponents';
 import { getGraphBlogPost } from '@helpers/getGraphBlogPost';
-import {
-  getGraphBreadcrumbItems,
-  getBreadcrumbItems,
-} from '@features/blog/functions';
+import { getBreadcrumbItems } from '@features/blog/functions';
 import FormComment from '@features/blog/components/FormComment/FormComment';
 import getPostComments from '@features/blog/functions/getPostsComments';
-import CommentCard from '@features/blog/components/CommentCard.astro';
 import SectionComments from '@features/blog/components/SectionComments.astro';
 
 interface AstroProps {

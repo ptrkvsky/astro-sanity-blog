@@ -14,7 +14,7 @@ export function getBreadcrumbItems(post: Post) {
     {
       //@ts-ignore
       name: post?.categories ? post?.categories[0]?.title : '',
-      path: '/',
+      path: `/categorie/${post?.categories[0]?.slug.current}`,
     },
   ];
   return breadcrumbItems;

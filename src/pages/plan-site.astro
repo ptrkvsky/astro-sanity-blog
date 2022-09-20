@@ -6,7 +6,6 @@ import getPostsByCategory from '@helpers/getPostsByCategory';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
-
 const sanityPosts = await fetchSanity<SanityAllPost>(queryAllPosts);
 const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
 ---
@@ -32,9 +31,14 @@ const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
             categoriesPosts &&
             categoriesPosts.map((categoryPosts) => (
               <li>
-                <span class="block my-2">
-                  Catégorie <strong>{categoryPosts.category}</strong>
-                </span>
+                Catégorie{' '}
+                <a
+                  href={`categorie/${categoryPosts.category.slug.current}`}
+                  class="my-2 font-bold"
+                  class="link-categorie"
+                >
+                  {categoryPosts.category.title}
+                </a>
                 <ul class="mx-4">
                   {categoryPosts.posts.map((post) => (
                     <li>

@@ -6,6 +6,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/javascript/package-json/",
+      "destination": "/posts/package-json",
+      "permanent": true
+    },
+    {
       "source": "/blog/",
       "destination": "/posts",
       "permanent": true

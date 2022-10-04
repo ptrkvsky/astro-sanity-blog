@@ -88,6 +88,9 @@ export default function FormComment({ postId, postTitle }: FormComment) {
 
   return (
     <>
+      <h2 class="font-semibold text-indigo-600 mt-10 mb-4 text-2xl lg:text-3xl">
+        Laisser un commentaire
+      </h2>
       <form onSubmit={handleSubmit}>
         {errorsForm.map((errorForm) => (
           <p>{errorForm}</p>

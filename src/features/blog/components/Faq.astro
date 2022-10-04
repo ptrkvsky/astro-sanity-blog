@@ -1,0 +1,35 @@
+---
+import type { QuestionsAnswers, SanityKeyed } from '@interfaces/SanitySchema';
+
+interface AstroProps {
+  questionsAnswers: Array<SanityKeyed<QuestionsAnswers>>;
+}
+
+const { questionsAnswers } = Astro.props as AstroProps;
+---
+
+<section>
+  <h2>Questions fréquentes</h2>
+  {
+    questionsAnswers.map((questionAnswer) => {
+      return (
+        <article>
+          <h3 class="question">{questionAnswer.question}</h3>
+          <p class="reponse">{questionAnswer.answer}</p>
+        </article>
+      );
+    })
+  }
+</section>
+
+<style lang="scss">
+  section {
+    @apply max-w-2xl mb-16;
+  }
+  h2 {
+    @apply font-semibold text-indigo-600 mt-10 mb-4 text-2xl lg:text-3xl;
+  }
+  h3 {
+    @apply font-semibold  mt-8 mb-4 text-xl lg:text-2xl;
+  }
+</style>

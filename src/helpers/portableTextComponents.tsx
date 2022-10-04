@@ -5,6 +5,8 @@ import type { PortableTextHtmlComponents } from '@portabletext/to-html';
 import hljs from 'highlight.js';
 //@ts-ignore
 import imageUrlBuilder from '@sanity/image-url';
+import LiteYouTubeEmbed from 'react-lite-youtube-embed';
+import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 
 const builder = imageUrlBuilder(client);
 
@@ -34,6 +36,20 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
         language: elem.value.language,
       }).value;
       return `<pre class="language-${elem.value.language}"><code>${code}</code></pre>`;
+    },
+    //ts-ignore
+    youtube: (elem) => {
+      return `<div>
+      <iframe
+      width="100%"
+      height="500"
+      src="https://www.youtube.com/embed/${elem.value.idYoutube}&autoplay=1"
+      srcdoc="<style>*{padding:0;margin:0;ov560erflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${elem.value.idYoutube}?autoplay=1><img src=https://img.youtube.com/vi/${elem.value.idYoutube}/hqdefault.jpg alt='Video The Dark Knight Rises: What Went Wrong? – Wisecrack Edition'><span>▶</span></a>"
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+      </div>`;
     },
   },
   marks: {

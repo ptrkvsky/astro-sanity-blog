@@ -17,6 +17,7 @@ import { getBreadcrumbItems } from '@features/blog/functions';
 import FormComment from '@features/blog/components/FormComment/FormComment';
 import getPostComments from '@features/blog/functions/getPostsComments';
 import SectionComments from '@features/blog/components/SectionComments.astro';
+import Faq from '@features/blog/components/Faq.astro';
 
 interface AstroProps {
   post: Post;
@@ -41,6 +42,7 @@ const graphPost = getGraphBlogPost(post);
 const postContent = toHTML(post.bodyRaw, {
   components: portableTextComponents,
 });
+
 const headings = getHeadings(post.bodyRaw || []);
 const breadcrumbItems = getBreadcrumbItems(post);
 ---
@@ -73,6 +75,11 @@ const breadcrumbItems = getBreadcrumbItems(post);
       }
       <div>
         <article class="post-content" set:html={postContent}></article>
+        {
+          post.questionsAnswers && (
+            <Faq questionsAnswers={post.questionsAnswers} />
+          )
+        }
         <FormComment client:visible postId={post._id} postTitle={post.title} />
         <SectionComments postTitle={post.title} comments={comments} />
       </div>

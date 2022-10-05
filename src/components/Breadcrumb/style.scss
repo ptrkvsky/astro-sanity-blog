@@ -1,0 +1,5 @@
+.breadcrumb {
+  li:last-child() svg {
+    display: none;
+  }
+}

@@ -6,7 +6,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { TableOfContent } from '@features/blog/components/TableOfContent/';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
 import Header from '@components/Header.astro';
-import Breadcrumb from '@components/Breadcrumb.astro';
+import Breadcrumb from '@components/Breadcrumb';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
@@ -62,7 +62,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
   <div slot="main" class="post">
     <ObserverTableOfContent />
     <Header slot="before-main">
-      <Breadcrumb breadcrumbItems={breadcrumbItems} />
+      <!-- <Breadcrumb client:only="react" breadcrumbItems={breadcrumbItems} /> -->
       <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
     </Header>{}
     <div class="wrapper-post">

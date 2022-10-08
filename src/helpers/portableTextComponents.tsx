@@ -5,8 +5,7 @@ import type { PortableTextHtmlComponents } from '@portabletext/to-html';
 import hljs from 'highlight.js';
 //@ts-ignore
 import imageUrlBuilder from '@sanity/image-url';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
+import getPost from '@features/blog/functions/getPost';
 
 const builder = imageUrlBuilder(client);
 
@@ -53,9 +52,10 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
     },
   },
   marks: {
-    internalLink: ({ children, value }) => {
-      const href = value.href || '';
-      return `<a href="${href}" class="internalLink">${children}</a>`;
+    //@ts-ignore
+    internalLink: async (prop) => {
+      const post = await getPost(prop.value.reference._ref);
+      return `<a href="${post[0].slug.current}" class="internalLink">${prop.children}</a>`;
     },
   },
 

@@ -68,7 +68,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
     <div class="wrapper-post">
       {
         headings.length > 0 && (
-          <aside class="wrapper-table-of-content px-4 lg:px-0">
+          <aside class="wrapper-table-of-content px-4 lg:px-0 bg-white">
             <TableOfContent headings={headings} />
           </aside>
         )
@@ -160,7 +160,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
 
   .post-content pre {
     @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
-    max-width: calc(100vw - 2rem);
+    max-width: calc(100vw - 2.8rem);
   }
   .wrapper-post {
     @apply relative lg:justify-between max-w-6xl mx-auto lg:flex;
@@ -180,7 +180,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
   }
 
   .wrapper-table-of-content {
-    @apply lg:max-w-xs max-h-screen sticky order-last top-0;
+    @apply lg:max-w-xs max-h-screen relative lg:sticky order-last top-0;
   }
 
   .toc ul {

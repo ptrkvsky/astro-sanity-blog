@@ -87,7 +87,7 @@ export default function FormComment({ postId, postTitle }: FormComment) {
   }
 
   return (
-    <>
+    <section class="px-4 sm:px-0">
       <h2 class="font-semibold text-indigo-600 mt-10 mb-4 text-2xl lg:text-3xl">
         Laisser un commentaire
       </h2>
@@ -127,6 +127,6 @@ export default function FormComment({ postId, postTitle }: FormComment) {
           <input type="submit" value="Envoyer" />
         )}
       </form>
-    </>
+    </section>
   );
 }

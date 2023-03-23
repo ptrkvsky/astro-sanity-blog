@@ -1,4 +1,3 @@
-import { Image } from '@astrojs/image/components';
 import { client } from '@lib/sanityClient';
 import { slugify } from '@lib/slugify';
 import type { PortableTextHtmlComponents } from '@portabletext/to-html';
@@ -56,6 +55,9 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
     internalLink: async (prop) => {
       const post = await getPost(prop.value.reference._ref);
       return `<a href="${post[0].slug.current}" class="internalLink">${prop.children}</a>`;
+    },
+    link: ({ text, value }: any) => {
+      return `<a title="${text}" href="${value.href}">${text}</a>`;
     },
   },
 

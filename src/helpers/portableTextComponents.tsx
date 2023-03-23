@@ -57,7 +57,7 @@ export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
       return `<a href="${post[0].slug.current}" class="internalLink">${prop.children}</a>`;
     },
     link: ({ text, value }: any) => {
-      return `<a title="${text}" href="${value.href}">${text}</a>`;
+      return `<a class="link" title="${text}" href="${value.href}">${text}</a>`;
     },
   },
 

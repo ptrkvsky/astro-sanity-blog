@@ -19,20 +19,6 @@ const { title, schema, description, hasGradient, image, canonical } =
   Astro.props as Props;
 ---
 
-<script>
-  //@ts-ignore
-  import Swup from 'swup';
-  //@ts-ignore
-  import SwupHeadPlugin from '@swup/head-plugin';
-  //@ts-ignore
-  import SwupScrollPlugin from '@swup/scroll-plugin';
-
-  new Swup({
-    //@ts-ignore
-    plugins: [new SwupHeadPlugin(), SwupScrollPlugin()],
-  });
-</script>
-
 <meta charset="utf-8" />
 <meta
   name="google-site-verification"
@@ -71,14 +57,7 @@ const { title, schema, description, hasGradient, image, canonical } =
   <main>
     <slot name="main" />
   </main>
-  {
-    Astro.url.pathname === '/' ? (
-      <Footer client:visible />
-    ) : (
-      // <Footer client:only="react" />
-      <Footer client:visible />
-    )
-  }
+  <Footer client:visible />
 </div>
 
 <style is:global>

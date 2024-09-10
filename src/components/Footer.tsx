@@ -1,4 +1,4 @@
-import Fragment from '@astrojs/preact';
+import React from 'react';
 
 const Footer = () => {
   return (

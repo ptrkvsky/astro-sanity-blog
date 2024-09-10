@@ -1,18 +1,17 @@
-import { defineConfig } from "astro/config";
-import compress from "astro-compress";
-import { VitePWA } from "vite-plugin-pwa";
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
-import image from "@astrojs/image";
-import partytown from "@astrojs/partytown";
-import sitemap from "@astrojs/sitemap";
-import { manifest } from "./src/config";
+import { defineConfig } from 'astro/config';
+import compress from 'astro-compress';
+import { VitePWA } from 'vite-plugin-pwa';
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+import partytown from '@astrojs/partytown';
+import sitemap from '@astrojs/sitemap';
+import { manifest } from './src/config';
 
-import prefetch from "@astrojs/prefetch";
+import prefetch from '@astrojs/prefetch';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://developpeur-web.tech",
+  site: 'https://developpeur-web.tech',
   integrations: [
     // tailwind({
     //   config: {
@@ -20,14 +19,13 @@ export default defineConfig({
     //     path: './tailwind.config.js',
     //   },
     // }),
-    (await import("astro-compress")).default(),
     react(),
     tailwind(),
     sitemap(),
     partytown({
       // Adds dataLayer.push as a forwarding-event.
       config: {
-        forward: ["dataLayer.push"],
+        forward: ['dataLayer.push'],
       },
     }),
     prefetch(),
@@ -36,7 +34,7 @@ export default defineConfig({
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
       // https://github.com/shikijs/shiki/blob/main/docs/themes.md
-      theme: "dracula",
+      theme: 'dracula',
       // Add custom languages
       // Note: Shiki has countless langs built-in, including .astro!
       // https://github.com/shikijs/shiki/blob/main/docs/languages.md

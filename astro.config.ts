@@ -7,7 +7,6 @@ import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import { manifest } from './src/config';
 
-import prefetch from '@astrojs/prefetch';
 
 // https://astro.build/config
 export default defineConfig({
@@ -28,7 +27,6 @@ export default defineConfig({
         forward: ['dataLayer.push'],
       },
     }),
-    prefetch(),
   ],
   markdown: {
     shikiConfig: {

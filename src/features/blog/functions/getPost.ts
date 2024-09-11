@@ -1,7 +1,6 @@
-import { client } from '@lib/sanityClient';
+import { client } from "@lib/sanityClient";
 
 export default async function getPost(refPost: string) {
-  console.log(refPost);
   const query = `*[_id==$refPost]`;
   const params = {
     refPost,

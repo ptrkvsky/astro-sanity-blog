@@ -7,7 +7,6 @@ import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
 const sanityPosts = await fetchSanity<SanityAllPost>(queryAllPosts);
-console.log(sanityPosts);
 const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
 ---
 

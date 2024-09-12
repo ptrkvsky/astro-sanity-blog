@@ -4,6 +4,7 @@ import type { Graph, WithContext } from 'schema-dts';
 import type { BlogPosting } from 'schema-dts';
 import Footer from '@components/Footer';
 import Favicons from '@components/Favicons.astro';
+import Header from '@components/Header.astro';
 import { seoConfig } from '../config';
 
 interface Props {
@@ -52,13 +53,12 @@ const { title, schema, description, hasGradient, image, canonical } =
   data-host="https://api.tinybird.co"
   data-token="p.eyJ1IjogImFhNGYyNzMzLTQ5MWUtNDA2ZS1iYjVmLTI3NzUzYjRhMjk2OCIsICJpZCI6ICI1ZGY0MmYxOC0zNDQyLTRkZmUtOGUxMC05NzZkM2I1OTY4MTkifQ.yV405Lc-YqoXf4lwD63SZ2fifVmKMLvsMNdoKFQqOGE"
 ></script>
-<div id="swup" class="grid-layout transition-fade">
-  <slot name="before-main" />
-  <main>
-    <slot name="main" />
-  </main>
-  <Footer client:visible />
-</div>
+<slot name="before-main" />
+<main>
+  <Header />
+  <slot name="main" />
+</main>
+<Footer client:visible />
 
 <style is:global>
   .transition-fade {

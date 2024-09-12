@@ -1,13 +1,15 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@features/blog/components/PostCard/index.astro';
-import imgDevelopper from '@assets/images/developpeur-freelance.jpeg';
-import { Image } from 'astro:assets';
 import SafeMail from '@components/SafeMail.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryPostsHome } from '@features/home/queries/queryPostsHome';
 import type { Post } from '@interfaces/SanitySchema';
+import { SectionHero } from '@features/home/components/SectionHero';
+import { SectionNumbers } from '@features/home/components/SectionNumbers';
+import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
+
 const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
 const schema = getGraphHome();
 const description =
@@ -21,20 +23,14 @@ const description =
   canonical="/"
 >
   <div slot="main">
+    <SectionHero />
+    <SectionNumbers />
+    <SectionTestimonials />
+
     <!-- 02847c164813f253 -->
-    <h1 class="text-3xl font-bold text-center">
-      Développeur <span class="text-gradient">React</span> Freelance
-    </h1>
+
     <div class="max-w-xl mx-4 md:mx-auto">
-      <div class="banner mt-4 mb-2">
-        <Image
-          format="avif"
-          width={400}
-          height={400}
-          src={imgDevelopper}
-          alt="Johan Petrikovsyk développeur freelance"
-        />
-      </div>
+      <div class="banner mt-4 mb-2"></div>
       <p
         class="rounded-lg p-6 mt-6 mb-3 leading-relaxed bg-gradient-to-r from-blue-500 to-blue-600 text-white drop-shadow-md"
       >
@@ -275,16 +271,6 @@ const description =
 <style>
   .list {
     list-style-type: disc;
-  }
-  h1 {
-    @apply mt-2 mb-3;
-  }
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply mt-2 mb-3;
   }
 
   .conteneur {

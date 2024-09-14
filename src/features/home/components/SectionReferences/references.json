@@ -1,0 +1,105 @@
+{
+    "references": [
+      {
+        "year": 2024,
+        "technologies": ["React", "Gatsby", "Headless WordPress"],
+        "company": {
+          "name": "ALS Action Canada",
+          "url": "https://www.alsactioncanada.org/",
+          "description": "ALS Action Canada est une organisation dédiée à sensibiliser et la recherche sur la sclérose latérale amyotrophique (SLA). Mes actions :"
+        },
+        "actions": [
+          "Contribution à la refonte de templates avec React et Gatsby.",
+          "Utilisation de WordPress en mode headless pour la gestion de contenu. Collaboration avec des équipes pour",
+          "Intégration fluide entre le frontend Gatsby et l'API WordPress.",
+          "Création de composants réutilisables et modulaires.",
+          "Amélioration de l'expérience utilisateur grâce à des interfaces dynamiques et réactives."
+        ]
+      },
+      {
+        "year": 2024,
+        "technologies": ["Astro","React", "Sanity", "WebGL", "GSAP"],
+        "company": {
+          "name": "Draw me a Sheep",
+          "url": "https://drawmeasheep.fr/",
+          "description": "Développeur fullstack pour Draw me a Sheep. C'est un site créatif conçu pour captiver les utilisateurs grâce à des animations interactives et des visuels uniques. "
+        },
+        "actions": [
+          "Développement complet du frontend avec Astro pour des performances optimales et une expérience utilisateur fluide.",
+          "Utilisation de Sanity comme back-office pour la gestion de contenu et la création de pages dynamiques.",
+          "Création d'animations immersives avec WebGL et GSAP pour offrir une expérience interactive unique.",
+          "Optimisation des performances et de l'accessibilité du site.",
+          "Récompensé sur CSS Design pour l'excellence en design et développement."
+        ]
+      },
+      {
+        "year": 2024,
+        "technologies": ["TypeScript", "React", "React Testing Library", "Storybook", "Leaflet"],
+        "company": {
+          "name": "Omega SAFTI",
+          "url": "#",
+          "description": "Omega est un outil interne développé par SAFTI, destiné à faciliter la mise en relation des conseillers immobiliers. En tant que lead front-end, j'ai mené la refonte de cette brique essentielle de l'application."
+        },
+        "actions": [
+          "Lead front-end sur la refonte de cette brique Omega pour améliorer les interactions entre les conseillers immobiliers.",
+          "Utilisation de technologies modernes comme TypeScript, React, React Query, et Storybook pour assurer un développement fiable et maintenable.",
+          "Collaboration avec les développeurs back-end pour les accompagner dans leur montée en compétences sur le front-end.",
+          "Mise en place d'une architecture front-end robuste avec des tests via React Testing Library pour garantir la qualité du code.",
+          "Intégration de Leaflet pour permettre le dessin de zones et de polygones afin de représenter visuellement les zones de recherche."
+        ]
+      },
+      {
+        "year": "2022-2024",
+        "technologies": ["Next.js", "TypeScript", "Tailwind CSS", "Jest", "SEO"],
+        "company": {
+          "name": "SAFTI.fr",
+          "url": "https://www.safti.fr/",
+          "description": "SAFTI.fr est un site d'annonce immobilières. Refonte de l'architecture du site SAFTI.fr en collaboration avec une équipe Agile. Migration de l'app router, optimisation SEO et recherche de prestataires pour le netlinking."
+        },
+        "actions": [
+          "Participation à la refonte de l'architecture du site SAFTI public",
+          "Monté en version de NextJS vers l'app router.",
+          "Optimisation technique SEO et gestion des performances.",
+          "Recherche et gestion de prestataires pour le netlinking.",
+          "Rédaction des tests unitaires avec des objectifs de coverage atteints.",
+          "Participation à la suppression des code smells remontés par SonarQube.",
+          "Proposition et développement d'une fonctionnalité qui a permis de passer la note Trustpilot de 2.1 à 4.8"
+        ]
+      },
+      {
+        "year": 2023,
+        "technologies": ["Sulu CMS","PHP", "JavaScript", "TWIG", "Tailwind CSS"],
+        "company": {
+          "name": "Join SAFTI",
+          "url": "https://www.join-safti.com/",
+          "description": "Join SAFTI est un site multilingue utilisé pour le recrutement de conseillers immobiliers. Développé au sein d'une équipe Agile, le site utilise le CMS Sulu pour gérer le contenu de manière flexible."
+        },
+        "actions": [
+          "Développement front-end sur un site multilingue avec Sulu CMS.",
+          "Intégration de designs pixel perfect.",
+          "Collaboration avec des équipes back-end et des designers pour implémenter des fonctionnalités sur mesure.",
+          "Optimisation du contenu multilingue pour une meilleure expérience utilisateur.",
+          "Participation aux sprints Agile pour améliorer les fonctionnalités et la maintenance du site."
+        ]
+      },
+      {
+        "year": "2023-2024",
+        "technologies": ["NextJS", "SEO", "GA4"],
+        "company": {
+          "name": "Bien Estimer SAFTI",
+          "url": "https://bien-estimer-safti.fr/",
+          "description": "Bien Estimer SAFTI est un outil d'estimation immobilière en ligne, offrant des services de calculs précis pour les utilisateurs souhaitant estimer la valeur de leur bien."
+        },
+        "actions": [
+          "Maintenance régulière du site pour garantir sa stabilité et ses performances.",
+          "Développement de nouveaux composants interactifs.",
+          "Mise en place et suivi de la stratégie SEO p.",
+          "Implémentation du plan de taggage GA4 pour le suivi des performances et des interactions des utilisateurs.",
+          "Optimisation continue des temps de chargement et des performances du site.",
+          "Collaboration avec les équipes marketing pour améliorer la stratégie de contenu et aligner les objectifs SEO."
+        ]
+      }
+    ]
+  }
+  
+  

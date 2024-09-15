@@ -5,6 +5,7 @@ import florent from '@assets/images/florent-pasquet.jpeg';
 import logoCerise from '@assets/images/logo-les-cerises.png';
 import logoSpinat from '@assets/images/logo-spinat.svg';
 import { Testimonial } from './Testimonial';
+import { link } from 'fs';
 
 const testimonials = [
   {
@@ -15,6 +16,7 @@ const testimonials = [
       "J'ai travaillé de nombreuses années avec Johan. Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences. Toujours au fait des dernières tendances en matière de développement web et d'intégration il a réalisé de nombreux sites fonctionnels et ergonomiques. J'espère avoir l'occasion de travailler à nouveau à ses côtés !",
     logo: logoCerise,
     photo: perrine,
+    linkedin: 'https://www.linkedin.com/in/perrine-sini-berthonneau-1414433b/',
   },
   {
     name: 'Florent Pasquet',
@@ -24,6 +26,7 @@ const testimonials = [
       "J'ai travaillé avec Johan sur de nombreux projets de création de site internet. Ce développeur web à Toulouse est vraiment très doué et sympathique. Toujours au fait des nouvelles techniques d'intégration je le conseille à 100% .",
     logo: logoSpinat,
     photo: florent,
+    linkedin: 'https://www.linkedin.com/in/florent-pasquet-37b52b27/',
   },
 ];
 ---
@@ -57,6 +60,7 @@ const testimonials = [
       {
         testimonials.map((testimonial) => (
           <Testimonial
+            linkedin={testimonial.linkedin}
             name={testimonial.name}
             job={testimonial.job}
             company={testimonial.company}

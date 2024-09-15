@@ -20,46 +20,47 @@ const { title, schema, description, hasGradient, image, canonical } =
   Astro.props as Props;
 ---
 
-<meta charset="utf-8" />
-<meta
-  name="google-site-verification"
-  content="hYnFEHeU0yp9Wsa8c3QfTnVFqMAuCsAk-y6qF0A_XjQ"
-/>
-<meta property="og:locale" content="fr_FR" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="generator" content={Astro.generator} />
-<title>{title}</title>
-<meta name="description" content={description} />
-<meta name="jungleup" content="ed238befefc41b3e8840277869cc1c67" />
-{image && <meta property="og:image" content={image} />}
-{
-  schema && (
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  )
-}
-<Favicons />
-<script is:inline src="/registerSW.js"></script>
-{
-  canonical && (
-    <link rel="canonical" href={`${seoConfig.baseURL}${canonical}`} />
-  )
-}
-<link rel="manifest" href="/manifest.webmanifest" />
-<meta name="theme-color" content="#4f39fa" />
+<html lang="fr">
+  <meta charset="utf-8" />
+  <meta
+    name="google-site-verification"
+    content="hYnFEHeU0yp9Wsa8c3QfTnVFqMAuCsAk-y6qF0A_XjQ"
+  />
+  <meta property="og:locale" content="fr_FR" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="jungleup" content="ed238befefc41b3e8840277869cc1c67" />
+  {image && <meta property="og:image" content={image} />}
+  {
+    schema && (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )
+  }
+  <Favicons />
+  <script is:inline src="/registerSW.js"></script>
+  {
+    canonical && (
+      <link rel="canonical" href={`${seoConfig.baseURL}${canonical}`} />
+    )
+  }
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#4f39fa" />
 
-<script
-  type="text/partytown"
-  src="https://unpkg.com/@tinybirdco/flock.js"
-  data-host="https://api.tinybird.co"
-  data-token="p.eyJ1IjogImFhNGYyNzMzLTQ5MWUtNDA2ZS1iYjVmLTI3NzUzYjRhMjk2OCIsICJpZCI6ICI1ZGY0MmYxOC0zNDQyLTRkZmUtOGUxMC05NzZkM2I1OTY4MTkifQ.yV405Lc-YqoXf4lwD63SZ2fifVmKMLvsMNdoKFQqOGE"
-></script>
-<slot name="before-main" />
-<main>
-  <Header />
-  <slot name="main" />
-</main>
-<Footer client:visible />
-
+  <script
+    type="text/partytown"
+    src="https://unpkg.com/@tinybirdco/flock.js"
+    data-host="https://api.tinybird.co"
+    data-token="p.eyJ1IjogImFhNGYyNzMzLTQ5MWUtNDA2ZS1iYjVmLTI3NzUzYjRhMjk2OCIsICJpZCI6ICI1ZGY0MmYxOC0zNDQyLTRkZmUtOGUxMC05NzZkM2I1OTY4MTkifQ.yV405Lc-YqoXf4lwD63SZ2fifVmKMLvsMNdoKFQqOGE"
+  ></script>
+  <slot name="before-main" />
+  <main>
+    <Header />
+    <slot name="main" />
+  </main>
+  <Footer client:visible />
+</html>
 <style is:global>
   .transition-fade {
     transition: 0.25s;

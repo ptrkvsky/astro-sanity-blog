@@ -63,8 +63,8 @@ const breadcrumbItems = getBreadcrumbItems(post);
     <ObserverTableOfContent />
     <Header slot="before-main">
       <!-- <Breadcrumb client:only="react" breadcrumbItems={breadcrumbItems} /> -->
-      <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
-    </Header>{}
+    </Header>
+
     <div class="wrapper-post">
       {
         headings.length > 0 && (
@@ -74,7 +74,9 @@ const breadcrumbItems = getBreadcrumbItems(post);
         )
       }
       <div>
-        <article class="post-content" set:html={postContent}></article>
+        <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
+
+        <article class="post-content" set:html={postContent} />
         {
           post.questionsAnswers && (
             <Faq questionsAnswers={post.questionsAnswers} />
@@ -163,7 +165,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
     max-width: calc(100vw - 2.8rem);
   }
   .wrapper-post {
-    @apply relative lg:justify-between max-w-6xl mx-auto lg:flex;
+    @apply relative lg:justify-between max-w-6xl mx-auto lg:flex sm:py-32;
   }
   .post-content {
     @apply max-w-2xl relative z-10 px-4 lg:px-0;

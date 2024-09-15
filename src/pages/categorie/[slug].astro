@@ -22,9 +22,8 @@ interface AstroProps {
 }
 
 export async function getStaticPaths() {
-  const sanityCategories = await fetchSanity<SanityAllCategories>(
-    queryAllCategories
-  );
+  const sanityCategories =
+    await fetchSanity<SanityAllCategories>(queryAllCategories);
   const params = sanityCategories && getCategoriesUrlParams(sanityCategories);
   return params;
 }

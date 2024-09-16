@@ -7,10 +7,7 @@
 
   let isOpen = false;
 
-  console.log('hello');
-
   const toggleMenu = () => {
-    console.log('click');
     const menu = document.querySelector('#nav-mobile');
     const menuItems = menu?.querySelectorAll('#nav-mobile a');
 
@@ -50,6 +47,7 @@
       isOpen = true;
     }
   };
+
   const menu = document.querySelector('#burger-button');
   menu?.addEventListener('click', () => {
     toggleMenu();
@@ -57,7 +55,12 @@
 </script>
 
 <!-- Mobile menu, show/hide based on menu open state. -->
-<div id="wrapper-menu-mobile" role="dialog" aria-modal="true">
+<div
+  id="wrapper-menu-mobile"
+  class="block lg:hidden"
+  role="dialog"
+  aria-modal="true"
+>
   <!-- Background backdrop, show/hide based on slide-over state. -->
   <div class="fixed inset-0 z-50"></div>
   <div
@@ -97,8 +100,12 @@
         </button>
       </div>
     </div>
-    <div id="nav-mobile" class="flow-root bg-white h-full relative z-40">
-      <nav class="space-y-2 px-6">
+    <div
+      id="nav-mobile"
+      class="flow-root bg-white h-full relative z-40 -translate-y-full"
+    >
+      <nav class="space-y-2
+      px-6">
         <a
           href="#"
           class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

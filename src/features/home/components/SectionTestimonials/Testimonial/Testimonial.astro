@@ -28,6 +28,8 @@ const { name, job, company, description, logo, photo, linkedin } = Astro.props;
           class="h-14 w-14 rounded-full bg-gray-50"
           src={photo}
           alt={`Photo ${name} ${job}`}
+          width={56}
+          height={56}
         />
         <div class="text-base">
           <div class="font-semibold text-gray-900">{name}</div>

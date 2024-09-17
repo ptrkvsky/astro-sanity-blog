@@ -1,13 +1,17 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import PostCard from '@features/blog/components/PostCard/index.astro';
-import imgDevelopper from '@assets/images/developpeur-freelance.jpeg';
-import { Image } from 'astro:assets';
 import SafeMail from '@components/SafeMail.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryPostsHome } from '@features/home/queries/queryPostsHome';
 import type { Post } from '@interfaces/SanitySchema';
+import { SectionHero } from '@features/home/components/SectionHero';
+import { SectionNumbers } from '@features/home/components/SectionNumbers';
+import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
+import SectionReferences from '@features/home/components/SectionReferences/SectionReferences.astro';
+import { SectionPresentation } from '@features/home/components/SectionPresentation';
+
 const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
 const schema = getGraphHome();
 const description =
@@ -21,225 +25,12 @@ const description =
   canonical="/"
 >
   <div slot="main">
+    <SectionHero />
+    <SectionNumbers />
+    <SectionTestimonials />
+    <SectionReferences />
+
     <!-- 02847c164813f253 -->
-    <h1 class="text-3xl font-bold text-center">
-      Développeur <span class="text-gradient">React</span> Freelance
-    </h1>
-    <div class="max-w-xl mx-4 md:mx-auto">
-      <div class="banner mt-4 mb-2">
-        <Image
-          format="avif"
-          width={400}
-          height={400}
-          src={imgDevelopper}
-          alt="Johan Petrikovsyk développeur freelance"
-        />
-      </div>
-      <p
-        class="rounded-lg p-6 mt-6 mb-3 leading-relaxed bg-gradient-to-r from-blue-500 to-blue-600 text-white drop-shadow-md"
-      >
-        Bonjour, je suis Johan Petrikovsky et je suis un développeur freelance
-        spécialisé en Javascript, plus particulièrement React et Typescript<br
-        />
-        Après avoir travaillé comme développeur php/Wordpress en <a
-          href="https://developpeur-web.tech/posts/agence-web-agence-digitale-agence-numerique"
-          >agence web
-        </a> et réalisé plus d'une cinquantaine de projets, je propose aujourd'hui
-        mes compétences de développeur front-end en freelance.
-      </p>
-      <section>
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          🔍 Qu'est ce qu'un développeur React ?
-        </h2>
-        <p class="mt-1 mb-2 text-sm">
-          Un développeur React est responsable de la conception et de la mise en
-          œuvre d'interfaces utilisateur (UI, user interface) et de composants
-          UI à l'aide de React, une bibliothèque JavaScript front.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Ils développent et maintiennent des interfaces utilisateur pour les
-          applications web et mobiles. Ils doivent avoir une expertise de haut
-          niveau en utilisant React et une compréhension approfondie de toutes
-          les étapes du cycle de vie du développement logiciel. Ils écrivent,
-          testent, déboguent et mettent en œuvre du code pour répondre aux
-          exigences des utilisateurs.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Les développeurs React doivent avoir de bonnes compétences en
-          communication, car ils travaillent en étroite collaboration avec les
-          chefs de projet, les développeurs, les clients, les testeurs et les
-          concepteurs web pour créer des applications efficaces.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Ils doivent avoir une expérience significative de l'utilisation de
-          JavaScript ou de Typescript, de solides compétences en mathématiques
-          et une bonne connaissance pratique des outils de débogage.
-        </p>
-
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          🧠 Quelles sont les compétences requises pour être un bon développeur
-          React Freelance ?
-        </h2>
-        <ul class="list ml-5 mt-4">
-          <li class="mb-2 text-sm">
-            Avoir une expérience de la collaboration avec des partenaires
-            techniques et non techniques et pouvoir communiquer en conséquence.
-          </li>
-          <li class="mb-2 text-sm">
-            Comprendre qu'une partie du cycle de vie du produit implique
-            l'analyse des besoins commerciaux et la prise de décisions à petite
-            échelle concernant le produit.
-          </li>
-          <li class="mb-2 text-sm">
-            Il est important d'être à l'aise pour travailler à la fois de
-            manière indépendante et au sein d'une équipe.
-          </li>
-          <li class="mb-2 text-sm">
-            Avoir l'envie et le goût du travail bien fait autour de la base de
-            code
-          </li>
-          <li class="mb-2 text-sm">
-            Être ouvert à l'apprentissage de nouvelles technologies et au
-            partage de vos connaissances avec les autres.
-          </li>
-        </ul>
-
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          ✅ Quelles tâches effectuent un développeur frontend end au quotiden ?
-        </h2>
-        <ul class="list ml-5 mt-4">
-          <li class="mb-2 text-sm">Optimiser l'expérience utilisateur.</li>
-          <li class="mb-2 text-sm">
-            Utiliser HTML, JavaScript et CSS pour donner vie aux concepts.
-          </li>
-          <li class="mb-2 text-sm">
-            Développer et entretenir l'interface utilisateur.
-          </li>
-          <li class="mb-2 text-sm">
-            Mettre en œuvre le design sur des sites Web mobiles.
-          </li>
-          <li class="mb-2 text-sm">
-            Créer des outils qui améliorent l'interaction avec le site, quel que
-            soit le navigateur.
-          </li>
-          <li class="mb-2 text-sm">Gérer le flux de travail du logiciel.</li>
-          <li class="mb-2 text-sm">
-            Suivre les meilleures pratiques de référencement.
-          </li>
-          <li class="mb-2 text-sm">
-            Corriger les bogues et tester la convivialité.
-          </li>
-        </ul>
-
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          🧰 Quels outils j'utilise en tant que développeur frontend freelance ?
-        </h2>
-        <h2 class="text-xl font-bold mt-4 mb-3">Vscode</h2>
-        <p class="mt-1 mb-2 text-sm">
-          Visual Studio Code est un éditeur de code simplifié qui prend en
-          charge les opérations de développement telles que le débogage,
-          l'exécution de tâches et le contrôle de version.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Il vise à fournir juste les outils dont un développeur a besoin pour
-          un cycle rapide de construction de code et de débogage et laisse les
-          flux de travail plus complexes aux IDE plus complets, tels que Visual
-          Studio IDE.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Il est plébiscité par tous les types de développeur, que ce soit les
-          développeurs back-end (comme les développeurs JAVA ou Node), les
-          développeurs web fullstack, mais aussi les développeurs d'applications
-          mobile comme les développeurs qui React native
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Visual Studio Code est un outil de développement qui permet de créer
-          des applications web et mobiles en JavaScript, HTML, CSS et plus
-          encore.
-        </p>
-        <h3 class="text-2xl font-bold mt-4 mb-3">GIT</h3>
-        <p class="mt-1 mb-2 text-sm">
-          Git est un système de contrôle de version utilisé pour suivre les
-          modifications d'un fichier informatiques. Il est généralement utilisé
-          pour la gestion du code source dans le développement de logiciels.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Je l'utilise quotidiennement depuis plusieurs années pour le
-          développement de mes projets reactjs ou node, que ce soit chez des
-          clients ou sur mes projets personnels
-        </p>
-        <h3 class="text-2xl font-bold mt-4 mb-3">Notion</h3>
-        <p class="mt-1 mb-2 text-sm">
-          Notion est un espace unique où vous pouvez penser, écrire et
-          planifier. C'est un outil parfait que j'utilise pour organiser mon
-          temps de travail au quotiden avec mes clients.
-        </p>
-
-        <ul class="list ml-5 mt-4">
-          <li class="mb-2 text-sm">
-            Git est utilisé pour suivre les modifications du code source.
-          </li>
-          <li class="mb-2 text-sm">
-            L'outil de contrôle de version distribué est utilisé pour la gestion
-            du code source.
-          </li>
-          <li class="mb-2 text-sm">
-            Il permet à plusieurs développeurs de travailler ensemble
-          </li>
-          <li class="mb-2 text-sm">
-            Il prend en charge le développement non linéaire grâce à ses
-            milliers de branches parallèles.
-          </li>
-        </ul>
-
-        <h3 class="text-2xl font-bold mt-4 mb-3">Figma</h3>
-        <p class="mt-1 mb-2 text-sm">
-          Figma est un outil de conception puissant qui vous aide à créer
-          n'importe quoi : sites web, applications, logos, et bien plus encore.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          C'est un outil plébiscité par les graphistes mais aussi par les
-          développeurs frontend à cause de sa simplicité d'utilisation
-        </p>
-
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          🧰 Quelle est la stack technique que j'utilise pour le développement ?
-        </h2>
-        <p class="mt-1 mb-2 text-sm">
-          Après avoir travaillié 8 ans avec des agences comme développeur
-          php/Wordpress en freelance, mon quotidien tourne maintenant autour de
-          l'écosystème Javascript.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Voici une liste non exaustive des technologies que j'utilise
-        </p>
-        <ul class="list ml-5 mt-4">
-          <li class="mb-0 text-sm">HTML</li>
-          <li class="mb-0 text-sm">CSS</li>
-          <li class="mb-0 text-sm">Javascript</li>
-          <li class="mb-0 text-sm">Next</li>
-          <li class="mb-0 text-sm">Gatsby</li>
-          <li class="mb-0 text-sm">Astro</li>
-          <li class="mb-0 text-sm">Storybook</li>
-          <li class="mb-0 text-sm">Github Actions</li>
-          <li class="mb-0 text-sm">Graphql</li>
-          <li class="mb-0 text-sm">Prisma</li>
-          <li class="mb-0 text-sm">Nodejs</li>
-        </ul>
-        <h2 class="text-2xl font-bold mt-4 mb-3">
-          🌍 Dans quel secteur j'exerce mon activité de développeur front ?
-        </h2>
-        <p class="mt-1 mb-2 text-sm">
-          Basé à Toulouse si votre projet l'exige, je peux me déplacer
-          quotidiennement à Toulouse et dans sa périphérie.
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Si votre projet l'exige, je peux me déplacer ponctuellement à Paris et
-          dans toute la France.
-        </p>
-      </section>
-    </div>
-
     <section
       class="mt-12 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 py-12"
     >
@@ -253,38 +44,13 @@ const description =
       </ul>
     </section>
 
-    <section class="my-6 py-12">
-      <h2 class="max-w-7xl mx-4 md:mx-auto text-2xl font-bold mb-6">
-        📮 Contact
-      </h2>
-      <div class="max-w-7xl mx-4 md:mx-auto">
-        <p class="mt-1 mb-2 text-sm">
-          Vous ou l'un de vos clients recherchez un développeur front end
-          spécialisé en Javascript et plus particulièrement en React pour votre
-          prochain projet ?
-        </p>
-        <p class="mt-1 mb-2 text-sm">
-          Vous pouvez me contacter{` `}
-          <SafeMail />
-        </p>
-      </div>
-    </section>
+    <SectionPresentation />
   </div>
 </BaseLayout>
 
 <style>
   .list {
     list-style-type: disc;
-  }
-  h1 {
-    @apply mt-2 mb-3;
-  }
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply mt-2 mb-3;
   }
 
   .conteneur {

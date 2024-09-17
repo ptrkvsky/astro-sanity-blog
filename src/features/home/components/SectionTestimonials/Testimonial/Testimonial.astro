@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  name: string;
+  job: string;
+  company: string;
+  description: string;
+  logo: ImageMetadata;
+  photo: ImageMetadata;
+  linkedin: string;
+}
+
+const { name, job, company, description, logo, photo, linkedin } = Astro.props;
+---
+
+<article class="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
+  <Image class="h-12 w-auto self-start" src={logo} alt={`Logo ${company}`} />
+  <figure class="mt-10 flex flex-auto flex-col justify-between">
+    <blockquote class="text-lg leading-8 text-gray-900">
+      <p>
+        "{description}"
+      </p>
+    </blockquote>
+    <figcaption class="mt-10 flex items-center gap-x-6">
+      <a href={linkedin} target="_blank" rel="noopener noreferrer">
+        <Image
+          class="h-14 w-14 rounded-full bg-gray-50"
+          src={photo}
+          alt={`Photo ${name} ${job}`}
+        />
+        <div class="text-base">
+          <div class="font-semibold text-gray-900">{name}</div>
+          <div class="mt-1 text-gray-500">{job}</div>
+        </div>
+      </a>
+    </figcaption>
+  </figure>
+</article>

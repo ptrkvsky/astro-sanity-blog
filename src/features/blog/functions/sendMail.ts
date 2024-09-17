@@ -15,7 +15,7 @@ export default async function sendMail(postTitle: string) {
 
   const receivers = [
     {
-      email: 'johan.petrikovsky@gmail.com',
+      email: 'johan@developpeur-web.tech',
     },
   ];
 

@@ -28,6 +28,7 @@
     "@types/node": "^18.19.50",
     "@types/react": "^18.3.7",
     "@vercel/node": "^2.15.10",
+    "@vite-pwa/astro": "^0.4.3",
     "astro": "^4.15.6",
     "astro-compress": "^2.3.1",
     "astro-seo": "^0.8.4",
@@ -45,7 +46,7 @@
     "ts-node": "^10.9.2",
     "ts-prune": "^0.10.3",
     "typescript": "^5.6.2",
-    "vite-plugin-pwa": "^0.12.8"
+    "vite-plugin-pwa": "^0.20.5"
   },
   "dependencies": {
     "@astrojs/preact": "^3.5.3",

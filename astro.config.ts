@@ -1,12 +1,11 @@
 import { defineConfig } from 'astro/config';
-import compress from 'astro-compress';
 import { VitePWA } from 'vite-plugin-pwa';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import { manifest } from './src/config';
-
+import AstroPWA from '@vite-pwa/astro';
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +17,9 @@ export default defineConfig({
     //     path: './tailwind.config.js',
     //   },
     // }),
+    AstroPWA({
+      manifest,
+    }),
     react(),
     tailwind(),
     sitemap(),

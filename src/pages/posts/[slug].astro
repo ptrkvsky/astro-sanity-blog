@@ -56,7 +56,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
   title={post?.seoTitle || ''}
   schema={graphPost}
   description={post?.seoDescription || ''}
-  image={post.seoImage?.asset.url}
+  image={post.seoImage?.asset?.url}
   canonical={`/posts/${post.slug.current}`}
 >
   <div slot="main" class="post">

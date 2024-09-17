@@ -1,3 +1,8 @@
+---
+import { Image } from 'astro:assets';
+import johan from '@assets/images/johan.jpeg';
+---
+
 <section
   id="section-contact"
   class="isolate overflow-hidden bg-white px-6 lg:px-8 mt-24 sm:my-32"
@@ -38,20 +43,24 @@
           </p>
           <p class="mt-6">
             Si vous recherchez un développeur expérimenté et passionné, je
-            serais ravi d'<a
+            serais ravi d'
+            <a
               class="text-indigo-600 underline underline-offset-4 hover:text-indigo-600"
-              href="mailto:johan@developpeur-web.tech">échanger avec vous.</a
-            > 👋
+              href="mailto:johan@developpeur-web.tech"
+            >
+              échanger avec vous.
+            </a>{' '}
+            👋
           </p>
         </blockquote>
       </div>
       <div class="col-end-1 w-16 lg:row-span-4 lg:w-72">
-        <img
+        <Image
           class="rounded-xl bg-indigo-50 lg:rounded-3xl"
-          src="https://media.licdn.com/dms/image/v2/C5103AQGgBJ4d1QlcCA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516832881350?e=1731542400&v=beta&t=2rTgKVgTQrX4Kj-PFgewtPzfTksQY_TA5CNh3tXYrqY"
-          alt=""
+          src={johan}
+          alt="Johan Petrikovsky developpeur React Freelance"
         />
       </div>
     </figure>
   </div>
-</section>
+</section>; ---

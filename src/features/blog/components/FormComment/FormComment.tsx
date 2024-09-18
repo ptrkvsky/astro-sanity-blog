@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { seoConfig } from 'src/config';
-// import { createComment } from 'src/functions/createComment';
 import styles from './FormComment.module.css';
 interface IFormComment {
   _id: string;
@@ -13,7 +12,10 @@ interface FormComment {
   postTitle: string;
 }
 
-export default function FormComment({ postId, postTitle }: FormComment) {
+export default function FormComment({
+  postId,
+  postTitle,
+}: Readonly<FormComment>) {
   const initForm: IFormComment = {
     _id: postId,
     pseudo: '',
@@ -31,11 +33,11 @@ export default function FormComment({ postId, postTitle }: FormComment) {
     }
   }, []);
 
-  function handleChangePseudo(e: any) {
+  function handleChangePseudo(e: React.ChangeEvent<HTMLInputElement>) {
     setFormState({ ...formState, pseudo: e.currentTarget.value });
   }
 
-  function handleChangeComment(e: any) {
+  function handleChangeComment(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setFormState({ ...formState, comment: e.currentTarget.value });
   }
 
@@ -48,10 +50,10 @@ export default function FormComment({ postId, postTitle }: FormComment) {
     setFormState(cleanFormState);
   }
 
-  function handleSubmit(event: any) {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
-    fetch(`${seoConfig.baseURL}/api/createComment`, {
+    fetch(`${seoConfig.baseURL}/api/save-comment.json`, {
       method: 'POST',
       body: JSON.stringify({ ...formState, postTitle }),
       headers: new Headers({
@@ -93,7 +95,7 @@ export default function FormComment({ postId, postTitle }: FormComment) {
       </h2>
       <form onSubmit={handleSubmit}>
         {errorsForm.map((errorForm) => (
-          <p>{errorForm}</p>
+          <p key={errorForm}>{errorForm}</p>
         ))}
         <label htmlFor="pseudo">
           Pseudo
@@ -110,7 +112,9 @@ export default function FormComment({ postId, postTitle }: FormComment) {
           <textarea
             required
             id="comment"
-            onChange={handleChangeComment}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              handleChangeComment(e)
+            }
             value={formState.comment}
           />
         </label>

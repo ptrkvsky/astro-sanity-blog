@@ -10,12 +10,11 @@ interface AstroProps {
       };
 }
 
-const { comments } = Astro.props as AstroProps;
+const { comments } = Astro.props;
 ---
 
 {
-  Array.isArray(comments) &&
-  comments.length > 0 && (
+  Array.isArray(comments) && comments.length > 0 && (
     <section class="comments">
       <h2 class="secondary-title">Commentaires précédents</h2>
       {comments.map((comment) => (

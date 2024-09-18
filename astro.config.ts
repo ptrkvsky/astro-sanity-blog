@@ -6,17 +6,12 @@ import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import { manifest } from './src/config';
 import AstroPWA from '@vite-pwa/astro';
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://developpeur-web.tech',
   integrations: [
-    // tailwind({
-    //   config: {
-    //     applyBaseStyles: false,
-    //     path: './tailwind.config.js',
-    //   },
-    // }),
     AstroPWA({
       manifest,
     }),
@@ -43,22 +38,6 @@ export default defineConfig({
       wrap: false,
     },
   },
-  // vite: {
-  //   plugins: [
-  //     VitePWA({
-  //       registerType: 'autoUpdate',
-  //       manifest,
-  //       strategies: 'generateSW',
-  //       workbox: {
-  //         globDirectory: 'dist',
-  //         globPatterns: [
-  //           '**/*.{js,css,svg,png,jpg,jpeg,gif,webp,woff,woff2,ttf,eot,ico}',
-  //         ],
-  //         // Don't fallback on document based (e.g. `/some-page`) requests
-  //         // Even though this says `null` by default, I had to set this specifically to `null` to make it work
-  //         navigateFallback: null,
-  //       },
-  //     }),
-  //   ],
-  // },
+  output: 'hybrid',
+  adapter: vercel(),
 });

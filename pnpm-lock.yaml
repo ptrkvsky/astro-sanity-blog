@@ -81,9 +81,6 @@ importers:
       sib-api-v3-sdk:
         specifier: ^8.5.0
         version: 8.5.0
-      swup:
-        specifier: ^4.7.0
-        version: 4.7.0
     devDependencies:
       '@astrojs/partytown':
         specifier: ^2.1.2
@@ -137,7 +134,7 @@ importers:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.19.50)(ts-node@10.9.2(@types/node@18.19.50)(typescript@5.6.2))
       prettier:
-        specifier: ^3.3.3
+        specifier: ^3.0.0
         version: 3.3.3
       prettier-plugin-astro:
         specifier: ^0.14.1
@@ -2729,9 +2726,6 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
-  delegate-it@6.2.0:
-    resolution: {integrity: sha512-nu1ZQcP+2Xju4kWYVgLUvZm+3zBkSrtIS6sC/Y7gKIfwxhcjfKE3IqnY2XWntzEME92lkSqxJwodbSaHAXoyFA==}
-
   delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
 
@@ -4650,10 +4644,6 @@ packages:
   oniguruma-to-js@0.4.3:
     resolution: {integrity: sha512-X0jWUcAlxORhOqqBREgPMgnshB7ZGYszBNspP+tS9hPD3l13CdaXcHbgImoHUHlrvGx/7AvFEkTRhAGYh+jzjQ==}
 
-  opencollective-postinstall@2.0.3:
-    resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
-    hasBin: true
-
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -4756,9 +4746,6 @@ packages:
 
   path-to-regexp@6.2.2:
     resolution: {integrity: sha512-GQX3SSMokngb36+whdpRXE+3f9V8UzyAorlYvOGx87ufGHehNTn5lCxrKtLyZ4Yl/wEKnNnr98ZzOwwDZV5ogw==}
-
-  path-to-regexp@6.3.0:
-    resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
 
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
@@ -5675,9 +5662,6 @@ packages:
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  swup@4.7.0:
-    resolution: {integrity: sha512-ILVKiFtHujf3MCo3tYt95/ENnqsBywmeCEiZUs87BrQeJKeHzR3J7LbFu4J6jqmxqhAnRFnRVVlWAPKyWAsPgQ==}
-
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
@@ -5898,9 +5882,6 @@ packages:
   typed-array-length@1.0.6:
     resolution: {integrity: sha512-/OxDN6OtAk5KBpGb28T+HZc2M+ADtvRxXrKKbUwtsLgdoxgX13hyy7ek6bFRl5+aBs2yZzB0c4CnQfAtVypW/g==}
     engines: {node: '>= 0.4'}
-
-  typed-query-selector@2.12.0:
-    resolution: {integrity: sha512-SbklCd1F0EiZOyPiW192rrHZzZ5sBijB6xM+cpmrwDqObvdtunOHHIk9fCGsoK5JVIYXoyEp4iEdE3upFH3PAg==}
 
   typesafe-path@0.2.2:
     resolution: {integrity: sha512-OJabfkAg1WLZSqJAJ0Z6Sdt3utnbzr/jh+NAHoyWHJe8CMSy79Gm085094M9nvTPy22KzTVn5Zq5mbapCI/hPA==}
@@ -9627,10 +9608,6 @@ snapshots:
 
   delayed-stream@1.0.0: {}
 
-  delegate-it@6.2.0:
-    dependencies:
-      typed-query-selector: 2.12.0
-
   delegates@1.0.0: {}
 
   dequal@2.0.3: {}
@@ -12089,8 +12066,6 @@ snapshots:
     dependencies:
       regex: 4.3.2
 
-  opencollective-postinstall@2.0.3: {}
-
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -12203,8 +12178,6 @@ snapshots:
   path-to-regexp@6.2.1: {}
 
   path-to-regexp@6.2.2: {}
-
-  path-to-regexp@6.3.0: {}
 
   path-type@4.0.0: {}
 
@@ -13279,12 +13252,6 @@ snapshots:
       picocolors: 1.1.0
       sax: 1.4.1
 
-  swup@4.7.0:
-    dependencies:
-      delegate-it: 6.2.0
-      opencollective-postinstall: 2.0.3
-      path-to-regexp: 6.3.0
-
   symbol-tree@3.2.4: {}
 
   synckit@0.8.8:
@@ -13547,8 +13514,6 @@ snapshots:
       has-proto: 1.0.3
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
-
-  typed-query-selector@2.12.0: {}
 
   typesafe-path@0.2.2: {}
 

@@ -71,8 +71,7 @@
     "remark-toc": "^8.0.1",
     "sanity-codegen": "^0.9.8",
     "schema-dts": "^1.1.2",
-    "sib-api-v3-sdk": "^8.5.0",
-    "swup": "^4.7.0"
+    "sib-api-v3-sdk": "^8.5.0"
   },
   "resolutions": {
     "vite": "^5.0.0",

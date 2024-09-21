@@ -18,9 +18,11 @@ import FormComment from '@features/blog/components/FormComment/FormComment';
 import getPostComments from '@features/blog/functions/getPostsComments';
 import SectionComments from '@features/blog/components/SectionComments.astro';
 import Faq from '@features/blog/components/Faq.astro';
+import { SectionPosts } from '@features/blog/components/SectionPosts';
 
-interface AstroProps {
+interface Props {
   post: Post;
+  relatedPosts: Post[];
   params: {
     slug: {
       current: string;
@@ -35,7 +37,8 @@ export async function getStaticPaths() {
   return params;
 }
 
-const { post } = Astro.props as AstroProps;
+const { post, relatedPosts } = Astro.props;
+console.log(relatedPosts);
 if (!post) return;
 const comments = await getPostComments(post._id);
 const graphPost = getGraphBlogPost(post);
@@ -61,9 +64,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
 >
   <div slot="main" class="post">
     <ObserverTableOfContent />
-    <Header slot="before-main">
-      <!-- <Breadcrumb client:only="react" breadcrumbItems={breadcrumbItems} /> -->
-    </Header>
+    <Header slot="before-main" />
 
     <div class="wrapper-post">
       {
@@ -74,14 +75,24 @@ const breadcrumbItems = getBreadcrumbItems(post);
         )
       }
       <div>
+        <Breadcrumb client:only="react" breadcrumbItems={breadcrumbItems} />
+
         <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
 
         <article class="post-content" set:html={postContent} />
+      </div>
+    </div>
+    <div class="sm:pb-16">
+      <div class="mx-auto max-w-2xl lg:max-w-7xl">
         {
           post.questionsAnswers && (
             <Faq questionsAnswers={post.questionsAnswers} />
           )
         }
+      </div>
+      {relatedPosts.length > 0 && <SectionPosts relatedPosts={relatedPosts} />}
+
+      <div class="mx-auto max-w-2xl lg:max-w-7xl">
         <FormComment client:visible postId={post._id} postTitle={post.title} />
         <SectionComments postTitle={post.title} comments={comments} />
       </div>
@@ -165,7 +176,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
     max-width: calc(100vw - 2.8rem);
   }
   .wrapper-post {
-    @apply relative lg:justify-between max-w-6xl mx-auto lg:flex sm:py-32;
+    @apply relative max-w-6xl mx-auto lg:grid lg:grid-cols-2 gap-4 pt-16 lg:pt-0;
   }
   .post-content {
     @apply max-w-2xl relative z-10 px-4 lg:px-0;

@@ -163,7 +163,7 @@ export interface Post extends SanityDocument {
    */
   mainImage: {
     _type: 'image';
-    asset: SanityReference<SanityImageAsset>;
+    asset: SanityImageAsset;
     crop?: SanityImageCrop;
     hotspot?: SanityImageHotspot;
   };

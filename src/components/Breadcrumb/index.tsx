@@ -20,7 +20,7 @@ export default function Breadcrumb({ breadcrumbItems }: Props) {
     <nav id="breadcrumb" className="breadcrumb conteneur mt-6 mb-4">
       <ul className="flex gap-1">
         {breadcrumbItems.map(({ name, path }, index) => (
-          <li className="flex gap-1 text-gray-500 text-sm">
+          <li key={path} className="flex gap-1 text-gray-500 text-sm">
             <a className="" href={path}>
               {name}
             </a>

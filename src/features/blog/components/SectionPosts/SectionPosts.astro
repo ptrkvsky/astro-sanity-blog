@@ -1,0 +1,62 @@
+---
+import { Post } from '@interfaces/SanitySchema';
+import { Image } from 'astro:assets';
+import { getFrenchDate } from 'src/utils/getFrenchDate';
+
+interface Props {
+  relatedPosts: Post[];
+}
+
+const { relatedPosts } = Astro.props;
+---
+
+<section class="mt-16 bg-gradient-to-t from-gray-100 pb-14">
+  <div class="px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:max-w-7xl">
+      <h2 class="text-2xl font-medium tracking-tight">Plus d'articles</h2><div
+        class="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-3"
+      >
+        {
+          relatedPosts.map((relatedPost) => {
+            return (
+              <article class="relative flex flex-col rounded-3xl bg-white p-2 shadow-md shadow-black/5 ring-1 ring-black/5">
+                <>
+                  <Image
+                    alt={relatedPost.title}
+                    src={relatedPost.mainImage.asset.url}
+                    width={
+                      relatedPost.mainImage.asset.metadata.dimensions.width
+                    }
+                    height={
+                      relatedPost.mainImage.asset.metadata.dimensions.height
+                    }
+                    class="aspect-[3/2] w-full rounded-2xl object-cover"
+                  />
+                  <div class="flex flex-1 flex-col p-8">
+                    <>
+                      <div class="text-sm/5 text-gray-700">
+                        {getFrenchDate(relatedPost._createdAt)}
+                      </div>
+                      <div class="mt-2 text-base/7 font-medium">
+                        <a
+                          data-headlessui-state=""
+                          href={`/posts/${relatedPost.slug.current}`}
+                        >
+                          <span class="absolute inset-0" />
+                          {relatedPost.title}
+                        </a>
+                      </div>
+                      <div class="mt-2 flex-1 text-sm/6 text-gray-500 line-clamp-3">
+                        {relatedPost.description}
+                      </div>
+                    </>
+                  </div>
+                </>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</section>

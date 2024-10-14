@@ -1,4 +1,35 @@
 {
   "taskExplorer.showLastTasks": false,
-  "conventionalCommits.scopes": ["home", "global", "posts"]
+  "conventionalCommits.scopes": ["home", "global", "posts"],
+
+  // Personnalisation des couleurs de VSCode avec #4f46e5 comme couleur de base
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#4f46e5",
+    "activityBar.foreground": "#FFFFFF",
+    "activityBar.activeBorder": "#4f46e5",
+    "activityBarBadge.background": "#4f46e5",
+    "activityBarBadge.foreground": "#FFFFFF",
+    "sideBar.background": "#2f2d8f",
+    "sideBar.foreground": "#FFFFFF",
+    "sideBarSectionHeader.background": "#4f46e5",
+    "sideBarSectionHeader.foreground": "#FFFFFF",
+    "editor.background": "#1E1E3F",
+    "editor.foreground": "#E0E0FF",
+    "editor.selectionBackground": "#4f46e5",
+    "editor.lineHighlightBackground": "#3535a5",
+    "editorCursor.foreground": "#FFFFFF",
+    "editorWhitespace.foreground": "#666699",
+    "terminal.background": "#1E1E3F",
+    "terminal.foreground": "#E0E0FF",
+    "statusBar.background": "#4f46e5",
+    "statusBar.foreground": "#FFFFFF",
+    "statusBarItem.hoverBackground": "#3535a5",
+    "titleBar.activeBackground": "#4f46e5",
+    "titleBar.activeForeground": "#FFFFFF",
+    "titleBar.inactiveBackground": "#2f2d8f",
+    "titleBar.inactiveForeground": "#CCCCFF"
+  },
+
+  // Thème de l'icône des dossiers et fichiers
+  "workbench.iconTheme": "material-icon-theme"
 }

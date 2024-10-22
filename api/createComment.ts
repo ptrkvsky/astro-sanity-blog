@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import sanityClient from '@sanity/client';
+import { createClient } from '@sanity/client';
 import sendMail from '../src/features/blog/functions/sendMail';
 
 const sanityConfig = {
@@ -10,11 +10,11 @@ const sanityConfig = {
   useCdn: true,
 };
 
-export const sanity = sanityClient(sanityConfig);
+export const sanity = createClient(sanityConfig);
 
 export default async function createComment(
   request: VercelRequest,
-  response: VercelResponse
+  response: VercelResponse,
 ) {
   try {
     const { _id, comment, pseudo, postTitle } = request.body;

@@ -3,6 +3,18 @@ export const queryHome = /* GraphQL */ `
     allHome {
       title
       sections {
+        ... on SectionArticles {
+          title
+          articles {
+            title
+            slug {
+              current
+            }
+            description
+            _id
+          }
+          _type
+        }
         ... on SectionProjects {
           _type
           title
@@ -66,7 +78,22 @@ export type Techno = {
   title: string;
 };
 
-export type HomeSection = {
+interface Article {
+  title: string;
+  slug: {
+    current: string;
+  };
+  description: string;
+  _id: string;
+}
+
+interface SectionArticles {
+  title: string;
+  articles: Article[];
+  _type: 'sectionArticles';
+}
+
+export type SectionReferences = {
   _type: string;
   title: string;
   subTitle: string;
@@ -97,10 +124,12 @@ export type HomeSection = {
   }>;
 };
 
+export type SectionsHome = Array<SectionReferences | SectionArticles>;
+
 export interface HomeQueryResult {
   allHome: Array<{
     title: string;
-    sections: Array<HomeSection>;
+    sections: SectionsHome;
     seoTitle: string;
     seoDescription: string;
     seoImage: {

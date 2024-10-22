@@ -3,10 +3,10 @@ import { SectionHero } from '@features/home/components/SectionHero';
 import { SectionNumbers } from '@features/home/components/SectionNumbers';
 import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
 import SectionReferences from '@features/home/components/SectionReferences/SectionReferences.astro';
-import type { HomeSection } from '@features/home/queries/queryHome';
+import type { SectionsHome } from '@features/home/queries/queryHome';
 
 interface Props {
-  sections: Array<HomeSection>;
+  sections: SectionsHome;
 }
 
 const { sections } = Astro.props;

@@ -1,11 +1,10 @@
 ---
-import type { HomeSection } from '@features/home/queries/queryHome';
+import type { SectionReferences } from '@features/home/queries/queryHome';
 import { HeadingSection } from '../HeadingSection';
 import Reference from './Reference/Reference.astro';
-import { references } from './references.json';
 
 interface Props {
-  section: HomeSection;
+  section: SectionReferences;
 }
 
 const { section } = Astro.props;

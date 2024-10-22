@@ -1,43 +1,65 @@
 ---
 import Badge from '@components/Badge/Badge.astro';
+import type { Techno } from '@features/home/queries/queryHome';
+import { portableTextComponents } from '@helpers/portableTextComponents';
+import { toHTML } from '@portabletext/to-html';
 
 interface Props {
-  technologies: string[];
+  technologies: Techno[];
   year: string | number;
-  company: {
+  companyInfo: {
     name: string;
-    url: string;
-    description: string;
+    website: string;
   };
-  actions: string[];
+  keypoints: any;
 }
 
-const { technologies, company, actions, year } = Astro.props;
+const { technologies, companyInfo, year, keypoints } = Astro.props;
+
+const keyPointsHTML = toHTML(keypoints, {
+  components: portableTextComponents,
+});
 ---
 
 <article class="flex max-w-xl flex-col items-start">
   <div class="flex items-center gap-x-4 text-xs">
     <time datetime="2020-03-16" class="text-gray-500">{year}</time>
     <div class="flex gap-2 flex-wrap">
-      {technologies.map((technology) => <Badge label={technology} />)}
+      {technologies.map((technology) => <Badge label={technology.title} />)}
     </div>
   </div>
   <div class="group relative">
     <h3
       class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
     >
-      <a target="_blank" href={company.url}>
+      <a target="_blank" href={companyInfo.website}>
         <span class="absolute inset-0"></span>
-        {company.name}
+        {companyInfo.name}
       </a>
     </h3>
-    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
-      {company.description}
-    </p>
-    <ul
-      class="mt-4 ml-0 px-0 flex flex-col gap-y-2 text-sm text-gray-600 list-disc pl-5"
+    <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"></p>
+
+    {
+      keyPointsHTML && (
+        <div
+          class="keypoints"
+          set:html={keyPointsHTML}
+          class="mt-4 ml-0 px-0 flex flex-col gap-y-2 text-sm text-gray-600 list-disc pl-5"
+        />
+      )
+    }
+    <!-- <ul
+      class=""
     >
       {actions.map((action) => <li>{action}</li>)}
-    </ul>
+    </ul> -->
   </div>
 </article>
+
+<style>
+  .keypoints {
+    ul {
+      @apply mt-4 ml-0 px-0 flex flex-col gap-y-2 text-sm text-gray-600 list-disc pl-5;
+    }
+  }
+</style>

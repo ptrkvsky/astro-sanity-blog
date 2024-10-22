@@ -2,7 +2,7 @@ import { config } from 'src/config';
 
 function fetchSanity<ReturnType>(
   query: string,
-  variables: Record<any, string> | undefined = undefined
+  variables: Record<any, string> | undefined = undefined,
 ) {
   return fetch(config.sanityGraphqlEndpoint, {
     method: 'POST',
@@ -20,6 +20,9 @@ function fetchSanity<ReturnType>(
     .then((result) => {
       if (result.error) {
         console.error('👨‍🚒', result.error + ': ' + result.message);
+      }
+      if (result.message) {
+        console.error('👨‍🚒', result.message + ': ' + result.message);
       }
       return result.data as ReturnType;
     })

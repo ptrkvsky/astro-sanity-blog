@@ -7,12 +7,18 @@
     "isolatedModules": true,
     "noEmit": true,
     "strict": true,
-    "importsNotUsedAsValues": "error",
-    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "allowSyntheticDefaultImports": true,
+    "plugins": [ 
+      { 
+        "name": "gql.tada/ts-plugin", 
+        "schema": "https://nrxsmjzk.api.sanity.io/v1/graphql/production/default", 
+        "tadaOutputLocation": "./src/graphql-env.d.ts"
+      } 
+    ],
     "paths": {
       "@assets/*": [
         "src/assets/*"
@@ -40,7 +46,6 @@
       ]
     },
     "types": [
-      "@astrojs/image/client",
       "astro/client"
     ]
   }

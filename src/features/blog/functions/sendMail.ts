@@ -35,7 +35,6 @@ export default async function sendMail(postTitle: string) {
       },
     });
 
-    console.log('✅ Email sent successfully:', result);
     return result;
   } catch (error: any) {
     console.error('🔥 Error sending email:', error.text);

@@ -1,0 +1,33 @@
+---
+import { SectionHero } from '@features/home/components/SectionHero';
+import { SectionNumbers } from '@features/home/components/SectionNumbers';
+import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
+import SectionReferences from '@features/home/components/SectionReferences/SectionReferences.astro';
+import type { HomeSection } from '@features/home/queries/queryHome';
+
+interface Props {
+  sections: Array<HomeSection>;
+}
+
+const { sections } = Astro.props;
+---
+
+<SectionHero />
+<SectionNumbers />
+<SectionTestimonials />
+
+{
+  sections.map((section) => {
+    if (section._type === 'sectionProjects') {
+      return <SectionReferences section={section} />;
+    }
+    // if (section.type === 'references') {
+    //     return <SectionReferences />;
+    // }
+    // if (section.type === 'testimonials') {
+    //     return <SectionTestimonials />;
+    // }
+    // if (section.type === 'numbers') {
+    //     return <SectionNumbers />;
+  })
+}

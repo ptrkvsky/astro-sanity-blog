@@ -9,7 +9,6 @@ export const queryAllPosts = /* GraphQL */ `
       _updatedAt
       seoTitle
       seoDescription
-      seoKeywords
       seoImage {
         asset {
           altText

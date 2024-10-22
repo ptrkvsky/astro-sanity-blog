@@ -4,31 +4,33 @@ import PostCard from '@features/blog/components/PostCard/index.astro';
 import SafeMail from '@components/SafeMail.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
 import fetchSanity from '@helpers/fetchSanity';
-import { queryPostsHome } from '@features/home/queries/queryPostsHome';
+import {
+  queryHome,
+  type HomeQueryResult,
+} from '@features/home/queries/queryHome';
 import type { Post } from '@interfaces/SanitySchema';
-import { SectionHero } from '@features/home/components/SectionHero';
-import { SectionNumbers } from '@features/home/components/SectionNumbers';
-import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
-import SectionReferences from '@features/home/components/SectionReferences/SectionReferences.astro';
+import { SectionsSwitch } from '@features/home/components/SectionsSwitch';
+
 import { SectionPresentation } from '@features/home/components/SectionPresentation';
 
-const postsHome = await fetchSanity<{ allPost: Post[] }>(queryPostsHome);
+const sanityHome = await fetchSanity<HomeQueryResult>(queryHome);
+const home = sanityHome?.allHome?.[0] ?? null;
+
 const schema = getGraphHome();
 const description =
   'Développeur React freelance et créateur de site internet depuis 2012. Spécialisé dans le développement front de site web en Javascript avec React.';
+
+const sections = home?.sections ?? [];
 ---
 
 <BaseLayout
-  title="Développeur React et Typescript Freelance"
-  description={description}
+  title={home?.seoTitle ?? 'Développeur React et Typescript Freelance'}
+  description={home?.seoDescription ?? description}
   schema={schema}
   canonical="/"
 >
   <div slot="main">
-    <SectionHero />
-    <SectionNumbers />
-    <SectionTestimonials />
-    <SectionReferences />
+    <SectionsSwitch sections={sections} />
 
     <!-- 02847c164813f253 -->
     <section
@@ -40,7 +42,7 @@ const description =
       <ul
         class="max-w-7xl mx-4 md:mx-auto grid grid-cols-1 gap-16 lg:grid-cols-3"
       >
-        {postsHome && postsHome.allPost.map((post) => <PostCard post={post} />)}
+        <!-- {postsHome && postsHome.allPost.map((post) => <PostCard post={post} />)} -->
       </ul>
     </section>
 

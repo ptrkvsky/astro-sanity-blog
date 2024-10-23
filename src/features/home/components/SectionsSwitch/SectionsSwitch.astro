@@ -4,6 +4,7 @@ import { SectionNumbers } from '@features/home/components/SectionNumbers';
 import { SectionTestimonials } from '@features/home/components/SectionTestimonials';
 import SectionReferences from '@features/home/components/SectionReferences/SectionReferences.astro';
 import type { SectionsHome } from '@features/home/queries/queryHome';
+import { SectionArticles } from '../SectionArticles';
 
 interface Props {
   sections: SectionsHome;
@@ -20,6 +21,9 @@ const { sections } = Astro.props;
   sections.map((section) => {
     if (section._type === 'sectionProjects') {
       return <SectionReferences section={section} />;
+    }
+    if (section._type === 'sectionArticles') {
+      return <SectionArticles section={section} />;
     }
     // if (section.type === 'references') {
     //     return <SectionReferences />;

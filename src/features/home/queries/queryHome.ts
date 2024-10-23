@@ -87,14 +87,14 @@ interface Article {
   _id: string;
 }
 
-interface SectionArticles {
+export interface SectionArticles {
   title: string;
   articles: Article[];
   _type: 'sectionArticles';
 }
 
 export type SectionReferences = {
-  _type: string;
+  _type: 'sectionProjects';
   title: string;
   subTitle: string;
   projects: Array<{

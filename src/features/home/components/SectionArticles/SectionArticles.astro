@@ -1,0 +1,34 @@
+---
+import type { SectionArticles } from '@features/home/queries/queryHome';
+import PostCard from '@features/blog/components/PostCard/index.astro';
+
+interface Props {
+  section: SectionArticles;
+}
+
+const { section } = Astro.props;
+
+console.log(section.articles);
+---
+
+<section
+  class="mt-12 bg-gradient-to-r from-red-200 via-red-300 to-yellow-200 py-12"
+>
+  <h2 class="max-w-7xl mx-4 md:mx-auto text-2xl font-bold mb-6">
+    {section.title}
+  </h2>
+  <ul class="max-w-7xl mx-4 md:mx-auto grid grid-cols-1 gap-16 lg:grid-cols-3">
+    {
+      section?.articles &&
+        section.articles.map((article) => <PostCard post={article} />)
+    }
+  </ul>
+  <p class="mt-6 text-center text-base">
+    <a
+      href="/posts"
+      class="inline-block px-6 py-3 text-white bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 rounded-lg text-lg font-medium shadow-md hover:shadow-lg transition-all duration-500 ease-out transform hover:scale-105"
+    >
+      Découvrir plus d'articles
+    </a>
+  </p>
+</section>

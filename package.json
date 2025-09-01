@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "name": "@astro/blog",
   "author": {
     "name": "Johan Petrikovsky",

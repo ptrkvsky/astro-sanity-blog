@@ -6,7 +6,7 @@ import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 import { manifest } from './src/config';
 import AstroPWA from '@vite-pwa/astro';
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,6 +38,8 @@ export default defineConfig({
       wrap: false,
     },
   },
-  output: 'hybrid',
-  adapter: vercel(),
+  output: 'server',
+  adapter: vercel({
+    isr: true,
+  }),
 });

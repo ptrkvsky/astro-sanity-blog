@@ -12,6 +12,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 .history/
+.astro
 
 # environment variables
 .env
@@ -20,6 +21,7 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+.astro/
 
 # google
 src/cle-analytics.json

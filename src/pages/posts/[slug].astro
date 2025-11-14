@@ -30,6 +30,8 @@ interface Props {
   };
 }
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const sanityProjects = await fetchSanity<SanityAllPost>(queryAllPosts);
   const params = sanityProjects && getPostsUrlParams(sanityProjects);

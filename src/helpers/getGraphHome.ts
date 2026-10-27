@@ -8,7 +8,7 @@ import type {
 import getGraphPlace from './getGraphPlace';
 import getGraphWebsite from './getGraphWebsite';
 import { getFaq } from './getFaq';
-import { getWebPage, ParamsGetWebPage } from './getWebPage';
+import { getWebPage, type ParamsGetWebPage } from './getWebPage';
 import { getBreadcrumb } from './getBreadcrumb';
 
 import type { BreadcrumbGraphItem } from '@interfaces/BreadcrumbGraphItem';

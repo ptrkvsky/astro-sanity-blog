@@ -1,6 +1,6 @@
 export const prerender = false;
 
-import { APIRoute } from 'astro';
+import type { APIRoute } from 'astro';
 import { createClient } from '@sanity/client';
 import sendMail from '@features/blog/functions/sendMail';
 

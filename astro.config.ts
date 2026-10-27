@@ -1,22 +1,16 @@
 import { defineConfig } from 'astro/config';
-import { VitePWA } from 'vite-plugin-pwa';
 import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
-import { manifest } from './src/config';
-import AstroPWA from '@vite-pwa/astro';
 import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://developpeur-web.tech',
+  // Astro 7 passe la valeur par défaut à 'jsx', qui supprime des espaces entre éléments inline
+  compressHTML: true,
   integrations: [
-    AstroPWA({
-      manifest,
-    }),
     react(),
-    tailwind(),
     sitemap(),
     partytown({
       // Adds dataLayer.push as a forwarding-event.

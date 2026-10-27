@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype A - Marges | Johan Petrikovsky</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Direction A - Marges : le portfolio comme une revue technique imprimée.
+   Aucune image décorative, aucune animation nécessaire : la typographie et la grille portent tout. */
+:root {
+  --paper: #F1EDE4;
+  --ink: #161513;
+  --muted: #5E5950;
+  --red: #B8301C;
+  --rule: #161513;
+  --hair: color-mix(in srgb, var(--ink) 18%, transparent);
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --step--1: clamp(.8rem, .78rem + .1vw, .875rem);
+  --step-0: clamp(1.0625rem, 1rem + .3vw, 1.25rem);
+  --step-1: clamp(1.35rem, 1.2rem + .6vw, 1.75rem);
+  --step-2: clamp(1.8rem, 1.4rem + 1.6vw, 2.75rem);
+  --step-4: clamp(3rem, 1.6rem + 6.2vw, 8.5rem);
+  --gutter: clamp(1rem, .5rem + 2vw, 2.5rem);
+  --margin-col: minmax(0, 13rem);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); -webkit-text-size-adjust: 100%; }
+body { margin: 0; font: 400 var(--step-0)/1.55 var(--serif); font-optical-sizing: auto; }
+::selection { background: var(--red); color: var(--paper); }
+a { color: inherit; text-decoration-thickness: .06em; text-underline-offset: .18em; }
+a:hover { color: var(--red); }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+.mono { font-family: var(--mono); font-size: var(--step--1); letter-spacing: .01em; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .6rem 1rem; z-index: 10; }
+.skip:focus { left: var(--gutter); }
+@view-transition { navigation: auto; }
+
+/* Grille : une colonne de marge pour les annotations, une colonne de texte */
+.page { padding-inline: var(--gutter); max-width: 92rem; margin-inline: auto; }
+.row { display: grid; grid-template-columns: var(--margin-col) minmax(0, 1fr); column-gap: var(--gutter); }
+.row > .margin { grid-column: 1; }
+.row > .body { grid-column: 2; }
+
+/* En-tête : un filet, un nom, quatre liens */
+.masthead { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-block: 1rem .6rem; border-bottom: 2px solid var(--rule); }
+.masthead strong { font-weight: 600; font-size: var(--step-0); letter-spacing: -.01em; }
+.masthead nav ul { display: flex; gap: clamp(.8rem, 2vw, 2rem); list-style: none; margin: 0; padding: 0; }
+.masthead nav a { text-decoration: none; }
+.masthead nav a[aria-current] { text-decoration: underline; }
+.edition { display: flex; justify-content: space-between; color: var(--muted); padding-block: .35rem; border-bottom: 1px solid var(--hair); }
+
+/* Hero : une phrase, pas d'image. Le LCP est du texte. */
+.hero { padding-block: clamp(2.5rem, 8vw, 7rem) clamp(2rem, 5vw, 4rem); border-bottom: 1px solid var(--hair); }
+.hero h1 { font-size: var(--step-4); line-height: .92; letter-spacing: -.035em; font-weight: 380; margin: 0; max-width: 14ch; font-variation-settings: "opsz" 72; }
+.hero h1 em { font-weight: 300; color: var(--red); }
+.hero .lede { font-size: var(--step-1); line-height: 1.35; max-width: 34ch; margin: 2rem 0 0; }
+.facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--rule); margin-top: clamp(2rem, 5vw, 3.5rem); }
+.facts div { padding: .7rem .8rem .2rem 0; border-right: 1px solid var(--hair); }
+.facts div:last-child { border-right: 0; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: .2rem 0 0; font-size: var(--step-0); }
+.cta { display: inline-flex; gap: .6rem; align-items: baseline; margin-top: 2rem; font-size: var(--step-1); }
+.cta a { text-decoration-thickness: 2px; }
+.note { color: var(--muted); }
+.note b { color: var(--red); font-weight: 500; }
+.margin .note { position: sticky; top: 1rem; }
+
+/* Sections numérotées */
+section { padding-block: clamp(2.5rem, 7vw, 6rem); border-bottom: 1px solid var(--hair); }
+.kicker { display: flex; gap: 1rem; align-items: baseline; margin-bottom: 1.5rem; }
+.kicker .num { color: var(--red); }
+h2 { font-size: var(--step-2); line-height: 1.05; letter-spacing: -.02em; font-weight: 420; margin: 0 0 1.5rem; max-width: 22ch; }
+h3 { font-size: var(--step-1); font-weight: 500; margin: 0; letter-spacing: -.01em; }
+
+/* Index des travaux : une table, pas des cartes */
+.index { width: 100%; border-collapse: collapse; }
+.index th { text-align: left; font: 400 var(--step--1) var(--mono); color: var(--muted); padding: .5rem .6rem .5rem 0; border-bottom: 2px solid var(--rule); }
+.index td { padding: 1rem .6rem 1rem 0; border-bottom: 1px solid var(--hair); vertical-align: baseline; }
+.index tr { position: relative; }
+.index tbody tr:hover, .index tbody tr:focus-within { background: var(--ink); color: var(--paper); }
+.index tbody tr:hover a, .index tbody tr:focus-within a { color: var(--paper); }
+.index td:first-child { font-family: var(--mono); font-size: var(--step--1); color: var(--red); width: 3rem; padding-left: .4rem; }
+.index tbody tr:hover td:first-child { color: var(--paper); }
+.index .proj a { font-size: var(--step-1); text-decoration: none; }
+.index .proj a::after { content: ""; position: absolute; inset: 0; }
+.index .stack { font-family: var(--mono); font-size: var(--step--1); }
+/* l'aperçu s'affiche dans la colonne de marge, comme une annotation */
+.index .preview { position: absolute; left: calc(-13rem - var(--gutter)); top: 50%; width: 13rem; aspect-ratio: 16/10; object-fit: cover; object-position: top; transform: translateY(-50%); opacity: 0; pointer-events: none; transition: opacity .2s; border: 1px solid var(--ink); }
+.index tbody tr:hover .preview { opacity: 1; }
+
+/* Étude de cas */
+.case { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--rule); margin-top: 2rem; }
+.case > div { padding: 1rem var(--gutter) 1rem 0; border-right: 1px solid var(--hair); }
+.case > div + div { padding-left: 1rem; }
+.case > div:last-child { border-right: 0; }
+.case h4 { font: 500 var(--step--1) var(--mono); color: var(--red); margin: 0 0 .6rem; text-transform: uppercase; letter-spacing: .06em; }
+.case p, .case li { font-size: var(--step-0); margin: 0 0 .6rem; }
+.case ul { padding-left: 1.1rem; margin: 0; }
+.status { font: 500 .72rem/1 var(--mono); border: 1px solid currentColor; padding: .15rem .35rem; text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+.status.todo { color: var(--red); }
+figure.shot { margin: 2rem 0 0; }
+figure.shot img { width: 100%; display: block; border: 1px solid var(--ink); }
+figure.shot figcaption { margin-top: .5rem; color: var(--muted); }
+
+/* Compétences : une liste de définitions dont chaque entrée renvoie à une preuve */
+.skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); margin: 0; }
+.skills > div { border-top: 1px solid var(--rule); padding: 1rem 0 1.4rem; }
+.skills dt { font-size: var(--step-1); font-weight: 500; }
+.skills dd { margin: .4rem 0 0; }
+.skills .proof { display: block; margin-top: .5rem; font-family: var(--mono); font-size: var(--step--1); }
+.skills .proof::before { content: "Preuve : "; color: var(--muted); }
+
+/* À propos */
+.about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gutter); align-items: start; }
+.about img { width: 9rem; aspect-ratio: 1; object-fit: cover; filter: grayscale(1) contrast(1.05); display: block; margin-bottom: .6rem; }
+blockquote { margin: 0 0 2rem; font-size: var(--step-1); line-height: 1.35; font-style: italic; font-weight: 340; }
+blockquote footer { font: normal 400 var(--step--1) var(--mono); margin-top: .6rem; color: var(--muted); }
+
+.articles { list-style: none; padding: 0; margin: 0; counter-reset: a; }
+.articles li { border-top: 1px solid var(--hair); padding: .9rem 0; display: grid; grid-template-columns: 3rem minmax(0, 1fr) auto; gap: 1rem; align-items: baseline; counter-increment: a; }
+.articles li::before { content: counter(a, decimal-leading-zero); font-family: var(--mono); font-size: var(--step--1); color: var(--red); }
+.articles a { font-size: var(--step-1); text-decoration: none; }
+.articles a:hover { text-decoration: underline; }
+
+/* Contact : l'adresse est le titre */
+.contact { padding-block: clamp(3rem, 10vw, 8rem); }
+.contact a.mail { font-size: clamp(1.9rem, .5rem + 5.4vw, 6.5rem); letter-spacing: -.03em; line-height: 1; font-weight: 380; word-break: break-word; text-decoration-thickness: .04em; }
+.colophon { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; padding-block: 1.2rem 2rem; border-top: 2px solid var(--rule); color: var(--muted); }
+
+/* Mobile : la marge passe dans le flux, la table devient une liste */
+@media (max-width: 760px) {
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .row > .margin, .row > .body { grid-column: 1; }
+  .margin .note { position: static; margin-bottom: 1rem; }
+  .masthead { flex-direction: column; gap: .4rem; }
+  .masthead nav ul { gap: 1rem; flex-wrap: wrap; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facts div:nth-child(2) { border-right: 0; }
+  .facts div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .index thead { display: none; }
+  .index, .index tbody, .index tr, .index td { display: block; }
+  .index tr { border-bottom: 1px solid var(--hair); padding: .8rem 0; }
+  .index td { border: 0; padding: .1rem 0; }
+  .index td:first-child { padding-left: 0; }
+  .index .preview { display: none; }
+  .case { grid-template-columns: minmax(0, 1fr); }
+  .case > div, .case > div + div { border-right: 0; border-bottom: 1px solid var(--hair); padding: 1rem 0; }
+  .skills, .about { grid-template-columns: minmax(0, 1fr); }
+  .articles li { grid-template-columns: 2rem minmax(0, 1fr); }
+  .articles li .mono:last-child { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } @view-transition { navigation: none; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+  <header class="masthead">
+    <strong>Johan Petrikovsky</strong>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#articles">Articles</a></li>
+        <li><a href="#a-propos">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="edition mono"><span>Développeur frontend, Toulouse</span><span>Édition d'octobre 2026</span></div>
+
+  <main id="contenu">
+    <div class="hero row">
+      <aside class="margin">
+        <p class="note mono"><b>1.</b> Mesuré, pas promis : chaque étude de cas sépare ce qui est vérifié de ce qui reste à sourcer.</p>
+      </aside>
+      <div class="body">
+        <h1>Des interfaces <em>rapides</em>, lisibles et faites pour durer.</h1>
+        <p class="lede">Je conçois et développe des applications React et des sites Next.js ou Astro, avec une exigence : la performance et le référencement se règlent dans l'architecture, pas après la mise en ligne.<sup class="mono" style="color:var(--red)">1</sup></p>
+        <dl class="facts mono">
+          <div><dt>Rôle</dt><dd>Développeur frontend senior</dd></div>
+          <div><dt>Depuis</dt><dd>2012</dd></div>
+          <div><dt>Stack</dt><dd>React, TypeScript, Next.js, Astro</dd></div>
+          <div><dt>Disponibilité</dt><dd><span class="status todo">à confirmer</span></dd></div>
+        </dl>
+        <p class="cta"><span aria-hidden="true">→</span><a href="mailto:johan@developpeur-web.tech">Écrire à johan@developpeur-web.tech</a></p>
+      </div>
+    </div>
+
+    <section id="projets" aria-labelledby="t-projets">
+      <div class="row">
+        <aside class="margin"><p class="kicker mono"><span class="num">§ 1</span><span>Travaux</span></p></aside>
+        <div class="body">
+          <h2 id="t-projets" style="max-width:none">Index des travaux, de 2022 à 2024</h2>
+          <table class="index">
+            <thead><tr><th>N°</th><th>Projet</th><th>Rôle</th><th>Année</th><th>Stack</th></tr></thead>
+            <tbody>
+              <tr><td>01</td><td class="proj"><a href="#cas-safti">SAFTI.fr</a><img class="preview" src="../assets/projects/safti.jpg" alt=""></td><td>Refonte d'architecture, SEO</td><td class="mono">2022-2024</td><td class="stack">Next.js, TypeScript, Jest</td></tr>
+              <tr><td>02</td><td class="proj"><a href="#">Omega</a></td><td>Lead frontend, outil métier</td><td class="mono">2024</td><td class="stack">React, TypeScript, Storybook, Leaflet</td></tr>
+              <tr><td>03</td><td class="proj"><a href="#">Draw me a Sheep</a><img class="preview" src="../assets/projects/drawmeasheep.jpg" alt=""></td><td>Développement complet</td><td class="mono">2024</td><td class="stack">Astro, Sanity, WebGL, GSAP</td></tr>
+              <tr><td>04</td><td class="proj"><a href="#">Bien Estimer</a><img class="preview" src="../assets/projects/bienestimer.jpg" alt=""></td><td>SEO, plan de marquage GA4</td><td class="mono">2023-2024</td><td class="stack">Next.js, GA4</td></tr>
+              <tr><td>05</td><td class="proj"><a href="#">ALS Action Canada</a><img class="preview" src="../assets/projects/als.jpg" alt=""></td><td>Refonte de templates</td><td class="mono">2024</td><td class="stack">React, Gatsby, WordPress headless</td></tr>
+              <tr><td>06</td><td class="proj"><a href="#">Join SAFTI</a><img class="preview" src="../assets/projects/join.jpg" alt=""></td><td>Full-stack, multilingue</td><td class="mono">2023</td><td class="stack">Sulu CMS, PHP, Twig</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row" id="cas-safti" style="margin-top:clamp(3rem,8vw,6rem)">
+        <aside class="margin">
+          <p class="kicker mono"><span class="num">§ 1.1</span><span>Étude de cas</span></p>
+          <p class="note mono"><b>2.</b> Extrait d'une page projet. Le texte complet vit sur <span style="white-space:nowrap">/projets/safti</span>.</p>
+        </aside>
+        <div class="body">
+          <h3 style="font-size:var(--step-2);font-weight:420;letter-spacing:-.02em">SAFTI.fr : refondre un site d'annonces sans perdre son trafic</h3>
+          <div class="case">
+            <div><h4>Problème</h4><p>Un site d'annonces immobilières dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</p></div>
+            <div><h4>Contraintes</h4><p>Équipe agile, mise en production continue, pages à fort enjeu SEO.</p><p><span class="status todo">à compléter</span></p></div>
+            <div><h4>Décisions</h4><ul><li>Migration progressive de Next.js vers l'App Router.</li><li>Optimisation technique du SEO et suivi des performances.</li><li>Tests unitaires avec objectifs de couverture.</li></ul></div>
+            <div><h4>Résultats</h4><p>Une fonctionnalité proposée et développée a accompagné le passage de la note Trustpilot de 2,1 à 4,8.</p><p><span class="status todo">à sourcer</span></p></div>
+          </div>
+          <figure class="shot"><img src="../assets/projects/safti.jpg" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces" loading="lazy" width="1440" height="900"><figcaption class="mono">Fig. 1 - safti.fr, octobre 2026.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-comp">
+      <div class="row">
+        <aside class="margin"><p class="kicker mono"><span class="num">§ 2</span><span>Savoir-faire</span></p><p class="note mono"><b>3.</b> Chaque compétence renvoie à un texte ou un projet qui la démontre.</p></aside>
+        <div class="body">
+          <h2 id="t-comp">Ce que je sais faire, et où le vérifier</h2>
+          <dl class="skills">
+            <div><dt>Performance web</dt><dd>Temps de réponse serveur, rendu, poids des pages, suivi en production.</dd><a class="proof" href="#">Comment réduire le TTFB</a></div>
+            <div><dt>SEO technique</dt><dd>Rendu serveur, données structurées, maillage, migrations sans perte.</dd><a class="proof" href="#">Le rôle des développeurs dans le SEO</a></div>
+            <div><dt>Architecture React et TypeScript</dt><dd>Applications métier testées, typées, documentées dans Storybook.</dd><a class="proof" href="#">Arrêter d'utiliser des barrel files</a></div>
+            <div><dt>Next.js et Astro</dt><dd>App Router, cache, îlots, contenus headless (Sanity, WordPress).</dd><a class="proof" href="#">Cache handler personnalisé pour Next.js 16</a></div>
+            <div><dt>Interfaces cartographiques</dt><dd>Dessin de zones et de polygones de recherche avec Leaflet.</dd><a class="proof" href="#">Projet Omega</a></div>
+            <div><dt>Interaction et WebGL</dt><dd>Animations et scènes WebGL au service d'un site éditorial.</dd><a class="proof" href="#">Projet Draw me a Sheep</a></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="a-propos" aria-labelledby="t-apropos">
+      <div class="row">
+        <aside class="margin"><p class="kicker mono"><span class="num">§ 3</span><span>À propos</span></p></aside>
+        <div class="body about">
+          <div>
+            <h2 id="t-apropos">Quatorze ans de frontend, d'abord en agence, maintenant en produit</h2>
+            <img src="../assets/johan.jpg" alt="Portrait de Johan Petrikovsky" width="349" height="349" loading="lazy">
+            <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript. Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur.</p>
+            <p>J'écris aussi : <a href="#articles">69 articles</a> sur React, TypeScript et la performance web.</p>
+          </div>
+          <div>
+            <blockquote>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."<footer>Perrine Sini-Berthonneau, fondatrice du studio Les Cerises</footer></blockquote>
+            <blockquote>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."<footer>Florent Pasquet, fondateur d'agence web</footer></blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="articles" aria-labelledby="t-articles">
+      <div class="row">
+        <aside class="margin"><p class="kicker mono"><span class="num">§ 4</span><span>Journal</span></p></aside>
+        <div class="body">
+          <h2 id="t-articles">Articles récents</h2>
+          <ol class="articles">
+            <li><a href="#">Comment créer un cache handler personnalisé pour Next.js 16</a><span class="mono">Next.js</span></li>
+            <li><a href="#">Comment réduire le TTFB</a><span class="mono">Performance</span></li>
+            <li><a href="#">Les composants Tooltip ne devraient pas exister</a><span class="mono">Accessibilité</span></li>
+            <li><a href="#">Comment faire une application React plus rapide ?</a><span class="mono">React</span></li>
+          </ol>
+          <p class="mono" style="margin-top:1.5rem"><a href="#">Tous les articles (69) →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="t-contact">
+      <div class="row">
+        <aside class="margin"><p class="kicker mono"><span class="num">§ 5</span><span>Contact</span></p></aside>
+        <div class="body">
+          <h2 id="t-contact" style="font-size:var(--step-1);color:var(--muted);font-weight:400">Un projet, une refonte, un audit de performance ?</h2>
+          <a class="mail" href="mailto:johan@developpeur-web.tech">johan@developpeur-web.tech</a>
+          <p class="mono" style="margin-top:2rem">LinkedIn <span class="status todo">à fournir</span> &nbsp; GitHub <span class="status todo">à fournir</span></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon mono">
+    <span>Composé en Newsreader et IBM Plex Mono. Aucune image décorative, aucun script nécessaire à la lecture.</span>
+    <span><a href="#">Plan du site</a> · <a href="#">Mentions légales</a></span>
+  </footer>
+</div>
+</body>
+</html>

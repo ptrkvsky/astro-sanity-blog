@@ -21,6 +21,8 @@ interface AstroProps {
   };
 }
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const sanityCategories =
     await fetchSanity<SanityAllCategories>(queryAllCategories);

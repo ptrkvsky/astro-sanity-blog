@@ -143,6 +143,7 @@ Graphe unique par page (`@graph`), généré côté serveur, échappé correctem
 - `trailingSlash: 'never'` dans Astro + redirection 308 côté Vercel des URL avec slash.
 - Sitemap généré par `@astrojs/sitemap`, sans slash, excluant `/old` et toute page `noindex`, avec `lastmod` réel issu de Sanity (`_updatedAt`).
 - `robots.txt` : inchangé dans l'esprit (tout autorisé, lien vers `sitemap-index.xml`). Ne pas bloquer `/_astro/` (CSS et JS nécessaires au rendu).
+- `llms.txt` et une vue texte du site (`/index.txt` ou équivalent) générés au build depuis les mêmes contenus : coût de maintenance nul, et démonstration directe de la compétence SEO (idée observée chez basement.studio, voir `research.md`).
 - Pages de prototypes (`docs/redesign/prototypes`) : hors build, jamais publiées.
 
 ## 8. Rendu et accessibilité du contenu sans effets

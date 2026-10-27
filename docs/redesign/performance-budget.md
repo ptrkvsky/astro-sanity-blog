@@ -6,20 +6,20 @@ Ce document fixe les limites que la future implémentation ne doit pas dépasser
 
 | Mesure (desktop, sans bridage) | Site actuel | Médiane des 26 références | Références avec WebGL (15) | Références sans WebGL (11) |
 |---|---|---|---|---|
-| Poids total transféré | **301 Ko** | 4 043 Ko | 12 158 Ko | 1 622 Ko |
-| JavaScript | 97 Ko | 806 Ko | 815 Ko | 721 Ko |
-| Requêtes | 13 | 43 | - | - |
+| Poids total transféré | **105 Ko** | 2 086 Ko | 3 850 Ko | 839 Ko |
+| JavaScript (transféré) | 29 Ko | 403 Ko | 522 Ko | 308 Ko |
+| Requêtes | 12 | 34 | - | - |
 | LCP (non bridé) | 260 ms | 1 070 ms | - | - |
 
-Lecture : le site actuel est déjà **13 fois plus léger que la médiane** des portfolios étudiés. C'est un avantage à conserver, pas à sacrifier pour un effet. Les références avec WebGL pèsent en médiane 7,5 fois plus que celles sans WebGL, surtout à cause de vidéos et de textures (jusqu'à 142 Mo de média pour un site), rarement à cause du code 3D lui-même : une scène WebGL écrite sans bibliothèque tient en 69 Ko chez Aristide Benoist (voir `research.md`).
+Lecture : le site actuel est déjà **20 fois plus léger que la médiane** des portfolios étudiés. C'est un avantage à conserver, pas à sacrifier pour un effet. Les références avec WebGL pèsent en médiane 4,6 fois plus que celles sans WebGL, surtout à cause de vidéos et de textures (jusqu'à 142 Mo de média pour un site), rarement à cause du code 3D lui-même : une scène WebGL écrite sans bibliothèque tient en 69 Ko chez Aristide Benoist (voir `research.md`).
 
 Prototypes de cette mission, mesurés avec le même outil (non optimisés, polices Google et captures pleine taille) :
 
 | Prototype | Total | JS | Polices | Images | Requêtes |
 |---|---|---|---|---|---|
-| A - Marges | 833 Ko | 0 Ko | 301 Ko | 505 Ko | 12 |
-| B - Relief | 257 Ko | 7 Ko | 126 Ko | 103 Ko | 7 |
-| C - Banc d'essai | 561 Ko | 2 Ko | 30 Ko | 505 Ko | 9 |
+| A - Marges | 814 Ko | 0 Ko | ~300 Ko | ~505 Ko | 11 |
+| B - Relief | 241 Ko | 7 Ko | ~126 Ko | ~103 Ko | 6 |
+| C - Banc d'essai | 548 Ko | 2 Ko | ~30 Ko | ~505 Ko | 8 |
 
 Les écarts viennent de deux causes corrigeables : des captures de projets servies en 1 440 px sans variantes, et des familles de polices complètes (Newsreader avec tous ses axes). Le code propre aux directions est négligeable : 0 à 7 Ko.
 
@@ -34,7 +34,7 @@ Les écarts viennent de deux causes corrigeables : des captures de projets servi
 | JS d'amélioration (îlots, mesures) | ≤ 15 Ko compressés, chargé `client:idle` ou `client:visible` | |
 | Couche créative (shader) | ≤ 10 Ko compressés, chargée après le LCP | `relief.js` mesure 2,9 Ko compressés |
 | Images au-dessus de la ligne de flottaison | ≤ 1 image, ≤ 60 Ko en AVIF ou WebP | le hero des trois directions n'en a pas besoin |
-| Poids total au premier chargement | **≤ 350 Ko** | proche du site actuel (301 Ko), 10 fois sous la médiane des références |
+| Poids total au premier chargement | **≤ 200 Ko** | le double du site actuel (105 Ko) pour absorber polices et visuels, 10 fois sous la médiane des références |
 | Requêtes au premier chargement | ≤ 15 | |
 
 Seuils Core Web Vitals visés (75e centile, données réelles une fois le site en ligne) :
@@ -120,7 +120,8 @@ Légende de l'impact : LCP, INP, CLS ; "aucun" signifie que l'effet ne peut pas,
 ## 5. Méthode et limites des mesures
 
 - Outil : Playwright 1.61 (Chromium) depuis un poste sur fibre, **sans bridage réseau ni CPU**. Les valeurs servent à comparer, pas à prédire les Core Web Vitals réels.
-- Poids : somme des réponses observées pendant 6 s après l'événement `load`. Les ressources chargées plus tard (défilement, interaction) ne sont pas comptées.
+- Poids : octets réellement transférés (corps compressés et en-têtes, mesurés par le navigateur) des requêtes terminées dans les 6 s suivant l'événement `load`, plus les médias en streaming comptés par leur `Content-Length`. Les ressources chargées plus tard (défilement, interaction) ne sont pas comptées. Une première version de ce document additionnait parfois des tailles décompressées, ce qui surestimait les poids ; elle a été corrigée.
+- Prototypes : servis par un serveur local sans compression ; polices WOFF2 et images JPEG étant déjà compressées, l'écart avec une mise en ligne est faible.
 - WebGL : détecté en interceptant `getContext` ; les canvas rendus dans un Web Worker (`OffscreenCanvas`) ne sont pas vus. Active Theory affiche ainsi 0 contexte malgré son moteur WebGL.
 - LCP à 0 : l'élément le plus grand est un canvas, que l'API LCP ignore.
 - Aucune mesure sur appareil mobile réel : à faire pendant l'implémentation (un Android d'entrée de gamme, Chrome, via WebPageTest ou un appareil physique).

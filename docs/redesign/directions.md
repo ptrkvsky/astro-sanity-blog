@@ -8,7 +8,7 @@ Ouvrir : `python3 -m http.server 8765` à la racine du dépôt, puis http://127.
 
 Ce que la recherche montre, et que les trois directions prennent en compte :
 
-1. **Le portfolio de développeur moyen est lourd et fragile.** Médiane de 4 Mo et 806 Ko de JavaScript sur 26 références ; 6 portfolios de développeurs sur 9 du groupe "développeurs reconnus" affichent un écran vide sans JavaScript, souvent alors que le texte est dans le HTML (servi en `opacity: 0`). Le site actuel de Johan pèse 301 Ko.
+1. **Le portfolio de développeur moyen est lourd et fragile.** Médiane de 2,1 Mo transférés et 403 Ko de JavaScript sur 26 références ; 6 portfolios de développeurs sur 9 du groupe "développeurs reconnus" affichent un écran vide sans JavaScript, souvent alors que le texte est dans le HTML (servi en `opacity: 0`). Le site actuel de Johan pèse 105 Ko.
 2. **Les gabarits se reconnaissent plus vite que les techniques.** Photo détourée et nom en défilement, colonne gauche épinglée sur fond ardoise, curseur magnétique : ces formes évoquent aujourd'hui un template. Ce qui reste singulier, c'est une idée unique poussée jusqu'au bout.
 3. **La crédibilité vient d'une preuve vérifiable.** Bibliothèques utilisées par d'autres, articles qui expliquent comment le site est construit, chiffres publics. Johan a cette matière (69 articles, projets à fort trafic) mais le site actuel la noie dans des chiffres invérifiables (150+ clients, note 4,6 en JSON-LD).
 4. **Le WebGL impressionne quand il est léger et qu'il sert le propos.** Le même type de scène peut coûter 69 Ko (Benoist, sans bibliothèque) ou plusieurs mégaoctets.
@@ -31,7 +31,7 @@ Le positionnement à exprimer : **un développeur frontend senior dont la spéci
 | Navigation | Bandeau à filet : nom à gauche, 4 liens à droite ; ligne d'édition ("Édition d'octobre 2026") qui date le contenu. |
 | Avantages | Lecture excellente ; robustesse totale (0 Ko de JS) ; prolonge naturellement les 69 articles ; vieillit bien ; maintenance quasi nulle. |
 | Inconvénients | Ne **montre** pas le savoir-faire frontend, il le décrit. Le registre éditorial serif est très utilisé en 2025-2026 : risque de "beau mais déjà vu". Un studio créatif peut le juger sage. |
-| SEO, a11y, perf, responsive | Optimal sur les quatre axes. Le prototype pèse 833 Ko à cause des polices Google complètes (301 Ko) et des aperçus non redimensionnés : réductible sous 200 Ko. |
+| SEO, a11y, perf, responsive | Optimal sur les quatre axes. Le prototype pèse 814 Ko à cause des polices Google complètes (environ 300 Ko) et des aperçus non redimensionnés : réductible sous 200 Ko. |
 | Technologies et maintenance | Astro + CSS. Aucune dépendance d'interface. |
 
 ## B - Relief
@@ -50,7 +50,7 @@ Le positionnement à exprimer : **un développeur frontend senior dont la spéci
 | Navigation | Libellés de carte en haut (nom, 4 liens) ; liste HTML complète des projets juste sous le hero. |
 | Avantages | Impact immédiat ; démontre une vraie compétence graphique à un coût mesuré ; concept motivé par le parcours de Johan, pas décoratif ; matière pour un article technique ("une carte WebGL en 3 Ko"). |
 | Inconvénients | Le registre "fond sombre + WebGL" est celui de 15 références sur 26 : la différence tient au propos et à la légèreté, pas au genre. Les marqueurs sont masqués sur mobile (trop serrés) : la carte y devient décorative. Coût GPU continu pendant que le hero est visible, à valider sur un Android d'entrée de gamme. Risque de lecture "créatif" plutôt que "senior produit". |
-| SEO, a11y, perf, responsive | Bon si la discipline est tenue : tout est en HTML, le canvas est `aria-hidden`, repli CSS testé sans WebGL. Prototype à 257 Ko. Contraste du texte sur les lignes : traité par le masque du shader, à vérifier sur chaque taille d'écran. |
+| SEO, a11y, perf, responsive | Bon si la discipline est tenue : tout est en HTML, le canvas est `aria-hidden`, repli CSS testé sans WebGL. Prototype à 241 Ko. Contraste du texte sur les lignes : traité par le masque du shader, à vérifier sur chaque taille d'écran. |
 | Technologies et maintenance | Astro + un module GLSL. Faible en dépendances, mais le GLSL doit être documenté pour rester modifiable. |
 
 ## C - Banc d'essai
@@ -69,7 +69,7 @@ Le positionnement à exprimer : **un développeur frontend senior dont la spéci
 | Navigation | En-tête simple + pastille de mesure ; planches numérotées (Pl. 00 à Pl. 05) qui servent de repères. |
 | Avantages | Idée la plus alignée sur la spécialité de Johan. Une seule référence sur 26 affiche des mesures en direct (carterogunsola.com : FPS et LCP dans une micro-barre de télémétrie, comme signal d'ambiance) ; ici la mesure devient le principe d'organisation du site, expliquée et complète. Aligne le design sur la vraie spécialité (performance, SEO, rigueur). Chaque étude de cas peut embarquer son spécimen. Les statuts "vérifié / à sourcer" deviennent un élément de design honnête. |
 | Inconvénients | Densité : plus de choses à lire que A. Rend publique toute régression de performance, ce qui oblige à tenir le budget. Le registre "laboratoire" peut paraître froid si les planches se multiplient. Les spécimens demandent du temps de conception par projet. |
-| SEO, a11y, perf, responsive | Très bon : contenu en HTML, spécimens avec repli statique, mesures en `aria-live`. Prototype à 561 Ko, dont 505 Ko de captures non redimensionnées : le code de la direction pèse 3,6 Ko. |
+| SEO, a11y, perf, responsive | Très bon : contenu en HTML, spécimens avec repli statique, mesures en `aria-live`. Prototype à 548 Ko, dont environ 505 Ko de captures non redimensionnées : le code de la direction pèse 3,6 Ko. |
 | Technologies et maintenance | Astro + 2 petits modules (mesures, spécimens) + le shader optionnel. Les spécimens sont des îlots isolés : on peut en ajouter ou en retirer sans toucher au reste. |
 
 ## Notation

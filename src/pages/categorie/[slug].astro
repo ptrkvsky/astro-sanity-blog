@@ -1,5 +1,4 @@
 ---
-import Header from '@features/layout/Header/Header.astro';
 import PostCard from '@features/blog/components/PostCard/index.astro';
 import { getCategoriesUrlParams } from '@features/blog/functions/getCategoriesUrlParams';
 import type { Category } from '@features/blog/interfaces/Category';
@@ -20,6 +19,8 @@ interface AstroProps {
     };
   };
 }
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const sanityCategories =
@@ -46,10 +47,8 @@ const schema = getSchemaBlogListing(mostRecentDate);
   title={title}
   description={description}
   schema={schema}
-  hasGradient={true}
   canonical={`/categorie/${category.slug.current}`}
 >
-  <Header slot="before-main" />
   <div slot="main" class="wrapper">
     <h1 class="font-semibold text-purple-900 mt-10 mb-6 text-4xl">
       {category.title}

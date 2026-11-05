@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expériences - mission 2.1</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+  .intro { padding-block: clamp(2rem, 6vw, 4rem) 2rem; display: grid; gap: 1rem; max-width: 62ch; }
+  .intro > .tape { justify-self: start; }
+  .list { list-style: none; margin: 0 0 4rem; padding: 0; border-top: 1px solid var(--ink); }
+  .list li { border-bottom: 1px solid var(--ink); padding: 1.2rem 0; display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 1rem; }
+  .list p { margin: .3rem 0 0; color: var(--muted); }
+  .list .links { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .5rem; font: var(--step--1) var(--mono); }
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top"><span>Expériences techniques</span><span class="mono muted">Mission 2.1 - hors build Astro, jamais publiées</span></header>
+<main>
+<section class="intro">
+  <span class="tape">Micro-prototypes</span>
+  <h1>Expériences</h1>
+  <p class="muted">Chaque prototype valide un mécanisme observé sur une référence, avec ses réglages, ses instruments de mesure (en bas à droite) et ses replis. Détail et mesures : README de chaque dossier et docs/redesign/technical-research.md.</p>
+</section>
+<ol class="list">
+  <li><span class="mono muted">01</span><div><h2 class="h3"><a href="01-view-transitions/index.html">Transitions entre documents</a></h2><p>Index des essais vers une étude de cas : la capture et le titre se déplacent. View Transitions natives, 0 Ko de JS nécessaire. Référence : cydstumpel.nl, sebg.ch.</p></div></li>
+  <li><span class="mono muted">02</span><div><h2 class="h3"><a href="02-scroll-driven/index.html">Planches sur titre épinglé</a></h2><p>Animations pilotées par le défilement en CSS natif, comparées à GSAP ScrollTrigger, plus une inclinaison selon la vitesse. Référence : cydstumpel.nl, david-estrada.dev.</p><p class="links"><a href="02-scroll-driven/index.html">Variante CSS</a><a href="02-scroll-driven/gsap.html">Variante GSAP</a></p></div></li>
+  <li><span class="mono muted">03</span><div><h2 class="h3"><a href="03-image-reveal/index.html">Révélation tramée des images</a></h2><p>Tramage ordonné (Bayer 4x4) à l'entrée dans l'écran, Canvas 2D ou WebGL2, l'image HTML restant la source. Référence : sebg.ch.</p><p class="links"><a href="03-image-reveal/index.html?mode=2d">Canvas 2D</a><a href="03-image-reveal/index.html?mode=webgl">WebGL2</a></p></div></li>
+  <li><span class="mono muted">04</span><div><h2 class="h3"><a href="04-worker-specimen/index.html">Spécimen WebGL en worker</a></h2><p>Le shader de relief chargé au clic et rendu dans un Web Worker (OffscreenCanvas), comparé au fil principal. Référence : david-estrada.dev.</p><p class="links"><a href="04-worker-specimen/index.html?thread=worker">Worker</a><a href="04-worker-specimen/index.html?thread=main">Fil principal</a><a href="04-worker-specimen/index.html?simulate=nogl">Repli simulé</a></p></div></li>
+</ol>
+</main>
+</div>
+</body>
+</html>

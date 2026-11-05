@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype B - Relief | Johan Petrikovsky</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,300..600&display=swap" rel="stylesheet">
+<style>
+/* Direction B - Relief : une carte topographique vivante.
+   Le shader est une couche posée sur un document complet : sans WebGL, le fond CSS de repli prend le relais. */
+:root {
+  --night: #0D0F11;
+  --bone: #E9E4D8;
+  --muted: #8C9095;
+  --amber: #F2A33A;
+  --line: #2A2E33;
+  --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Martian Mono", ui-monospace, Menlo, monospace;
+  --gutter: clamp(1rem, .4rem + 2.4vw, 2.75rem);
+  --step--1: clamp(.72rem, .7rem + .08vw, .8rem);
+  --step-0: clamp(1rem, .95rem + .25vw, 1.15rem);
+  --step-1: clamp(1.3rem, 1.1rem + .8vw, 1.9rem);
+  --step-2: clamp(1.9rem, 1.2rem + 2.6vw, 3.6rem);
+  --step-4: clamp(2.6rem, .9rem + 6.6vw, 8rem);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--night); color: var(--bone); }
+body { margin: 0; font: 400 var(--step-0)/1.55 var(--sans); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--amber); outline-offset: 4px; }
+.mono { font-family: var(--mono); font-size: var(--step--1); font-variation-settings: "wdth" 87.5; letter-spacing: .02em; text-transform: uppercase; }
+.skip { position: absolute; left: -999px; z-index: 20; background: var(--amber); color: var(--night); padding: .6rem 1rem; }
+.skip:focus { left: var(--gutter); top: .5rem; }
+.wide { font-variation-settings: "wdth" 125; }
+
+/* Hero cartographique */
+.map { position: relative; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; padding: var(--gutter); overflow: hidden; isolation: isolate; }
+.map canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; }
+/* repli sans WebGL : courbes de niveau approximées en CSS, statiques */
+.map::before { content: ""; position: absolute; inset: 0; z-index: -2;
+  background:
+    repeating-radial-gradient(ellipse 60% 45% at 72% 38%, transparent 0 22px, var(--line) 22px 23px),
+    repeating-radial-gradient(ellipse 50% 60% at 18% 80%, transparent 0 26px, var(--line) 26px 27px);
+  opacity: .9; }
+.has-webgl .map::before { display: none; }
+.hud { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.hud .name { font-weight: 800; letter-spacing: -.01em; font-size: var(--step-0); text-decoration: none; }
+.hud nav ul { list-style: none; display: flex; gap: clamp(.8rem, 2.4vw, 2.2rem); margin: 0; padding: 0; }
+.hud nav a { text-decoration: none; }
+.hud nav a:hover { color: var(--amber); }
+.hero-text { align-self: end; max-width: 64rem; padding-bottom: clamp(1.5rem, 5vw, 3rem); }
+.hero-text h1 { font-size: var(--step-4); line-height: .9; font-weight: 750; letter-spacing: -.02em; margin: 0; text-transform: uppercase; font-variation-settings: "wdth" 125; }
+.hero-text h1 span { display: block; font-weight: 300; color: var(--muted); font-variation-settings: "wdth" 100; text-transform: none; letter-spacing: -.03em; font-size: .52em; line-height: 1.05; margin-top: .3em; }
+.hero-text p { max-width: 38ch; margin: 1.6rem 0 0; color: var(--bone); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 1.6rem; align-items: center; }
+.btn { display: inline-block; background: var(--amber); color: var(--night); text-decoration: none; padding: .85rem 1.2rem; font-weight: 700; }
+.btn:hover { background: var(--bone); }
+.legend { display: flex; justify-content: space-between; gap: 1rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: .8rem; }
+
+/* Marqueurs : de vrais liens posés sur les reliefs du shader */
+.markers { list-style: none; margin: 0; padding: 0; }
+.marker { position: absolute; transform: translate(-6px, -6px); }
+.marker a { display: inline-flex; align-items: center; gap: .6rem; text-decoration: none; padding: .3rem .4rem .3rem 0; }
+.marker a::before { content: ""; width: 11px; height: 11px; border: 1.5px solid var(--amber); border-radius: 50%; background: var(--night); flex: none; }
+.marker a:hover::before, .marker a:focus-visible::before { background: var(--amber); }
+.marker .lbl { background: color-mix(in srgb, var(--night) 80%, transparent); padding: .15rem .35rem; }
+.marker .lbl b { color: var(--amber); font-weight: 500; }
+
+/* Sections sur fond nuit */
+.page { padding-inline: var(--gutter); }
+section { padding-block: clamp(4rem, 10vw, 8rem); border-top: 1px solid var(--line); }
+.sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: var(--gutter); margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+.sec-head .mono { color: var(--amber); }
+h2 { font-size: var(--step-2); line-height: .98; margin: 0; font-weight: 700; letter-spacing: -.02em; text-transform: uppercase; font-variation-settings: "wdth" 112; }
+h3 { font-size: var(--step-1); margin: 0; font-weight: 650; font-variation-settings: "wdth" 110; letter-spacing: -.01em; }
+
+.projects { list-style: none; margin: 0; padding: 0; }
+.projects li { display: grid; grid-template-columns: 4rem minmax(0, 2fr) minmax(0, 2fr) 7rem; gap: var(--gutter); align-items: baseline; padding: 1.2rem 0; border-bottom: 1px solid var(--line); }
+.projects li .mono:first-child { color: var(--amber); }
+.projects a { text-decoration: none; font-size: var(--step-1); font-weight: 650; font-variation-settings: "wdth" 115; text-transform: uppercase; letter-spacing: -.01em; }
+.projects a:hover { color: var(--amber); }
+.projects .role { color: var(--muted); }
+
+.case { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--gutter); margin-top: clamp(3rem, 8vw, 5rem); }
+.case dl { margin: 1.5rem 0 0; display: grid; gap: 1.1rem; }
+.case dt { color: var(--amber); }
+.case dd { margin: .35rem 0 0; }
+.case figure { margin: 0; position: relative; border: 1px solid var(--line); }
+.case img { display: block; width: 100%; filter: grayscale(.2) contrast(1.02); }
+.case figcaption { display: flex; justify-content: space-between; padding: .6rem .8rem; color: var(--muted); border-top: 1px solid var(--line); }
+.tag { display: inline-block; border: 1px solid var(--amber); color: var(--amber); padding: .1rem .35rem; margin-left: .4rem; }
+
+/* Compétences présentées comme une légende de carte */
+.layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 var(--gutter); margin: 0; }
+.layers div { border-top: 1px solid var(--line); padding: 1.2rem 0 1.6rem; }
+.layers dt { display: flex; gap: .8rem; align-items: center; font-weight: 650; font-size: var(--step-1); font-variation-settings: "wdth" 105; }
+.layers dt i { width: 2.2rem; height: 0; border-top: 2px solid var(--bone); flex: none; }
+.layers div:nth-child(2) dt i { border-top-style: dashed; }
+.layers div:nth-child(3) dt i { border-top: 4px double var(--bone); }
+.layers div:nth-child(4) dt i { border-top-color: var(--amber); }
+.layers div:nth-child(5) dt i { border-top-style: dotted; border-top-width: 3px; }
+.layers div:nth-child(6) dt i { border-top: 2px solid var(--amber); box-shadow: 0 4px 0 -2px var(--muted); }
+.layers dd { margin: .6rem 0 0; color: var(--muted); }
+.layers dd a { color: var(--bone); display: inline-block; margin-top: .5rem; }
+
+.about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--gutter); }
+.about img { width: 8rem; aspect-ratio: 1; object-fit: cover; filter: grayscale(1) contrast(1.1); display: block; margin-bottom: 1rem; }
+blockquote { margin: 0 0 2rem; font-size: var(--step-1); line-height: 1.3; font-weight: 300; }
+blockquote footer { margin-top: .6rem; color: var(--muted); }
+.articles { list-style: none; margin: 0; padding: 0; }
+.articles li { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+.articles a { text-decoration: none; font-size: var(--step-1); font-weight: 400; }
+.articles a:hover { color: var(--amber); }
+.contact .mail { display: block; font-size: clamp(1.6rem, .3rem + 5.4vw, 6rem); font-weight: 800; letter-spacing: -.03em; text-decoration: none; font-variation-settings: "wdth" 125; line-height: 1; margin-top: 1rem; word-break: break-word; }
+.contact .mail:hover { color: var(--amber); }
+footer.site { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding: 1.5rem 0 2rem; color: var(--muted); border-top: 1px solid var(--line); }
+
+@media (max-width: 760px) {
+  .hud { flex-direction: column; gap: .6rem; }
+  .markers { display: none; }
+  /* la chasse large ne tient pas sur 390 px : retour à la chasse normale */
+  .hero-text h1 { font-size: clamp(2.1rem, 10.2vw, 3rem); font-variation-settings: "wdth" 100; }
+  .hero-text h1 span { font-size: .62em; }
+  .sec-head, .case, .about, .layers { grid-template-columns: minmax(0, 1fr); }
+  .projects li { grid-template-columns: 2.4rem minmax(0, 1fr); row-gap: .2rem; }
+  .projects li > :nth-child(3), .projects li > :nth-child(4) { grid-column: 2; }
+  .legend span:last-child { display: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="map" id="carte">
+  <canvas aria-hidden="true"></canvas>
+  <div class="hud">
+    <a class="name" href="#">JOHAN PETRIKOVSKY</a>
+    <nav aria-label="Navigation principale" class="mono">
+      <ul>
+        <li><a href="#projets">Projets</a></li>
+        <li><a href="#articles">Articles</a></li>
+        <li><a href="#a-propos">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+  <!-- les coordonnées des marqueurs correspondent aux reliefs passés au shader -->
+  <ul class="markers mono" aria-label="Projets sur la carte">
+    <li class="marker" style="left:58%;top:15%"><a href="#cas-safti"><span class="lbl"><b>01</b> SAFTI.fr</span></a></li>
+    <li class="marker" style="left:76%;top:25%"><a href="#projets"><span class="lbl"><b>02</b> Omega</span></a></li>
+    <li class="marker" style="left:90%;top:37%"><a href="#projets"><span class="lbl"><b>03</b> Draw me a Sheep</span></a></li>
+    <li class="marker" style="left:86%;top:10%"><a href="#projets"><span class="lbl"><b>04</b> Bien Estimer</span></a></li>
+    <li class="marker" style="left:83%;top:49%"><a href="#projets"><span class="lbl"><b>05</b> ALS Action Canada</span></a></li>
+    <li class="marker" style="left:91%;top:62%"><a href="#projets"><span class="lbl"><b>06</b> Join SAFTI</span></a></li>
+  </ul>
+  <div class="hero-text">
+    <h1>Développeur frontend<span>Je rends les interfaces complexes simples à utiliser, et rapides.</span></h1>
+    <p>React, TypeScript, Next.js et Astro. Outils métier, sites à fort trafic, performance et SEO technique. Depuis 2012, à Toulouse.</p>
+    <div class="hero-actions">
+      <a class="btn" href="mailto:johan@developpeur-web.tech">Discuter d'un projet</a>
+      <a class="mono" href="#projets">Voir les 6 projets ↓</a>
+    </div>
+  </div>
+  <div class="legend mono"><span>43,60° N · 1,44° E - Toulouse</span><span>Relevé d'octobre 2026 · 6 reliefs = 6 projets</span></div>
+</header>
+
+<main id="contenu" class="page">
+  <section id="projets" aria-labelledby="t-projets">
+    <div class="sec-head"><p class="mono">01 / Projets</p><h2 id="t-projets">Six terrains, de l'outil métier au site créatif</h2></div>
+    <ol class="projects">
+      <li><span class="mono">01</span><a href="#cas-safti">SAFTI.fr</a><span class="role">Refonte d'architecture, SEO · Next.js, TypeScript</span><span class="mono">2022-2024</span></li>
+      <li><span class="mono">02</span><a href="#">Omega</a><span class="role">Lead frontend · React, Storybook, Leaflet</span><span class="mono">2024</span></li>
+      <li><span class="mono">03</span><a href="#">Draw me a Sheep</a><span class="role">Développement complet · Astro, WebGL, GSAP</span><span class="mono">2024</span></li>
+      <li><span class="mono">04</span><a href="#">Bien Estimer</a><span class="role">SEO, plan de marquage GA4 · Next.js</span><span class="mono">2023-2024</span></li>
+      <li><span class="mono">05</span><a href="#">ALS Action Canada</a><span class="role">Refonte de templates · Gatsby, WordPress</span><span class="mono">2024</span></li>
+      <li><span class="mono">06</span><a href="#">Join SAFTI</a><span class="role">Full-stack multilingue · Sulu, PHP</span><span class="mono">2023</span></li>
+    </ol>
+
+    <article class="case" id="cas-safti" aria-labelledby="t-cas">
+      <div>
+        <p class="mono" style="color:var(--amber)">Étude de cas 01</p>
+        <h3 id="t-cas">SAFTI.fr : refondre un site d'annonces sans perdre son trafic</h3>
+        <dl>
+          <div><dt class="mono">Problème</dt><dd>Un site d'annonces dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</dd></div>
+          <div><dt class="mono">Contraintes</dt><dd>Équipe agile, mise en production continue, pages à fort enjeu SEO.<span class="tag mono">à compléter</span></dd></div>
+          <div><dt class="mono">Décisions</dt><dd>Migration progressive vers l'App Router de Next.js, optimisation technique du SEO, tests unitaires avec objectifs de couverture.</dd></div>
+          <div><dt class="mono">Résultats</dt><dd>Note Trustpilot passée de 2,1 à 4,8 après une fonctionnalité proposée et développée.<span class="tag mono">à sourcer</span></dd></div>
+        </dl>
+      </div>
+      <figure>
+        <img src="../assets/projects/safti.jpg" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces" width="1440" height="900" loading="lazy">
+        <figcaption class="mono"><span>Fig. 01 - safti.fr</span><span>Octobre 2026</span></figcaption>
+      </figure>
+    </article>
+  </section>
+
+  <section aria-labelledby="t-comp">
+    <div class="sec-head"><p class="mono">02 / Savoir-faire</p><h2 id="t-comp">Légende : ce que je maîtrise, et la preuve</h2></div>
+    <dl class="layers">
+      <div><dt><i></i>Performance web</dt><dd>Temps serveur, rendu, poids des pages, suivi en production.<br><a href="#">Comment réduire le TTFB →</a></dd></div>
+      <div><dt><i></i>SEO technique</dt><dd>Rendu serveur, données structurées, migrations sans perte.<br><a href="#">Le rôle des développeurs dans le SEO →</a></dd></div>
+      <div><dt><i></i>React et TypeScript</dt><dd>Outils métier testés, typés, documentés dans Storybook.<br><a href="#">Arrêter les barrel files →</a></dd></div>
+      <div><dt><i></i>Next.js et Astro</dt><dd>App Router, cache, îlots, contenus headless.<br><a href="#">Cache handler pour Next.js 16 →</a></dd></div>
+      <div><dt><i></i>Cartographie</dt><dd>Dessin de zones et de polygones de recherche avec Leaflet.<br><a href="#">Projet Omega →</a></dd></div>
+      <div><dt><i></i>WebGL et animation</dt><dd>Scènes et shaders au service du propos, comme cette carte.<br><a href="#">Projet Draw me a Sheep →</a></dd></div>
+    </dl>
+  </section>
+
+  <section id="a-propos" aria-labelledby="t-apropos">
+    <div class="sec-head"><p class="mono">03 / À propos</p><h2 id="t-apropos">Quatorze ans de frontend</h2></div>
+    <div class="about">
+      <div>
+        <img src="../assets/johan.jpg" alt="Portrait de Johan Petrikovsky" width="349" height="349" loading="lazy">
+        <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript. Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur. J'ai écrit 69 articles techniques.</p>
+      </div>
+      <div>
+        <blockquote>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."<footer class="mono">Perrine Sini-Berthonneau, studio Les Cerises</footer></blockquote>
+        <blockquote>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."<footer class="mono">Florent Pasquet, fondateur d'agence web</footer></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section id="articles" aria-labelledby="t-articles">
+    <div class="sec-head"><p class="mono">04 / Journal</p><h2 id="t-articles">Articles récents</h2></div>
+    <ol class="articles">
+      <li><a href="#">Comment créer un cache handler personnalisé pour Next.js 16</a><span class="mono">Next.js</span></li>
+      <li><a href="#">Comment réduire le TTFB</a><span class="mono">Performance</span></li>
+      <li><a href="#">Les composants Tooltip ne devraient pas exister</a><span class="mono">Accessibilité</span></li>
+      <li><a href="#">Comment faire une application React plus rapide ?</a><span class="mono">React</span></li>
+    </ol>
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="t-contact">
+    <p class="mono" style="color:var(--amber)">05 / Contact</p>
+    <h2 id="t-contact" style="font-size:var(--step-1);text-transform:none;font-weight:400;color:var(--muted)">Un projet, une refonte, un audit de performance ?</h2>
+    <a class="mail" href="mailto:johan@developpeur-web.tech">johan@developpeur-web.tech</a>
+    <p class="mono" style="margin-top:2rem;color:var(--muted)">LinkedIn <span class="tag">à fournir</span> · GitHub <span class="tag">à fournir</span></p>
+  </section>
+
+  <footer class="site mono"><span>Carte rendue par un shader WebGL2 de 3 Ko compressés, sans bibliothèque. Repli statique sans WebGL.</span><span><a href="#">Plan du site</a> · <a href="#">Mentions légales</a></span></footer>
+</main>
+
+<script type="module">
+  // Le shader n'est chargé qu'après le premier rendu et seulement si l'appareil s'y prête.
+  const canvas = document.querySelector('.map canvas');
+  const saveData = navigator.connection && navigator.connection.saveData;
+  const boot = async () => {
+    if (saveData) return;
+    const { initRelief } = await import('../shared/relief.js');
+    const peaks = [...document.querySelectorAll('.marker')].map((m) => ({ x: parseFloat(m.style.left) / 100, y: parseFloat(m.style.top) / 100, h: 0.32 }));
+    const mobile = matchMedia('(max-width: 760px)').matches;
+    // sur mobile les marqueurs sont masqués : pas de reliefs à dessiner
+    const relief = initRelief(canvas, { peaks: mobile ? [] : peaks, textMask: matchMedia('(max-width: 760px)').matches ? [1.2, 0.55] : [0.62, 0.6], maxDpr: matchMedia('(max-width: 760px)').matches ? 1 : 1.5 });
+    window.__relief = relief;
+  };
+  ('requestIdleCallback' in window ? requestIdleCallback : setTimeout)(boot, { timeout: 1500 });
+</script>
+</body>
+</html>

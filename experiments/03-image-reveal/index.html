@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Révélation tramée - prototype 03</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  .intro { padding-block: clamp(2rem, 6vw, 5rem) 40vh; display: grid; gap: 1rem; }
+  .intro > .tape { justify-self: start; }
+  .modes { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .modes a[aria-current] { background: var(--ink); color: var(--plate); }
+  .gallery { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(1rem, 3vw, 2.5rem); padding-bottom: 30vh; }
+  .gallery figure { margin: 0; position: relative; }
+  .gallery .wide { grid-column: 1 / -1; }
+  .gallery .half { grid-column: span 6; }
+  .gallery .tall { grid-column: 2 / span 5; }
+  .gallery .side { grid-column: 8 / span 5; align-self: end; }
+  .gallery .frame { position: relative; background: var(--plate); border: 1px solid var(--hair); }
+  .gallery img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .gallery .tall img { aspect-ratio: 2 / 3; }
+  /* Le canvas recouvre exactement l'image et grossit ses pixels sans lissage */
+  .reveal-canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+  .gallery figcaption { display: flex; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
+  @media (max-width: 40rem) { .gallery .half, .gallery .tall, .gallery .side { grid-column: 1 / -1; } }
+</style>
+<script type="module" src="run.js"></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+<header class="top"><a href="../index.html">Expériences</a><span class="mono muted">Prototype 03 - révélation tramée</span></header>
+<main id="contenu">
+<section class="intro">
+  <span class="tape">Prototype 03</span>
+  <h1>Relevés</h1>
+  <p class="muted">Descendez : chaque image apparaît en points tramés (matrice de Bayer 4x4) puis se résout en image réelle. Les images déjà visibles au chargement ne sont pas animées.</p>
+  <nav class="modes" aria-label="Mode de rendu"><a class="btn" href="?mode=2d">Canvas 2D</a><a class="btn" href="?mode=webgl">WebGL2</a></nav>
+  <fieldset class="controls plate">
+    <legend>Réglages (appliqués aux prochaines révélations)</legend>
+    <label for="pixel">Taille du point <input id="pixel" type="range" min="1" max="8" step="1" value="3"><output for="pixel">3px</output></label>
+    <label for="duration">Durée totale <input id="duration" type="range" min="300" max="3000" step="100" value="1300"><output for="duration">1300ms</output></label>
+    <p><button class="btn" type="button" id="replay">Rejouer l'image la plus visible</button></p>
+  </fieldset>
+</section>
+<div class="gallery">
+  <figure class="wide" data-reveal><div class="frame"><picture>
+    <source type="image/avif" srcset="../assets/planche-topo-800.avif 800w, ../assets/planche-topo-1440.avif 1440w" sizes="(min-width: 90rem) 86rem, 100vw">
+    <img src="../assets/planche-topo-1440.webp" width="1440" height="960" alt="Carte topographique imprimée posée sur un établi, avec une règle et un porte-mine" loading="lazy" decoding="async">
+  </picture></div><figcaption><span>Relevé</span><span class="mono muted">image générée</span></figcaption></figure>
+  <figure class="half" data-reveal><div class="frame"><picture>
+    <source type="image/avif" srcset="../assets/planche-mesure-800.avif 800w, ../assets/planche-mesure-1440.avif 1440w" sizes="(min-width: 40rem) 45vw, 100vw">
+    <img src="../assets/planche-mesure-800.webp" width="800" height="533" alt="Pied à coulisse numérique mesurant un bloc d'aluminium" loading="lazy" decoding="async">
+  </picture></div><figcaption><span>Mesure</span><span class="mono muted">image générée</span></figcaption></figure>
+  <figure class="half" data-reveal><div class="frame"><picture>
+    <source type="image/avif" srcset="../assets/planche-epreuve-800.avif 800w, ../assets/planche-epreuve-1440.avif 1440w" sizes="(min-width: 40rem) 45vw, 100vw">
+    <img src="../assets/planche-epreuve-800.webp" width="800" height="533" alt="Épreuves de mise en page avec repères de coupe et grille de ligne de base" loading="lazy" decoding="async">
+  </picture></div><figcaption><span>Épreuve</span><span class="mono muted">image générée</span></figcaption></figure>
+  <figure class="tall" data-reveal><div class="frame"><picture>
+    <source type="image/avif" srcset="../assets/atelier-portrait-390.avif 390w, ../assets/atelier-portrait-800.avif 800w" sizes="(min-width: 40rem) 38vw, 100vw">
+    <img src="../assets/atelier-portrait-800.webp" width="800" height="1200" alt="Bureau vu d'en haut : ordinateur fermé, carte à courbes de niveau, carnet avec un polygone dessiné" loading="lazy" decoding="async">
+  </picture></div><figcaption><span>Atelier</span><span class="mono muted">image générée</span></figcaption></figure>
+  <figure class="side" data-reveal><div class="frame"><picture>
+    <source type="image/avif" srcset="../assets/planche-nuancier-800.avif 800w, ../assets/planche-nuancier-1440.avif 1440w" sizes="(min-width: 40rem) 38vw, 100vw">
+    <img src="../assets/planche-nuancier-800.webp" width="800" height="533" alt="Nuancier de cartes grises et noires, une carte jaune, une loupe posée dessus" loading="lazy" decoding="async">
+  </picture></div><figcaption><span>Nuancier</span><span class="mono muted">image générée</span></figcaption></figure>
+</div>
+</main>
+</div>
+</body>
+</html>

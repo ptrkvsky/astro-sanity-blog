@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spécimen en worker - prototype 04</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<style>
+  .intro { padding-block: clamp(2rem, 6vw, 4rem) 2rem; display: grid; gap: 1rem; }
+  .intro > .tape { justify-self: start; }
+  .threads { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .threads a[aria-current] { background: var(--ink); color: var(--plate); }
+  .specimen { display: grid; gap: 1rem; margin-bottom: 4rem; }
+  .stage { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--hair); overflow: hidden; touch-action: pan-y; }
+  .stage img, .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .row { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+  [role=status] { min-height: 1.5em; margin: 0; }
+  @media (max-width: 40rem) { .stage { aspect-ratio: 4 / 5; } }
+</style>
+<script type="module" src="specimen.js"></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+<header class="top"><a href="../index.html">Expériences</a><span class="mono muted">Prototype 04 - spécimen en worker</span></header>
+<main id="contenu">
+<section class="intro">
+  <span class="tape">Prototype 04</span>
+  <h1>Spécimen : relief</h1>
+  <p class="muted">Le champ de lignes de niveau n'est chargé qu'au clic. Il est rendu dans un Web Worker quand le navigateur le permet : le fil principal reste libre pour répondre au visiteur. Le "coût de scène" simule le JavaScript d'une scène plus lourde que ce shader.</p>
+  <nav class="threads" aria-label="Fil de rendu"><a class="btn" href="?thread=worker">Worker (OffscreenCanvas)</a><a class="btn" href="?thread=main">Fil principal</a></nav>
+</section>
+<section class="specimen plate" aria-labelledby="sp-title">
+  <h2 id="sp-title">Planche 04 - Relief</h2>
+  <div class="stage">
+    <picture><source type="image/avif" srcset="relief-poster.avif">
+    <img src="relief-poster.webp" width="1280" height="720" alt="Champ de lignes de niveau gris sur fond clair, image fixe du spécimen" loading="lazy" decoding="async"></picture>
+  </div>
+  <div class="row">
+    <button class="btn primary" id="run" type="button" data-on="false">Lancer le spécimen</button>
+    <button class="btn" id="probe" type="button">Tester la réactivité <output>0</output></button>
+  </div>
+  <fieldset class="controls">
+    <legend>Réglages</legend>
+    <label for="scene">Coût de scène simulé, par image <input id="scene" type="range" min="0" max="14" step="1" value="0"><output for="scene">0ms</output></label>
+  </fieldset>
+  <p role="status" aria-live="polite" class="muted"></p>
+</section>
+</main>
+</div>
+</body>
+</html>

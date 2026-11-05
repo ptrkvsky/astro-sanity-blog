@@ -1,10 +1,11 @@
 ---
 import '@assets/style/global.css';
+import '@assets/style/epreuve.css';
 import type { Graph, WithContext } from 'schema-dts';
 import type { BlogPosting } from 'schema-dts';
-import Footer from '@components/Footer';
+import SiteHeader from '@components/SiteHeader.astro';
+import SiteFooter from '@components/SiteFooter.astro';
 import Favicons from '@components/Favicons.astro';
-import { Header } from '@features/layout/Header';
 import { seoConfig } from '../config';
 
 interface Props {
@@ -12,12 +13,10 @@ interface Props {
   description: string;
   canonical: string;
   schema?: WithContext<BlogPosting> | Graph;
-  hasGradient?: boolean;
   image?: string;
 }
 
-const { title, schema, description, hasGradient, image, canonical } =
-  Astro.props as Props;
+const { title, schema, description, image, canonical } = Astro.props as Props;
 ---
 
 <html lang="fr">
@@ -36,9 +35,16 @@ const { title, schema, description, hasGradient, image, canonical } =
     {image && <meta property="og:image" content={image} />}
     {
       schema && (
-        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+        <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
       )
     }
+    <link
+      rel="preload"
+      href="/assets/fonts/instrument-serif-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <Favicons />
     {
       canonical && (
@@ -46,36 +52,18 @@ const { title, schema, description, hasGradient, image, canonical } =
       )
     }
     <!-- <link rel="manifest" href="/manifest.webmanifest" /> -->
-    <meta name="theme-color" content="#4f39fa" />
+    <meta name="theme-color" content="#121210" />
   </head>
-  <slot name="before-main" />
-  <main>
-    <Header />
-    <slot name="main" />
-  </main>
-  <Footer client:visible />
+  <body id="haut">
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <SiteHeader />
+    <main id="contenu">
+      <slot name="main" />
+    </main>
+    <SiteFooter />
+  </body>
 </html>
 <style is:global>
-  .transition-fade {
-    transition: 0.25s;
-    opacity: 1;
-  }
-
-  html.is-animating .transition-fade {
-    opacity: 0;
-  }
-
-  body {
-    /* overflow-x: hidden; */
-  }
-
-  .grid-layout {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-  }
-
   .conteneur {
     @apply mx-2 md:mx-auto;
   }

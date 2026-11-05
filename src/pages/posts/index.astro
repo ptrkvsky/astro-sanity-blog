@@ -1,5 +1,4 @@
 ---
-import Header from '@features/layout/Header/Header.astro';
 import ListingSection from '@features/blog/components/ListingSection.astro';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
@@ -31,10 +30,8 @@ const categoriesPosts = getPostsByCategory(postsNoDefinitions);
   title={title}
   description={description}
   schema={schema}
-  hasGradient={true}
   canonical="/posts"
 >
-  <Header slot="before-main" />
   <div slot="main" class="wrapper">
     <h1 class="font-semibold text-purple-900 mb-6 text-4xl">Articles</h1>
     {
@@ -47,6 +44,6 @@ const categoriesPosts = getPostsByCategory(postsNoDefinitions);
 
 <style lang="scss">
   .wrapper {
-    @apply mx-auto lg:px-0 max-w-5xl py-32 px-4 relative z-10;
+    @apply mx-auto lg:px-0 max-w-5xl py-12 px-4 relative z-10;
   }
 </style>

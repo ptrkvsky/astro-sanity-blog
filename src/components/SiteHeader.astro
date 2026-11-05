@@ -1,0 +1,62 @@
+---
+// Bandeau Épreuve : marque, navigation (menu mobile en <details>, sans JavaScript) et ligne d'édition.
+// Les ancres pointent vers l'accueil (/#...) pour fonctionner depuis toutes les pages.
+const links = [
+  { href: '/#methode', n: '01', label: 'Méthode' },
+  { href: '/#essais', n: '02', label: 'Essais' },
+  { href: '/#controle', n: '03', label: 'Contrôle' },
+  { href: '/#a-propos', n: '04', label: 'À propos' },
+  { href: '/posts', n: '··', label: 'Articles' },
+  { href: '/#contact', n: '05', label: 'Contact' },
+];
+
+const edition = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'Europe/Paris',
+}).format(new Date());
+---
+
+<header class="masthead page">
+  <div class="bar">
+    <a class="brand" href="/"
+      ><b>Johan Petrikovsky</b><span>Développeur frontend</span></a
+    >
+    <nav class="nav" aria-label="Principale">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href}>
+                <span class="n">{l.n}</span>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Principale (mobile)">
+        <ul>
+          {
+            links.map((l) => (
+              <li>
+                <a href={l.href}>
+                  <span class="n">{l.n}</span>
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </details>
+  </div>
+  <div class="edition">
+    <span>Épreuve n° 1<span class="hide-s"> · Toulouse</span> · {edition}</span>
+    <span class="hide-s">developpeur-web.tech</span>
+  </div>
+</header>

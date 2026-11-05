@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototypes - refonte developpeur-web.tech</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<style>
+/* Page de comparaison volontairement neutre : elle ne doit favoriser aucune direction. */
+:root { --bg: #f4f4f4; --ink: #1a1a1a; --muted: #5f5f5f; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+main { max-width: 84rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+h1 { font-size: 1.6rem; margin: 0 0 .4rem; }
+p { max-width: 70ch; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+article { background: #fff; border: 1px solid #ddd; padding: 1rem; }
+h2 { font-size: 1.15rem; margin: 0; }
+.frame { width: 100%; aspect-ratio: 390 / 844; overflow: hidden; border: 1px solid #ccc; margin: 1rem 0; position: relative; }
+.frame iframe { width: 390px; height: 844px; border: 0; transform-origin: 0 0; position: absolute; inset: 0; }
+a { color: inherit; }
+ul { padding-left: 1.1rem; margin: .5rem 0 0; color: var(--muted); font-size: .95rem; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Mission 2.3 : direction "Épreuve", deux expériences signature</h1>
+  <p>Même contenu réel, même typographie (Instrument Serif, PolySans, IBM Plex Mono), deux motifs centraux différents. Ouvrez chaque prototype en plein écran et faites défiler : l'aperçu ci-dessous ne montre que le premier écran à 390 px. Comparaison et recommandation : <a href="../experience-signature.md">experience-signature.md</a>.</p>
+  <div class="grid">
+    <article>
+      <h2><a href="e-calage/">E - Calage (recommandé)</a></h2>
+      <div class="frame"><iframe src="e-calage/" title="Prototype E en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>Un repère de calage, deux plaques : l'épreuve se cale jusqu'au bon à tirer</li><li>WebGL2 brut (trame, compte-fils), GSAP, MorphSVG</li><li><a href="e-calage/?simulate=nogl">sans WebGL</a> · <a href="e-calage/?tier=static">statique</a></li></ul>
+    </article>
+    <article>
+      <h2><a href="f-eclatee/">F - Vue éclatée</a></h2>
+      <div class="frame"><iframe src="f-eclatee/" title="Prototype F en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>Le modèle de boîte du titre, coté en direct, se démonte en calques</li><li>Three.js (3D au-delà de 1 024 px), GSAP</li><li><a href="f-eclatee/?simulate=nogl">sans WebGL</a> · <a href="f-eclatee/?tier=static">statique</a></li></ul>
+    </article>
+  </div>
+
+  <h1 style="margin-top:3rem">Missions 2 et 2.2 : trois directions, un même contenu</h1>
+  <p>Chaque prototype présente les mêmes éléments réels : hero, navigation, six projets dont une étude de cas, savoir-faire, à propos et témoignages, articles, contact. Les mentions "à compléter", "à sourcer" et "à fournir" signalent des informations à valider avant toute publication. Ouvrez chaque prototype en plein écran, puis réduisez la fenêtre pour voir le comportement mobile ; l'aperçu ci-dessous montre la largeur 390 px.</p>
+  <div class="grid">
+    <article>
+      <h2><a href="a-editorial/">A - Marges</a></h2>
+      <div class="frame"><iframe src="a-editorial/" title="Prototype A en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>Éditorial, typographique, grille apparente</li><li>Aucune image décorative, aucun script</li><li>Newsreader + IBM Plex Mono</li></ul>
+    </article>
+    <article>
+      <h2><a href="b-relief/">B - Relief</a></h2>
+      <div class="frame"><iframe src="b-relief/" title="Prototype B en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>Carte topographique en WebGL, 3 Ko compressés</li><li>Chaque relief est un projet, chaque marqueur un lien HTML</li><li>Archivo + Martian Mono</li></ul>
+    </article>
+    <article>
+      <h2><a href="c-atelier/">C - Banc d'essai</a></h2>
+      <div class="frame"><iframe src="c-atelier/" title="Prototype C en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>Mesures en direct et spécimens interactifs</li><li>Effets lourds chargés seulement à la demande</li><li>PolySans (police actuelle) + mono système</li></ul>
+    </article>
+    <article>
+      <h2><a href="d-revue/">D - Revue d'essais (mission 2.2)</a></h2>
+      <div class="frame"><iframe src="d-revue/" title="Prototype D en largeur mobile" loading="lazy"></iframe></div>
+      <ul><li>C avec l'identité éditoriale de A, haute fidélité</li><li>Alternative "Épreuve" : <a href="d-revue/?direction=epreuve">?direction=epreuve</a></li><li><a href="d-revue/fontes.html">Comparaison de fontes</a> · <a href="d-revue/etude-de-cas.html">étude de cas</a></li></ul>
+    </article>
+  </div>
+  <p style="margin-top:2rem">Documents : <a href="../experience-signature.md">experience-signature.md</a> · <a href="../research.md">research.md</a> · <a href="../directions.md">directions.md</a> · <a href="../architecture.md">architecture.md</a> · <a href="../performance-budget.md">performance-budget.md</a></p>
+</main>
+<script>
+  // met les iframes à l'échelle de leur cadre
+  const fit = () => document.querySelectorAll('.frame').forEach((f) => { f.querySelector('iframe').style.transform = `scale(${f.clientWidth / 390})`; });
+  addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>

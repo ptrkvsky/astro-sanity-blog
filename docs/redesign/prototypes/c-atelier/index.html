@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype C - Banc d'essai | Johan Petrikovsky</title>
+<meta name="robots" content="noindex">
+<link rel="preload" href="../../../../public/assets/fonts/PolySans-Neutral.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Direction C - Banc d'essai : chaque affirmation est accompagnée d'une mesure ou d'une démonstration.
+   Une seule police (PolySans, déjà la police du site) + la mono du système : 1 fichier de police au total. */
+@font-face { font-family: "PolySans"; src: url("../../../../public/assets/fonts/PolySans-Neutral.woff2") format("woff2"); font-display: swap; }
+:root {
+  --bench: #E7E7E1;
+  --plate: #FAFAF7;
+  --ink: #111111;
+  --muted: #55554F;
+  --tape: #FFD43B;
+  --ok: #0A6334;
+  --rule: #111111;
+  --hair: #C9C9C1;
+  --sans: "PolySans", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gutter: clamp(1rem, .5rem + 2vw, 2.25rem);
+  --step--1: clamp(.75rem, .73rem + .1vw, .82rem);
+  --step-0: clamp(1rem, .96rem + .2vw, 1.12rem);
+  --step-1: clamp(1.25rem, 1.1rem + .6vw, 1.7rem);
+  --step-2: clamp(1.8rem, 1.3rem + 2vw, 3.2rem);
+  --step-4: clamp(2.6rem, 1.3rem + 5.4vw, 7rem);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--bench); color: var(--ink); }
+body { margin: 0; font: 400 var(--step-0)/1.5 var(--sans); }
+a { color: inherit; text-underline-offset: .2em; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 6px var(--tape); }
+.mono { font-family: var(--mono); font-size: var(--step--1); }
+.tape { display: inline-block; background: var(--tape); color: var(--ink); font: 500 var(--step--1)/1.2 var(--mono); padding: .25rem .5rem; text-transform: uppercase; letter-spacing: .04em; }
+.tape.todo { background: var(--ink); color: var(--tape); }
+.skip { position: absolute; left: -999px; z-index: 20; }
+.skip:focus { left: 1rem; top: 1rem; }
+.page { max-width: 90rem; margin-inline: auto; padding-inline: var(--gutter); }
+
+/* Planche : cadre rectangulaire avec repères de coupe aux angles, sans arrondi */
+.plate { position: relative; background: var(--plate); border: 1px solid var(--hair); padding: clamp(1rem, 2.4vw, 2rem); }
+.plate::before, .plate::after { content: ""; position: absolute; width: 14px; height: 14px; border: 0 solid var(--ink); }
+.plate::before { top: -6px; left: -6px; border-top-width: 1px; border-left-width: 1px; }
+.plate::after { bottom: -6px; right: -6px; border-bottom-width: 1px; border-right-width: 1px; }
+.plate-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; margin-bottom: 1rem; }
+
+/* En-tête */
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem 2rem; padding-block: 1rem; border-bottom: 1px solid var(--rule); }
+.brand { text-decoration: none; font-size: var(--step-0); }
+.brand span { color: var(--muted); }
+.top nav ul { display: flex; gap: clamp(.8rem, 2vw, 1.8rem); list-style: none; margin: 0; padding: 0; }
+.top nav a { text-decoration: none; }
+.top nav a:hover { text-decoration: underline; }
+.live { display: inline-flex; gap: .5rem; align-items: center; }
+.live::before { content: ""; width: .5rem; height: .5rem; background: var(--ok); }
+
+/* Hero : la déclaration à gauche, la mesure à droite */
+.hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); padding-block: clamp(2rem, 6vw, 5rem); align-items: end; }
+.hero h1 { font-size: var(--step-4); line-height: .95; letter-spacing: -.035em; font-weight: 400; margin: 1rem 0 0; }
+.hero h1 .soft { color: var(--muted); }
+.hero p.lede { font-size: var(--step-1); line-height: 1.3; max-width: 30ch; margin: 1.6rem 0 0; }
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+.btn { display: inline-block; padding: .85rem 1.2rem; text-decoration: none; border: 1px solid var(--ink); }
+.btn.primary { background: var(--ink); color: var(--plate); }
+.btn.primary:hover { background: var(--tape); color: var(--ink); }
+.btn:hover { background: var(--plate); }
+.readout { margin: 0; }
+.readout div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; padding: .55rem 0; border-bottom: 1px dashed var(--hair); }
+.readout dt { color: var(--muted); }
+.readout dd { margin: 0; font: 500 var(--step-0) var(--mono); font-variant-numeric: tabular-nums; }
+.readout + p { color: var(--muted); margin: 1rem 0 0; }
+
+section { padding-block: clamp(3rem, 8vw, 6rem); border-top: 1px solid var(--rule); }
+.sec-title { display: flex; flex-wrap: wrap; gap: 1rem; align-items: baseline; margin-bottom: 2rem; }
+h2 { font-size: var(--step-2); line-height: 1; letter-spacing: -.025em; font-weight: 400; margin: 0; }
+h3 { font-size: var(--step-1); font-weight: 400; letter-spacing: -.015em; margin: 0; }
+
+/* Projets */
+.lead-case { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); }
+.lead-case img { width: 100%; display: block; border: 1px solid var(--hair); }
+.spec { margin: 1rem 0 0; display: grid; gap: .9rem; }
+.spec dt { font: 500 var(--step--1) var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.spec dd { margin: .25rem 0 0; }
+.grid-cases { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--gutter); margin-top: var(--gutter); }
+.grid-cases .plate { padding: 1rem; }
+.grid-cases img { width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top; display: block; border: 1px solid var(--hair); margin-bottom: .8rem; }
+.grid-cases a { text-decoration: none; }
+.grid-cases a:hover h3 { text-decoration: underline; }
+.thumb-omega { aspect-ratio: 16/10; border: 1px solid var(--hair); margin-bottom: .8rem; background: repeating-linear-gradient(0deg, transparent 0 19px, var(--hair) 19px 20px), repeating-linear-gradient(90deg, transparent 0 19px, var(--hair) 19px 20px); display: grid; place-items: center; }
+
+/* Spécimen : dessin de zone (reconstitution simplifiée de l'interaction d'Omega) */
+.specimen { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); margin-top: var(--gutter); }
+.drawzone { width: 100%; aspect-ratio: 16/10; display: block; background: var(--plate); border: 1px solid var(--hair); cursor: crosshair; touch-action: none; }
+.drawzone:focus-visible { outline-offset: -3px; }
+.specimen .readout dd { font-size: var(--step-1); }
+.specimen ol { padding-left: 1.2rem; color: var(--muted); }
+
+/* Savoir-faire : protocole = domaine, pratique, preuve */
+.protocol { width: 100%; border-collapse: collapse; }
+.protocol th { text-align: left; font: 500 var(--step--1) var(--mono); text-transform: uppercase; letter-spacing: .05em; padding: .6rem .8rem .6rem 0; border-bottom: 1px solid var(--rule); }
+.protocol td { padding: 1rem .8rem 1rem 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+.protocol td:first-child { font-size: var(--step-1); letter-spacing: -.01em; width: 26%; }
+
+.shader-box { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); margin-top: var(--gutter); }
+.shader-box .stage { aspect-ratio: 16/9; background: var(--ink); display: grid; place-items: center; position: relative; }
+.shader-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.shader-box button { font: inherit; background: var(--tape); border: 1px solid var(--ink); padding: .8rem 1.1rem; cursor: pointer; }
+
+.about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--gutter); }
+.about img { width: 8rem; aspect-ratio: 1; object-fit: cover; filter: grayscale(1); display: block; margin-bottom: 1rem; border: 1px solid var(--hair); }
+blockquote { margin: 0 0 1.4rem; font-size: var(--step-1); line-height: 1.3; letter-spacing: -.01em; }
+blockquote footer { font: var(--step--1) var(--mono); color: var(--muted); margin-top: .5rem; }
+.articles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--gutter); }
+.articles li { border-top: 1px solid var(--hair); padding: 1rem 0; }
+.articles a { font-size: var(--step-1); text-decoration: none; letter-spacing: -.01em; }
+.articles a:hover { text-decoration: underline; }
+.contact { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); align-items: end; }
+.contact .mail { font-size: clamp(1.6rem, .4rem + 4.4vw, 5rem); letter-spacing: -.035em; line-height: 1; word-break: break-word; }
+footer.site { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-block: 1.2rem 2rem; border-top: 1px solid var(--rule); color: var(--muted); }
+
+@media (max-width: 900px) {
+  .hero, .lead-case, .specimen, .shader-box, .about, .contact { grid-template-columns: minmax(0, 1fr); }
+  .grid-cases { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .articles { grid-template-columns: minmax(0, 1fr); }
+  .protocol thead { display: none; }
+  .protocol, .protocol tbody, .protocol tr, .protocol td { display: block; width: auto !important; }
+  .protocol tr { border-bottom: 1px solid var(--hair); padding: .8rem 0; }
+  .protocol td { border: 0; padding: .15rem 0; }
+}
+@media (max-width: 520px) { .grid-cases { grid-template-columns: minmax(0, 1fr); } .top nav ul { flex-wrap: wrap; } }
+</style>
+</head>
+<body>
+<a class="skip tape" href="#contenu">Aller au contenu</a>
+<div class="page">
+  <header class="top">
+    <a class="brand" href="#">Johan Petrikovsky <span>/ banc d'essai</span></a>
+    <nav aria-label="Navigation principale"><ul>
+      <li><a href="#projets">Projets</a></li><li><a href="#articles">Articles</a></li><li><a href="#a-propos">À propos</a></li><li><a href="#contact">Contact</a></li>
+    </ul></nav>
+    <span class="live mono" aria-live="polite" id="live-chip">Cette page : mesure en cours</span>
+  </header>
+
+  <main id="contenu">
+    <div class="hero">
+      <div>
+        <span class="tape">Pl. 00 · Présentation</span>
+        <h1>Développeur frontend. <span class="soft">Je mesure avant d'affirmer.</span></h1>
+        <p class="lede">React, TypeScript, Next.js et Astro depuis 2012. Des interfaces rapides, accessibles et bien référencées, prouvées par des mesures et des démonstrations plutôt que par des adjectifs.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:johan@developpeur-web.tech">Écrire à Johan</a>
+          <a class="btn" href="#projets">Voir les projets</a>
+        </div>
+      </div>
+      <div class="plate" aria-labelledby="t-mesure">
+        <div class="plate-head"><h2 id="t-mesure" class="mono" style="font-size:var(--step--1);text-transform:uppercase;letter-spacing:.05em">Fiche de mesure · cette page</h2><span class="mono">en direct</span></div>
+        <dl class="readout" id="readout">
+          <div><dt>Poids transféré</dt><dd data-k="transferKB" data-u=" Ko">n/d</dd></div>
+          <div><dt>Requêtes</dt><dd data-k="requests">n/d</dd></div>
+          <div><dt>JavaScript chargé</dt><dd data-k="jsKB" data-u=" Ko">n/d</dd></div>
+          <div><dt>Plus grand affichage (LCP)</dt><dd data-k="lcp" data-u=" ms">n/d</dd></div>
+          <div><dt>Décalages de mise en page (CLS)</dt><dd data-k="cls">n/d</dd></div>
+          <div><dt>Interaction la plus lente</dt><dd data-k="inp" data-u=" ms">n/d</dd></div>
+          <div><dt>Éléments dans le DOM</dt><dd data-k="domNodes">n/d</dd></div>
+        </dl>
+        <p class="mono">Valeurs lues à l'instant dans votre navigateur (API Performance), pas écrites dans le code. Rechargez la page : elles changent. "n/d" si votre navigateur ne fournit pas la mesure.</p>
+      </div>
+    </div>
+
+    <section id="projets" aria-labelledby="t-projets">
+      <div class="sec-title"><span class="tape">Pl. 01</span><h2 id="t-projets">Projets, présentés comme des essais</h2></div>
+      <article class="lead-case plate" aria-labelledby="t-safti">
+        <div>
+          <img src="../assets/projects/safti.jpg" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces" width="1440" height="900" loading="lazy">
+          <p class="mono" style="margin:.6rem 0 0;color:var(--muted)">safti.fr, capture d'octobre 2026</p>
+        </div>
+        <div>
+          <div class="plate-head"><span class="mono">Essai 01 · 2022-2024</span><span class="mono">Next.js · TypeScript · Jest</span></div>
+          <h3 id="t-safti">SAFTI.fr : refondre un site d'annonces sans perdre son trafic</h3>
+          <dl class="spec">
+            <div><dt>Problème</dt><dd>Un site dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</dd></div>
+            <div><dt>Contraintes</dt><dd>Équipe agile, mise en production continue, pages à fort enjeu SEO. <span class="tape todo">à compléter</span></dd></div>
+            <div><dt>Décisions</dt><dd>Migration progressive vers l'App Router, optimisation technique du SEO, tests unitaires avec objectifs de couverture.</dd></div>
+            <div><dt>Résultat</dt><dd>Note Trustpilot de 2,1 à 4,8 après une fonctionnalité proposée et développée. <span class="tape todo">à sourcer</span></dd></div>
+          </dl>
+          <p style="margin:1.2rem 0 0"><a href="#">Lire l'étude de cas →</a></p>
+        </div>
+      </article>
+
+      <div class="specimen">
+        <div class="plate">
+          <div class="plate-head"><span class="mono">Spécimen 02 · Omega, dessin de zone</span><span class="mono">SVG, 1,3 Ko compressés, sans bibliothèque</span></div>
+          <svg class="drawzone" id="drawzone" viewBox="0 0 640 400" role="application" tabindex="0" aria-label="Zone de dessin. Cliquez pour poser des points, ou utilisez les flèches puis Espace. Entrée ferme la zone, Échap efface." aria-describedby="draw-help"></svg>
+        </div>
+        <div class="plate">
+          <h3>Dessiner une zone de recherche</h3>
+          <p>Reconstitution simplifiée de l'interaction que j'ai développée avec Leaflet pour Omega, l'outil des conseillers SAFTI. Ce n'est pas le code d'Omega : c'est la même idée, réduite à l'essentiel et utilisable au clavier.</p>
+          <dl class="readout" aria-live="polite">
+            <div><dt>Sommets</dt><dd id="dz-count">0</dd></div>
+            <div><dt>Surface</dt><dd id="dz-area">-</dd></div>
+            <div><dt>État</dt><dd id="dz-state">ouverte</dd></div>
+          </dl>
+          <ol id="draw-help" class="mono"><li>Clic ou Espace : poser un sommet</li><li>Entrée : fermer la zone</li><li>Échap : recommencer</li></ol>
+        </div>
+      </div>
+
+      <div class="grid-cases">
+        <a href="#" class="plate"><div class="thumb-omega mono">capture interne non publiable</div><span class="mono">Essai 02 · 2024</span><h3>Omega</h3><p class="mono">React · Storybook · Leaflet</p></a>
+        <a href="#" class="plate"><img src="../assets/projects/drawmeasheep.jpg" alt="" loading="lazy"><span class="mono">Essai 03 · 2024</span><h3>Draw me a Sheep</h3><p class="mono">Astro · WebGL · GSAP</p></a>
+        <a href="#" class="plate"><img src="../assets/projects/bienestimer.jpg" alt="" loading="lazy"><span class="mono">Essai 04 · 2023-2024</span><h3>Bien Estimer</h3><p class="mono">Next.js · SEO · GA4</p></a>
+        <a href="#" class="plate"><img src="../assets/projects/als.jpg" alt="" loading="lazy"><span class="mono">Essai 05 · 2024</span><h3>ALS Action Canada</h3><p class="mono">Gatsby · WordPress</p></a>
+        <a href="#" class="plate"><img src="../assets/projects/join.jpg" alt="" loading="lazy"><span class="mono">Essai 06 · 2023</span><h3>Join SAFTI</h3><p class="mono">Sulu · PHP · Twig</p></a>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-comp">
+      <div class="sec-title"><span class="tape">Pl. 02</span><h2 id="t-comp">Protocole : ce que je fais, et la preuve</h2></div>
+      <table class="protocol">
+        <thead><tr><th>Domaine</th><th>Pratique</th><th>Preuve</th></tr></thead>
+        <tbody>
+          <tr><td>Performance web</td><td>Temps serveur, rendu, poids des pages, suivi en production.</td><td><a href="#">Comment réduire le TTFB</a> · la fiche de mesure ci-dessus</td></tr>
+          <tr><td>SEO technique</td><td>Rendu serveur, données structurées, migrations sans perte.</td><td><a href="#">Le rôle des développeurs dans le SEO</a></td></tr>
+          <tr><td>React et TypeScript</td><td>Outils métier testés, typés, documentés dans Storybook.</td><td><a href="#">Arrêter d'utiliser des barrel files</a></td></tr>
+          <tr><td>Next.js et Astro</td><td>App Router, cache, îlots, contenus headless.</td><td><a href="#">Cache handler personnalisé pour Next.js 16</a></td></tr>
+          <tr><td>Interfaces cartographiques</td><td>Dessin de zones et de polygones de recherche.</td><td>Spécimen 02 ci-dessus</td></tr>
+          <tr><td>WebGL</td><td>Shaders légers, chargés à la demande, avec repli.</td><td>Spécimen 03 ci-dessous</td></tr>
+        </tbody>
+      </table>
+      <div class="shader-box">
+        <div class="stage" id="stage"><button type="button" id="load-shader">Charger le spécimen WebGL (3 Ko compressés)</button></div>
+        <div class="plate">
+          <div class="plate-head"><span class="mono">Spécimen 03 · shader</span><span class="mono">chargé sur demande</span></div>
+          <h3>Lignes de niveau calculées sur la carte graphique</h3>
+          <p>Un seul shader de fragment, sans Three.js. Il n'est téléchargé que si vous cliquez : c'est la règle que j'applique aux effets lourds, qui ne doivent jamais retarder le contenu.</p>
+          <p class="mono" id="shader-state">Non chargé.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="a-propos" aria-labelledby="t-apropos">
+      <div class="sec-title"><span class="tape">Pl. 03</span><h2 id="t-apropos">À propos</h2></div>
+      <div class="about">
+        <div class="plate">
+          <img src="../assets/johan.jpg" alt="Portrait de Johan Petrikovsky" width="349" height="349" loading="lazy">
+          <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript. Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur.</p>
+          <p class="mono">Toulouse · 69 articles publiés</p>
+        </div>
+        <div>
+          <blockquote>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."<footer>Perrine Sini-Berthonneau, fondatrice du studio Les Cerises</footer></blockquote>
+          <blockquote>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."<footer>Florent Pasquet, fondateur d'agence web</footer></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="articles" aria-labelledby="t-articles">
+      <div class="sec-title"><span class="tape">Pl. 04</span><h2 id="t-articles">Notes de laboratoire</h2></div>
+      <ul class="articles">
+        <li><span class="mono">Next.js</span><br><a href="#">Comment créer un cache handler personnalisé pour Next.js 16</a></li>
+        <li><span class="mono">Performance</span><br><a href="#">Comment réduire le TTFB</a></li>
+        <li><span class="mono">Accessibilité</span><br><a href="#">Les composants Tooltip ne devraient pas exister</a></li>
+        <li><span class="mono">React</span><br><a href="#">Comment faire une application React plus rapide ?</a></li>
+      </ul>
+    </section>
+
+    <section id="contact" aria-labelledby="t-contact">
+      <div class="contact">
+        <div><span class="tape">Pl. 05 · Contact</span><h2 id="t-contact" style="margin-top:1rem">Un projet, une refonte, un audit de performance ?</h2></div>
+        <div class="plate"><a class="mail" href="mailto:johan@developpeur-web.tech">johan@developpeur-web.tech</a><p class="mono" style="margin-top:1.2rem">LinkedIn <span class="tape todo">à fournir</span> · GitHub <span class="tape todo">à fournir</span></p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site mono"><span>Une police (PolySans), la mono du système, aucun framework côté client.</span><span><a href="#">Plan du site</a> · <a href="#">Mentions légales</a></span></footer>
+</div>
+
+<script type="module">
+import { observeMeasures, fmt } from '../shared/measure.js';
+
+// Fiche de mesure et pastille d'en-tête
+const chip = document.getElementById('live-chip');
+observeMeasures((m) => {
+  document.querySelectorAll('#readout dd').forEach((dd) => { dd.textContent = fmt(m[dd.dataset.k], dd.dataset.u || ''); });
+  if (m.transferKB !== null) chip.textContent = `Cette page : ${fmt(m.transferKB, ' Ko')} transférés, ${m.requests} requêtes`;
+});
+
+// Spécimen 02 : dessin de zone au pointeur ou au clavier
+const svg = document.getElementById('drawzone');
+const NS = 'http://www.w3.org/2000/svg';
+const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+for (let x = 0; x <= 640; x += 40) svg.append(el('line', { x1: x, y1: 0, x2: x, y2: 400, stroke: '#E0E0D8' }));
+for (let y = 0; y <= 400; y += 40) svg.append(el('line', { x1: 0, y1: y, x2: 640, y2: y, stroke: '#E0E0D8' }));
+const poly = el('polygon', { fill: 'rgba(255,212,59,.35)', stroke: '#111', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+const cursor = el('g', {});
+cursor.append(el('line', { x1: -8, y1: 0, x2: 8, y2: 0, stroke: '#111' }), el('line', { x1: 0, y1: -8, x2: 0, y2: 8, stroke: '#111' }));
+const dots = el('g', {});
+svg.append(poly, dots, cursor);
+let pts = [], closed = false, cx = 320, cy = 200;
+const area = (p) => Math.abs(p.reduce((s, [x, y], i) => { const [x2, y2] = p[(i + 1) % p.length]; return s + x * y2 - x2 * y; }, 0) / 2);
+const render = () => {
+  poly.setAttribute('points', pts.map((p) => p.join(',')).join(' '));
+  poly.setAttribute('fill', closed ? 'rgba(255,212,59,.55)' : 'rgba(255,212,59,.2)');
+  dots.replaceChildren(...pts.map(([x, y]) => el('rect', { x: x - 4, y: y - 4, width: 8, height: 8, fill: '#111' })));
+  cursor.setAttribute('transform', `translate(${cx} ${cy})`);
+  document.getElementById('dz-count').textContent = pts.length;
+  // une case de la grille = 1 unité
+  document.getElementById('dz-area').textContent = pts.length > 2 ? `${(area(pts) / 1600).toFixed(1)} cases` : '-';
+  document.getElementById('dz-state').textContent = closed ? 'fermée' : 'ouverte';
+};
+const toSvg = (e) => { const r = svg.getBoundingClientRect(); return [Math.round((e.clientX - r.left) / r.width * 640), Math.round((e.clientY - r.top) / r.height * 400)]; };
+svg.addEventListener('pointermove', (e) => { [cx, cy] = toSvg(e); render(); });
+svg.addEventListener('click', (e) => { if (closed) { pts = []; closed = false; } pts.push(toSvg(e)); render(); });
+svg.addEventListener('dblclick', () => { if (pts.length > 2) { closed = true; render(); } });
+svg.addEventListener('keydown', (e) => {
+  const step = e.shiftKey ? 40 : 10;
+  const moves = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+  if (moves[e.key]) { cx = Math.max(0, Math.min(640, cx + moves[e.key][0])); cy = Math.max(0, Math.min(400, cy + moves[e.key][1])); }
+  else if (e.key === ' ') { if (closed) { pts = []; closed = false; } pts.push([cx, cy]); }
+  else if (e.key === 'Enter') { if (pts.length > 2) closed = true; }
+  else if (e.key === 'Escape') { pts = []; closed = false; }
+  else return;
+  e.preventDefault(); render();
+});
+// zone de démonstration pré-remplie pour que le spécimen parle avant toute interaction
+pts = [[120, 90], [300, 60], [420, 150], [380, 300], [190, 320], [90, 210]]; closed = true; render();
+
+// Spécimen 03 : shader chargé uniquement à la demande
+document.getElementById('load-shader').addEventListener('click', async (e) => {
+  const state = document.getElementById('shader-state');
+  e.target.remove(); state.textContent = 'Chargement...';
+  const t0 = performance.now();
+  const { initRelief } = await import('../shared/relief.js');
+  const canvas = Object.assign(document.createElement('canvas'), { ariaHidden: 'true' });
+  document.getElementById('stage').append(canvas);
+  const r = initRelief(canvas, { peaks: [{ x: .3, y: .4, h: .4 }, { x: .7, y: .6, h: .3 }], bg: [0.067, 0.067, 0.067], accent: [1, 0.83, 0.23] });
+  state.textContent = r ? `Chargé et compilé en ${Math.round(performance.now() - t0)} ms. Survolez-le.` : 'WebGL indisponible sur cet appareil : le spécimen reste désactivé, le reste de la page fonctionne.';
+});
+</script>
+</body>
+</html>

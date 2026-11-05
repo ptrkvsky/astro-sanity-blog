@@ -2,54 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Polysans';
-  src: url('/assets/fonts/PolySans-Neutral.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-:root {
-  --astro-gradient: linear-gradient(0deg, #4f39fa, #da62c4);
-  --color-border: hsl(17, 24%, 90%);
-}
-
-body {
-  font-family: 'Polysans', sans-serif;
-  color: #2f2d32;
-  @apply bg-white text-gray-900;
-}
-
-h1 {
-  @apply text-2xl;
-}
+/* Jetons, polices et socle de l'identité Épreuve : voir epreuve.css (importé après ce fichier par BaseLayout) */
 
 code {
   overflow: scroll !important;
-}
-
-.gradient-main {
-  @apply bg-gradient-to-b bg-fixed via-purple-100 from-pink-100 to-indigo-50;
-}
-
-.text-gradient {
-  font-weight: 900;
-  background-image: var(--astro-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 100% 200%;
-  background-position-y: 100%;
-  border-radius: 0.4rem;
-  animation: pulse 4s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    background-position-y: 0%;
-  }
-  50% {
-    background-position-y: 80%;
-  }
 }

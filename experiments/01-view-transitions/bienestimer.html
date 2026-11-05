@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bien Estimer SAFTI - prototype 01</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="vt.css">
+<script src="vt-head.js"></script>
+<script type="speculationrules">
+{ "prerender": [{ "where": { "selector_matches": ".index a, .prose a" }, "eagerness": "moderate" }] }
+</script>
+<script type="module" src="vt-bench.js"></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+<header class="top"><a href="index.html">Essais</a><span class="mono muted">Prototype 01 - transitions entre documents</span></header>
+<main id="contenu">
+<article>
+  <div class="case-head">
+    <a class="mono" href="index.html">Retour aux essais</a>
+    <h1 style="view-transition-name: title-bienestimer">Bien Estimer SAFTI</h1>
+    <p class="muted">Parcours d'estimation immobilière en ligne, pensé pour le référencement.</p>
+  </div>
+  <div class="case-shot">
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-bienestimer-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-bienestimer-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-bienestimer-d-800.avif 800w, ../assets/projet-bienestimer-d-1440.avif 1440w" sizes="(min-width: 90rem) 86rem, 100vw">
+  <img src="../assets/projet-bienestimer-d-800.webp" width="800" height="500" alt="Page d'accueil de Bien Estimer SAFTI, capture du 27/10/2026" fetchpriority="high" decoding="async" style="view-transition-name: shot-bienestimer">
+</picture>
+  </div>
+  <dl class="facts">
+    <div><dt>Rôle</dt><dd>Développement frontend</dd></div>
+    <div><dt>Période</dt><dd>2023-2024</dd></div>
+    <div><dt>Technologies</dt><dd>Next.js, GA4</dd></div>
+  </dl>
+  <div class="prose">
+    <p>Texte de test. Dans le site final, cette page porte le problème, les contraintes, les décisions techniques et les résultats vérifiables du projet.</p>
+    <p><a href="join.html">Essai suivant : Join SAFTI</a></p>
+  </div>
+</article>
+</main>
+</div>
+</body>
+</html>

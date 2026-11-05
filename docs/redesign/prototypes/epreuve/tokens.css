@@ -1,0 +1,46 @@
+/* Jetons de la direction "Épreuve" (mission 2.3).
+   Typographie : association 3 de d-revue/fontes.html, Instrument Serif (affiche) + PolySans (texte) + IBM Plex Mono (libellés). */
+
+@font-face { font-family: "Instrument Serif"; src: url("../d-revue/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("../d-revue/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "PolySans"; src: url("../../../../public/assets/fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Plex Mono"; src: url("../d-revue/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+:root {
+  /* Encre et papier inversés : la feuille est noire, l'encre est claire */
+  --paper: #121210;
+  --sheet: #1A1916;
+  --ink: #F1EEE6;
+  --muted: #A6A296;
+  --hair: #3A3833;
+  --red: #FF5A36;
+  --tape: #FFD43B;
+  --on-red: #121210;
+
+  --f-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --f-text: "PolySans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --step--1: clamp(.78rem, .76rem + .1vw, .84rem);
+  --step-0: clamp(1.02rem, .97rem + .22vw, 1.15rem);
+  --step-1: clamp(1.25rem, 1.1rem + .6vw, 1.65rem);
+  --step-2: clamp(2rem, 1.4rem + 2.2vw, 3.6rem);
+  --step-3: clamp(2.8rem, 1.6rem + 4.6vw, 6.4rem);
+  --step-hero: clamp(3.6rem, 1.2rem + 11.2vw, 12.5rem);
+
+  --space-1: .5rem; --space-2: 1rem; --space-3: 1.5rem;
+  --space-4: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --space-5: clamp(3rem, 2rem + 4vw, 6rem);
+  --space-6: clamp(5rem, 3rem + 7vw, 11rem);
+  --gutter: clamp(1rem, .4rem + 2.4vw, 2.5rem);
+  --measure: 60ch;
+
+  /* Motif : traits et plaques */
+  --stroke: 1.5px;
+  --stroke-bold: 2.5px;
+  --plate-offset: .06em;
+
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur-1: 160ms; --dur-2: 320ms;
+  color-scheme: dark;
+}

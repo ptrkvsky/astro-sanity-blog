@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAFTI.fr : refondre un site d'annonces sans perdre son trafic - prototype 2.2</title>
+<meta name="robots" content="noindex">
+<script>
+  { const p = new URLSearchParams(location.search); let d = p.get('direction');
+    try { if (d) sessionStorage.setItem('direction', d); else d = sessionStorage.getItem('direction'); } catch {}
+    if (d === 'epreuve') document.documentElement.dataset.direction = 'epreuve';
+    // Précharge la fonte de titre de la direction affichée (évite le décalage à son arrivée)
+    const l = Object.assign(document.createElement('link'), { rel: 'preload', as: 'font', type: 'font/woff2', crossOrigin: '', href: d === 'epreuve' ? 'fonts/bricolage-grotesque-latin-wdth-normal.woff2' : 'fonts/newsreader-latin-wght-normal.woff2' });
+    document.head.append(l); }
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="revue.js"></script>
+</head>
+<body>
+<div class="read-progress" aria-hidden="true"></div>
+<div class="proto-bar" role="note">Outil de prototype · Direction : <a href="?direction=revue" data-dir="revue">Revue d'essais</a> / <a href="?direction=epreuve" data-dir="epreuve">Épreuve</a> · <a href="index.html">Accueil</a> · Les paragraphes marqués "démo" sont des textes de démonstration</div>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<header class="masthead page">
+  <div class="bar">
+    <a class="brand" href="index.html"><b>Johan Petrikovsky</b><span>Développeur frontend</span></a>
+    <nav class="nav" aria-label="Principale">
+      <ul>
+        <li><a href="index.html#essais" aria-current="true"><span class="n">01</span>Essais</a></li>
+        <li><a href="index.html#expertise"><span class="n">02</span>Expertise</a></li>
+        <li><a href="index.html#a-propos"><span class="n">03</span>À propos</a></li>
+        <li><a href="index.html#contact"><span class="n">04</span>Contact</a></li>
+      </ul>
+    </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Principale (mobile)">
+        <ul>
+          <li><a href="index.html#essais"><span class="n">01</span>Essais</a></li>
+          <li><a href="index.html#expertise"><span class="n">02</span>Expertise</a></li>
+          <li><a href="index.html#a-propos"><span class="n">03</span>À propos</a></li>
+          <li><a href="index.html#contact"><span class="n">04</span>Contact</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+  <div class="edition">
+    <span><span class="issue">Revue d'essais · </span>Essai 01 · lecture : 6 min <span class="status">démo</span></span>
+    <span class="weight-pill">Cette page : <output data-m="transferKB">n/d</output> transférés, <output data-m="requests">n/d</output> requêtes</span>
+  </div>
+</header>
+
+<main id="contenu">
+  <article>
+    <header class="case-hero grid page">
+      <p class="crumb"><a href="index.html#essais">Essais</a> / 01</p>
+      <h1 style="view-transition-name: title-safti">SAFTI.fr : refondre un site d'annonces sans perdre son trafic</h1>
+      <p class="lede">Un site immobilier dont l'essentiel du trafic vient du référencement naturel, à faire évoluer vers une architecture moderne sans casser ce qui le fait vivre.</p>
+      <dl class="spec">
+        <div><dt>Période</dt><dd>2022-2024</dd></div>
+        <div><dt>Rôle</dt><dd>Refonte d'architecture, SEO technique</dd></div>
+        <div><dt>Stack</dt><dd>Next.js, TypeScript, Jest</dd></div>
+        <div><dt>En ligne</dt><dd><a href="#">safti.fr</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot case-shot page">
+      <div class="frame" style="view-transition-name: shot-safti">
+        <picture>
+          <source type="image/avif" media="(max-width: 48rem)" srcset="../../../../experiments/assets/projet-safti-m-390.avif">
+          <source type="image/avif" srcset="../../../../experiments/assets/projet-safti-d-800.avif 800w, ../../../../experiments/assets/projet-safti-d-1440.avif 1440w" sizes="100vw">
+          <img src="../../../../experiments/assets/projet-safti-d-1440.webp" width="1440" height="900" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces immobilières" fetchpriority="high" decoding="async">
+        </picture>
+      </div>
+      <figcaption><span>Fig. 1 · safti.fr, capture d'octobre 2026</span><span>Image au-dessus de la ligne de flottaison : jamais animée</span></figcaption>
+    </figure>
+
+    <div class="prose grid page">
+      <h2>Contexte</h2>
+      <aside><p class="note"><b>1.</b> Les études de cas suivent toujours le même plan : contexte, contraintes, décisions, mesures, ce que je referais autrement.</p></aside>
+      <p>Un site d'annonces vit de ses pages indexées : listes par ville, fiches de biens, pages de conseillers. Chaque changement d'architecture touche des milliers d'URL que les moteurs de recherche connaissent déjà.</p>
+      <p><span class="status">démo</span> Le texte détaillé du contexte (volumétrie, équipe, calendrier) reste à rédiger par Johan. Ce paragraphe sert à juger la mise en page d'un texte long, pas son contenu.</p>
+
+      <h2>Contraintes</h2>
+      <aside><p class="note"><b>2.</b> La marge porte le "pourquoi". Sur mobile, elle passe sous le paragraphe qu'elle commente.</p></aside>
+      <p>Équipe agile, mise en production continue, pages à fort enjeu SEO.</p>
+      <ul aria-describedby="valider">
+        <li>Migrer page par page, en faisant cohabiter les deux routeurs de Next.js.</li>
+        <li>Conserver les URL, les balises canoniques et les données structurées.</li>
+        <li>Garder un niveau de couverture de tests vérifié à chaque merge request.</li>
+      </ul>
+      <p id="valider"><span class="status">à valider</span> Liste reconstituée à partir du code actuel du site, à confirmer par Johan.</p>
+
+      <figure class="shot phone">
+        <div class="frame" data-reveal>
+          <picture><source type="image/avif" srcset="../../../../experiments/assets/projet-safti-m-390.avif"><img src="../../../../experiments/assets/projet-safti-m-390.webp" width="390" height="844" alt="SAFTI.fr sur mobile : recherche d'annonces" loading="lazy" decoding="async"></picture>
+        </div>
+        <figcaption><span>Fig. 2 · safti.fr sur mobile</span><span>révélation tramée</span></figcaption>
+      </figure>
+      <figure class="shot landscape">
+        <div class="frame" data-reveal>
+          <picture><source type="image/avif" srcset="../../../../experiments/assets/planche-mesure-800.avif"><img src="../../../../experiments/assets/planche-mesure-800.webp" width="800" height="533" alt="Visuel de démonstration généré : planche de mesure" loading="lazy" decoding="async"></picture>
+        </div>
+        <figcaption><span>Fig. 3 · <span class="status">démo</span> image générée, pas une capture du projet</span><span>révélation tramée</span></figcaption>
+      </figure>
+
+      <h2>Décisions</h2>
+      <aside><p class="note"><b>3.</b> Chaque décision renvoie, quand il existe, à l'article qui l'explique en détail.</p></aside>
+      <p>Migration progressive vers l'App Router, optimisation technique du SEO et suivi des performances, tests unitaires avec objectifs de couverture.</p>
+      <p><span class="status">démo</span> Ici viendrait le récit d'une décision précise, avec ses alternatives et la raison du choix. Un spécimen peut s'insérer à cet endroit quand une démonstration vaut mieux qu'une description.</p>
+
+      <h2>Mesures</h2>
+      <aside><p class="note"><b>4.</b> Un chiffre sans source porte l'étiquette "à sourcer" tant qu'il n'est pas vérifiable.</p></aside>
+      <p>Une fonctionnalité proposée et développée a accompagné le passage de la note Trustpilot de 2,1 à 4,8. <span class="status">à sourcer</span></p>
+      <p>Les mesures de performance avant et après la migration (Core Web Vitals issus des données réelles) restent à collecter. <span class="status">à fournir</span></p>
+    </div>
+
+    <nav class="next-case page" aria-label="Essai suivant">
+      <a href="index.html#essais">← Tous les essais</a>
+      <a href="#">Essai 02 · Omega →</a>
+    </nav>
+  </article>
+</main>
+
+<footer class="colophon page">
+  <span>Composé en Newsreader et IBM Plex Mono. Aucun JavaScript nécessaire pour lire ce site.</span>
+  <span><a href="#">Plan du site</a> · <a href="#">Mentions légales</a></span>
+</footer>
+</body>
+</html>

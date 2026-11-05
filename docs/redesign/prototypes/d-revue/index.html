@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Johan Petrikovsky, développeur frontend - prototype 2.2</title>
+<meta name="description" content="Prototype de la direction Revue d'essais : interfaces rapides, accessibles et trouvables, mesurées dans votre navigateur.">
+<meta name="robots" content="noindex">
+<script>
+  // Outil de prototype : ?direction=epreuve applique l'alternative, mémorisée pour la session.
+  { const p = new URLSearchParams(location.search); let d = p.get('direction');
+    try { if (d) sessionStorage.setItem('direction', d); else d = sessionStorage.getItem('direction'); } catch {}
+    if (d === 'epreuve') document.documentElement.dataset.direction = 'epreuve';
+    // Précharge la fonte de titre de la direction affichée (évite le décalage à son arrivée)
+    const l = Object.assign(document.createElement('link'), { rel: 'preload', as: 'font', type: 'font/woff2', crossOrigin: '', href: d === 'epreuve' ? 'fonts/bricolage-grotesque-latin-wdth-normal.woff2' : 'fonts/newsreader-latin-wght-normal.woff2' });
+    document.head.append(l); }
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="revue.js"></script>
+</head>
+<body>
+<div class="proto-bar" role="note">Outil de prototype · Direction : <a href="?direction=revue" data-dir="revue">Revue d'essais</a> / <a href="?direction=epreuve" data-dir="epreuve">Épreuve</a> · <a href="fontes.html">Fontes</a> · <a href="etude-de-cas.html">Étude de cas</a></div>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<header class="masthead page">
+  <div class="bar">
+    <a class="brand" href="index.html"><b>Johan Petrikovsky</b><span>Développeur frontend</span></a>
+    <nav class="nav" aria-label="Principale">
+      <ul>
+        <li><a href="#essais"><span class="n">01</span>Essais</a></li>
+        <li><a href="#expertise"><span class="n">02</span>Expertise</a></li>
+        <li><a href="#a-propos"><span class="n">03</span>À propos</a></li>
+        <li><a href="#contact"><span class="n">04</span>Contact</a></li>
+      </ul>
+    </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Principale (mobile)">
+        <ul>
+          <li><a href="#essais"><span class="n">01</span>Essais</a></li>
+          <li><a href="#expertise"><span class="n">02</span>Expertise</a></li>
+          <li><a href="#a-propos"><span class="n">03</span>À propos</a></li>
+          <li><a href="#contact"><span class="n">04</span>Contact</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+  <div class="edition">
+    <span><span class="issue">Revue d'essais · </span>Édition d'octobre 2026 · Toulouse</span>
+    <span class="weight-pill">Cette page : <output data-m="transferKB">n/d</output> transférés, <output data-m="requests">n/d</output> requêtes</span>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="hero grid page" aria-labelledby="t-hero">
+    <p class="hero-kicker"><b>Développeur frontend senior</b> · React, TypeScript, Next.js, Astro</p>
+    <h1 id="t-hero">Des interfaces rapides, lisibles, trouvables. <em>Mesurées avant d'être promises.</em></h1>
+    <div class="hero-body">
+      <p class="lede">Depuis 2012, je construis des sites à fort trafic et des outils métier. Ce site applique la même règle : chaque affirmation est accompagnée de sa preuve.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:johan@developpeur-web.tech">Écrire à Johan</a>
+        <a class="btn" href="#essais">Voir les essais</a>
+      </div>
+    </div>
+    <aside class="hero-aside" aria-label="Mesures et spécimen">
+      <div class="readout">
+        <h2>Fiche de mesure <span>en direct</span></h2>
+        <dl>
+          <dt>Poids transféré</dt><dd><output data-m="transferKB">n/d</output></dd>
+          <dt>JavaScript</dt><dd><output data-m="jsKB">n/d</output></dd>
+          <dt>Plus grand affichage (LCP)</dt><dd><output data-m="lcp">n/d</output></dd>
+          <dt>Décalage visuel (CLS)</dt><dd><output data-m="cls">n/d</output></dd>
+          <dt>Interaction la plus lente</dt><dd><output data-m="inp">n/d</output></dd>
+        </dl>
+        <p class="note">Valeurs prises par votre navigateur sur cette page, maintenant. "n/d" : mesure indisponible (API absente ou JavaScript désactivé).</p>
+      </div>
+      <div class="hero-specimen specimen-plate" data-specimen>
+        <div class="stage plate">
+          <picture><source type="image/avif" srcset="../../../../experiments/04-worker-specimen/relief-poster.avif"><img src="../../../../experiments/04-worker-specimen/relief-poster.webp" width="1280" height="720" alt="" loading="lazy" decoding="async"></picture>
+        </div>
+        <button class="btn" type="button" data-run>Allumer le relief · 2,9 Ko</button>
+        <p class="mono muted" role="status" aria-live="polite"></p>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 01 Essais -->
+  <section class="sec page" id="essais" aria-labelledby="t-essais">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">01</p>
+      <h2 id="t-essais">Essais</h2>
+      <p class="note">Six projets livrés, présentés comme des essais : le problème, les contraintes, les décisions et ce qui est vérifiable.</p>
+    </header>
+
+    <div class="essais grid">
+      <ol class="index">
+        <li><a href="etude-de-cas.html"><span class="n">01</span><span class="t" style="view-transition-name: title-safti">SAFTI.fr</span><span class="r">Refonte d'architecture, SEO</span><span class="y">2022-2024</span><span class="s">Next.js · TypeScript · Jest</span></a></li>
+        <li><a href="#"><span class="n">02</span><span class="t">Omega</span><span class="r">Lead frontend, outil métier</span><span class="y">2024</span><span class="s">React · TypeScript · Storybook · Leaflet</span></a></li>
+        <li><a href="#"><span class="n">03</span><span class="t">Draw me a Sheep</span><span class="r">Développement complet</span><span class="y">2024</span><span class="s">Astro · Sanity · WebGL · GSAP</span></a></li>
+        <li><a href="#"><span class="n">04</span><span class="t">Bien Estimer</span><span class="r">SEO, plan de marquage GA4</span><span class="y">2023-2024</span><span class="s">Next.js · GA4</span></a></li>
+        <li><a href="#"><span class="n">05</span><span class="t">ALS Action Canada</span><span class="r">Refonte de templates</span><span class="y">2024</span><span class="s">React · Gatsby · WordPress headless</span></a></li>
+        <li><a href="#"><span class="n">06</span><span class="t">Join SAFTI</span><span class="r">Full-stack, multilingue</span><span class="y">2023</span><span class="s">Sulu CMS · PHP · Twig</span></a></li>
+      </ol>
+      <div class="preview" aria-hidden="true">
+        <figure class="shot"><div class="frame"><picture><source type="image/avif" srcset="../../../../experiments/assets/projet-safti-d-800.avif"><img src="../../../../experiments/assets/projet-safti-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async"></picture></div><figcaption><span>Fig. 01 · safti.fr</span><span>oct. 2026</span></figcaption></figure>
+        <figure class="shot"><div class="frame ph mono">Capture interne non publiable<br>(outil métier)</div><figcaption><span>Fig. 02 · Omega</span><span class="status">visuel à fournir</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><img src="../assets/projects/drawmeasheep.jpg" width="1440" height="900" alt="" loading="lazy" decoding="async"></div><figcaption><span>Fig. 03 · Draw me a Sheep</span><span>2024</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><picture><source type="image/avif" srcset="../../../../experiments/assets/projet-bienestimer-d-800.avif"><img src="../../../../experiments/assets/projet-bienestimer-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async"></picture></div><figcaption><span>Fig. 04 · bien-estimer.fr</span><span>oct. 2026</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><picture><source type="image/avif" srcset="../../../../experiments/assets/projet-als-d-800.avif"><img src="../../../../experiments/assets/projet-als-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async"></picture></div><figcaption><span>Fig. 05 · ALS Action Canada</span><span>oct. 2026</span></figcaption></figure>
+        <figure class="shot"><div class="frame"><picture><source type="image/avif" srcset="../../../../experiments/assets/projet-join-d-800.avif"><img src="../../../../experiments/assets/projet-join-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async"></picture></div><figcaption><span>Fig. 06 · Join SAFTI</span><span>oct. 2026</span></figcaption></figure>
+      </div>
+    </div>
+
+    <article class="feature grid" aria-labelledby="t-feature">
+      <figure class="shot rise">
+        <div class="frame" style="view-transition-name: shot-safti">
+          <picture>
+            <source type="image/avif" media="(max-width: 48rem)" srcset="../../../../experiments/assets/projet-safti-m-390.avif">
+            <source type="image/avif" srcset="../../../../experiments/assets/projet-safti-d-800.avif 800w, ../../../../experiments/assets/projet-safti-d-1440.avif 1440w" sizes="(max-width: 64rem) 100vw, 56vw">
+            <img src="../../../../experiments/assets/projet-safti-d-800.webp" width="1440" height="900" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces immobilières" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <figcaption><span>Fig. 01 · safti.fr, capture d'octobre 2026</span><span>Essai à la une</span></figcaption>
+      </figure>
+      <div class="feature-body">
+        <p class="kicker"><span>Essai 01 · 2022-2024</span><span>Next.js · TypeScript · Jest</span></p>
+        <h3 id="t-feature">Refondre un site d'annonces sans perdre son trafic</h3>
+        <dl class="spec">
+          <div><dt>Problème</dt><dd>Un site d'annonces dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</dd></div>
+          <div><dt>Décisions</dt><dd>Migration progressive vers l'App Router, optimisation technique du SEO, tests unitaires avec objectifs de couverture.</dd></div>
+          <div><dt>Résultat</dt><dd>Une fonctionnalité proposée et développée a accompagné le passage de la note Trustpilot de 2,1 à 4,8. <span class="status">à sourcer</span></dd></div>
+        </dl>
+        <a class="more" href="etude-de-cas.html">Lire l'étude de cas →</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- 02 Expertise -->
+  <section class="sec page" id="expertise" aria-labelledby="t-expertise">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">02</p>
+      <h2 id="t-expertise">Expertise, et où la vérifier</h2>
+      <p class="note">Chaque compétence renvoie à un texte publié ou à un projet qui la démontre.</p>
+    </header>
+    <div class="grid">
+      <dl class="skills">
+        <div><dt>Performance web</dt><dd>Temps de réponse serveur, rendu, poids des pages, suivi en production.</dd><a class="proof" href="#">Comment réduire le TTFB</a></div>
+        <div><dt>SEO technique</dt><dd>Rendu serveur, données structurées, maillage, migrations sans perte de trafic.</dd><a class="proof" href="#">Le rôle des développeurs dans le SEO</a></div>
+        <div><dt>React et TypeScript</dt><dd>Applications métier testées, typées, documentées dans Storybook.</dd><a class="proof" href="#">Arrêter d'utiliser des barrel files</a></div>
+        <div><dt>Next.js et Astro</dt><dd>App Router, cache, îlots, contenus headless (Sanity, WordPress).</dd><a class="proof" href="#">Cache handler personnalisé pour Next.js 16</a></div>
+        <div><dt>Interfaces cartographiques</dt><dd>Dessin de zones et de polygones de recherche avec Leaflet.</dd><a class="proof" href="#">Essai 02, Omega</a></div>
+        <div><dt>Interaction et WebGL</dt><dd>Shaders légers, chargés à la demande, toujours avec un repli.</dd><a class="proof" href="#specimen">Spécimen ci-dessous</a></div>
+      </dl>
+      <div class="stack">
+        <div><h3>Langages</h3><ul><li>TypeScript</li><li>JavaScript</li><li>CSS</li><li>GLSL</li><li>PHP</li></ul></div>
+        <div><h3>Cadres et CMS</h3><ul><li>React</li><li>Next.js</li><li>Astro</li><li>Gatsby</li><li>Sanity</li><li>WordPress</li><li>Sulu</li></ul></div>
+        <div><h3>Outillage</h3><ul><li>Jest</li><li>Storybook</li><li>Leaflet</li><li>GA4</li></ul></div>
+      </div>
+    </div>
+
+    <div class="specimen grid specimen-plate" id="specimen" data-specimen>
+      <div class="stage-wrap">
+        <div class="stage plate">
+          <picture><source type="image/avif" srcset="../../../../experiments/04-worker-specimen/relief-poster.avif"><img src="../../../../experiments/04-worker-specimen/relief-poster.webp" width="1280" height="720" alt="Champ de lignes de niveau gris sur fond clair : image fixe du spécimen" loading="lazy" decoding="async"></picture>
+        </div>
+      </div>
+      <div class="specimen-body">
+        <p class="mono muted">Spécimen 01 · WebGL2, sans bibliothèque</p>
+        <h3>Lignes de niveau calculées sur la carte graphique</h3>
+        <p>Un seul shader, rendu hors du fil principal. Rien n'est téléchargé avant votre clic : c'est la règle que j'applique aux effets lourds, qui ne doivent jamais retarder le contenu.</p>
+        <dl class="facts">
+          <dt>Code</dt><dd>2,9 Ko compressés</dd>
+          <dt>Rendu</dt><dd data-thread>non chargé</dd>
+          <dt>Compilation du shader</dt><dd data-compile>n/d</dd>
+        </dl>
+        <button class="btn primary" type="button" data-run>Charger le spécimen</button>
+        <p class="mono muted" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 À propos -->
+  <section class="sec page" id="a-propos" aria-labelledby="t-apropos">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">03</p>
+      <h2 id="t-apropos">À propos</h2>
+      <p class="note">D'abord l'agence, maintenant le produit : quatorze ans de frontend.</p>
+    </header>
+    <div class="about grid">
+      <figure class="portrait shot"><div class="frame"><img src="../assets/johan.jpg" width="349" height="349" alt="Portrait de Johan Petrikovsky" loading="lazy" decoding="async"></div><figcaption><span>Johan Petrikovsky</span><span>Toulouse</span></figcaption></figure>
+      <div class="bio">
+        <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript.</p>
+        <p>Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur. J'écris aussi sur ce que j'apprends.</p>
+        <dl class="facts-list">
+          <dt>Basé à</dt><dd>Toulouse</dd>
+          <dt>Depuis</dt><dd>2012</dd>
+          <dt>Écrit</dt><dd>69 articles publiés</dd>
+          <dt>Disponibilité</dt><dd><span class="status">à fournir</span></dd>
+        </dl>
+      </div>
+      <div class="quotes">
+        <blockquote><p>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."</p><footer>Perrine Sini-Berthonneau, fondatrice du studio Les Cerises</footer></blockquote>
+        <blockquote><p>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."</p><footer>Florent Pasquet, fondateur d'agence web</footer></blockquote>
+      </div>
+      <h3 class="notes-head" id="t-notes">Dernières notes</h3>
+      <ul class="notes-list" aria-labelledby="t-notes">
+        <li><span class="mono">Next.js</span><a href="#">Comment créer un cache handler personnalisé pour Next.js 16</a></li>
+        <li><span class="mono">Performance</span><a href="#">Comment réduire le TTFB</a></li>
+        <li><span class="mono">Accessibilité</span><a href="#">Les composants Tooltip ne devraient pas exister</a></li>
+        <li><span class="mono">React</span><a href="#">Comment faire une application React plus rapide ?</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 04 Contact -->
+  <section class="contact page" id="contact" aria-labelledby="t-contact">
+    <div class="contact-inner grid">
+      <p class="sec-num" aria-hidden="true">04</p>
+      <h2 id="t-contact">Un projet, une refonte, un audit de performance ?</h2>
+      <a class="mail" href="mailto:johan@developpeur-web.tech">johan<span class="at">@</span>developpeur-web.tech</a>
+      <p class="meta"><span>Réponse sous 48 h <span class="status">démo</span></span><span>LinkedIn <span class="status">à fournir</span></span><span>GitHub <span class="status">à fournir</span></span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="colophon page">
+  <span>Composé en Newsreader et IBM Plex Mono. Aucun JavaScript nécessaire pour lire ce site.</span>
+  <span><a href="#">Plan du site</a> · <a href="#">Mentions légales</a></span>
+</footer>
+</body>
+</html>

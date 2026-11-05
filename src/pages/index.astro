@@ -1,76 +1,59 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import PostCard from '@features/blog/components/PostCard/index.astro';
-import SafeMail from '@components/SafeMail.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
-import fetchSanity from '@helpers/fetchSanity';
-import {
-  queryHome,
-  type HomeQueryResult,
-} from '@features/home/queries/queryHome';
-import type { Post } from '@interfaces/SanitySchema';
-import { SectionsSwitch } from '@features/home/components/SectionsSwitch';
+import { client } from 'src/lib/sanityClient';
+import '@assets/style/calage.css';
+import Defs from '@features/home-epreuve/components/Defs.astro';
+import Hero from '@features/home-epreuve/components/Hero.astro';
+import Methode from '@features/home-epreuve/components/Methode.astro';
+import Essais from '@features/home-epreuve/components/Essais.astro';
+import Controle from '@features/home-epreuve/components/Controle.astro';
+import APropos from '@features/home-epreuve/components/APropos.astro';
+import BonATirer from '@features/home-epreuve/components/BonATirer.astro';
 
-import { SectionPresentation } from '@features/home/components/SectionPresentation';
-
-const sanityHome = await fetchSanity<HomeQueryResult>(queryHome);
-const home = sanityHome?.allHome?.[0] ?? null;
-
-const schema = getGraphHome();
 const description =
   'Développeur React freelance et créateur de site internet depuis 2012. Spécialisé dans le développement front de site web en Javascript avec React.';
 
-const sections = home?.sections ?? [];
+interface Note {
+  title: string;
+  slug: string;
+  category?: string;
+}
 
-console.dir(home, { depth: 3 });
+// Les quatre derniers articles : si Sanity ne répond pas, la section est simplement omise.
+let notes: Note[] = [];
+let articleCount: number | undefined;
+try {
+  const result = await client.fetch<{ notes: Note[]; count: number }>(
+    `{
+      "notes": *[_type == "post" && defined(slug.current)] | order(_createdAt desc)[0...4]{
+        title, "slug": slug.current, "category": categories[0]->title
+      },
+      "count": count(*[_type == "post" && defined(slug.current)])
+    }`,
+  );
+  notes = result.notes.map((n) => ({ ...n, title: n.title.trim() }));
+  articleCount = result.count;
+} catch (error) {
+  console.error('Accueil : lecture des articles impossible', error);
+}
+
+const schema = getGraphHome();
 ---
 
 <BaseLayout
-  title={home?.seoTitle ?? 'Développeur React et Typescript Freelance'}
-  description={home?.seoDescription ?? description}
+  title="Développeur React et Typescript Freelance"
+  description={description}
   schema={schema}
   canonical="/"
 >
   <div slot="main">
-    <SectionsSwitch sections={sections} />
-
-    <SectionPresentation />
+    <Defs />
+    <Hero />
+    <Methode />
+    <Essais />
+    <Controle />
+    <APropos notes={notes} articleCount={articleCount} />
+    <BonATirer />
   </div>
 </BaseLayout>
-
-<style>
-  .list {
-    list-style-type: disc;
-  }
-
-  .conteneur {
-    margin: auto;
-    max-width: 60ch;
-  }
-  .banner {
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .banner img {
-    border-radius: 100%;
-  }
-
-  .instructions {
-    line-height: 1.6;
-  }
-
-  .instructions code {
-    font-size: 0.875em;
-    border: 0.1em solid var(--color-border);
-    border-radius: 4px;
-    padding: 0.15em 0.25em;
-  }
-
-  .link-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 1rem;
-    padding: 0;
-  }
-</style>

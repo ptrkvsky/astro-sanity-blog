@@ -1,0 +1,39 @@
+---
+import { contact, email } from '../content';
+---
+
+<section class="sec page bat" id="contact" aria-labelledby="t-contact">
+  <div class="bat-grid">
+    <p class="sec-num" aria-hidden="true">05</p>
+    <div class="stamp-wrap" aria-hidden="true">
+        <svg class="stamp" viewBox="-160 -160 320 320">
+          <defs>
+            <path id="stamp-path" d="M0,-104A104,104 0 1,1 -0.01,-104"></path>
+            <mask id="stamp-mask" maskUnits="userSpaceOnUse" x="-160" y="-160" width="320" height="320"><circle class="stamp-mask-c" r="110" fill="none" stroke="#fff" stroke-width="44" transform="rotate(-90)"></circle></mask>
+            <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"></feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"></feDisplacementMap>
+            </filter>
+          </defs>
+          <g class="stamp-ink" filter="url(#ink)">
+            <g class="stamp-ring">
+              <path class="seg" d="M-1 -150A150 150 0 0 1 130.4 -74.1L110.4 -62.7A127 127 0 0 0 -0.9 -127Z"></path>
+              <path class="seg" d="M129.4 -75.9A150 150 0 0 1 129.4 75.9L109.5 64.3A127 127 0 0 0 109.5 -64.3Z"></path>
+              <path class="seg" d="M130.4 74.1A150 150 0 0 1 -1 150L-0.9 127A127 127 0 0 0 110.4 62.7Z"></path>
+              <path class="seg" d="M1 150A150 150 0 0 1 -130.4 74.1L-110.4 62.7A127 127 0 0 0 0.9 127Z"></path>
+              <path class="seg" d="M-129.4 75.9A150 150 0 0 1 -129.4 -75.9L-109.5 -64.3A127 127 0 0 0 -109.5 64.3Z"></path>
+              <path class="seg" d="M-130.4 -74.1A150 150 0 0 1 1 -150L0.9 -127A127 127 0 0 0 -110.4 -62.7Z"></path>
+              <circle r="92" class="inner"></circle>
+            </g>
+            <text class="stamp-text" mask="url(#stamp-mask)"><textPath href="#stamp-path" textLength="650" lengthAdjust="spacing">BON À TIRER · ÉPREUVE N° 1 · DEVELOPPEUR-WEB.TECH · 2026 ·</textPath></text>
+          </g>
+          <g class="stamp-mark" data-mark>
+            <svg class="mark" x="-56" y="-56" width="112" height="112" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"></use><use href="#repere" class="plate-paper"></use></svg>
+          </g>
+        </svg>
+      </div>
+      
+    <h2 id="t-contact">{contact.title} <em>{contact.emphasis}</em></h2>
+    <a class="mail" href={`mailto:${email}`}>{email.split('@')[0]}<span class="at">@</span>{email.split('@')[1]}</a>
+  </div>
+</section>

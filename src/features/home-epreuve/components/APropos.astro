@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '@assets/images/johan.jpeg';
+import Repere from './Repere.astro';
+import { apropos, site } from '../content';
+
+interface Props {
+  notes: { title: string; slug: string; category?: string }[];
+  articleCount?: number;
+}
+const { notes, articleCount } = Astro.props;
+---
+
+<section class="sec page" id="a-propos" aria-labelledby="t-apropos">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">04</p>
+    <h2 id="t-apropos">{apropos.title}</h2>
+    <p class="note">{apropos.note}</p>
+  </header>
+  <div class="about g12">
+    <figure class="portrait">
+      <Image
+        src={portrait}
+        alt="Portrait de Johan Petrikovsky"
+        widths={[320, 640]}
+        sizes="(max-width: 48rem) 50vw, 25vw"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+    <div class="bio">
+      {apropos.bio.map((p) => <p>{p}</p>)}
+      <dl class="facts-list">
+        <dt>Basé à</dt><dd>{site.city}</dd>
+        <dt>Depuis</dt><dd>{site.since}</dd>
+        {articleCount && (<><dt>Écrit</dt><dd>{articleCount} articles publiés</dd></>)}
+      </dl>
+    </div>
+    <div class="quotes">
+      {
+        apropos.quotes.map((q) => (
+          <blockquote>
+            <p>« {q.text} »</p>
+            <footer>{q.author}</footer>
+          </blockquote>
+        ))
+      }
+    </div>
+    {
+      notes.length > 0 && (
+        <>
+          <h3 class="notes-head" id="t-notes">{apropos.notesTitle}</h3>
+          <ul class="notes-list" aria-labelledby="t-notes">
+            {notes.map((n) => (
+              <li>
+                {n.category && <span class="mono">{n.category}</span>}
+                <a href={`/posts/${n.slug}`}>{n.title}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </div>
+</section>

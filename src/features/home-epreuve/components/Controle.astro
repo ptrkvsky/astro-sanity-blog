@@ -1,0 +1,65 @@
+---
+import Repere from './Repere.astro';
+import { controle } from '../content';
+
+const patches = [
+  { x: 8, fill: '#F1EEE6' },
+  { x: 208, fill: 'url(#tint-paper-50)' },
+  { x: 408, fill: '#FF5A36' },
+  { x: 608, fill: 'url(#tint-red-50)' },
+  { x: 808, fill: 'url(#tint-over)' },
+  { x: 1008, fill: 'url(#tint-paper-25)' },
+];
+---
+
+<section class="sec page" id="controle" aria-labelledby="t-controle">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">03</p>
+    <h2 id="t-controle">{controle.title}</h2>
+    <p class="note">{controle.note}</p>
+  </header>
+  <div class="strip-wrap">
+    <div class="strip-figure">
+      <svg class="strip" viewBox="0 0 1200 160" aria-hidden="true">
+        <path class="strip-rule" d="M0 4H1200M0 156H1200"></path>
+        <g class="patches">
+          {
+            patches.map((p) => (
+              <path d={`M${p.x} 24H${p.x + 184}V136H${p.x}Z`} fill={p.fill}></path>
+            ))
+          }
+        </g>
+        <g class="patch-n">
+          {
+            patches.map((p, i) => (
+              <text x={p.x + 10} y="17">{String(i + 1).padStart(2, '0')}</text>
+            ))
+          }
+        </g>
+      </svg>
+    </div>
+    <dl class="strip-values">
+      {
+        controle.measures.map((m) => (
+          <div>
+            <dt><span>{m.n}</span> {m.label}</dt>
+            <dd><output data-m={m.key}>n/d</output></dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+  <p class="note strip-note">{controle.strip}</p>
+
+  <div class="checks">
+    {
+      controle.checks.map((c) => (
+        <div>
+          <h3>{c.title}</h3>
+          <p>{c.text}</p>
+          <a href={c.href}>{c.proof}</a>
+        </div>
+      ))
+    }
+  </div>
+</section>

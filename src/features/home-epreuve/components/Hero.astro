@@ -1,0 +1,30 @@
+---
+import Repere from './Repere.astro';
+import { hero } from '../content';
+---
+
+<section class="hero" aria-labelledby="t-hero">
+  <div class="sheet page">
+    <div class="sheet-inner">
+      <p class="hero-kicker"><b>Johan Petrikovsky</b> · {hero.kicker}</p>
+      <h1 id="t-hero" class="hero-title">
+        {hero.titleBefore}<em>{hero.titleEmphasis}</em>{hero.titleAfter}
+      </h1>
+      <div class="hero-mark" aria-hidden="true"><Repere /></div>
+      <div class="hero-body">
+        <p class="lede">{hero.lede}</p>
+        <div class="actions">
+          <a class="btn primary" href="#contact">Écrire à Johan</a>
+          <a class="btn" href="#essais">Voir les essais</a>
+        </div>
+      </div>
+      <dl class="hero-spec">
+        <div><dt>Plaques</dt><dd>papier, rouge</dd></div>
+        <div><dt>Trame</dt><dd>45° et 15°</dd></div>
+        <div><dt>Calage</dt><dd>100 %</dd></div>
+      </dl>
+    </div>
+    <span class="crop tl" aria-hidden="true"></span><span class="crop tr" aria-hidden="true"></span><span class="crop bl" aria-hidden="true"></span><span class="crop br" aria-hidden="true"></span>
+    <div class="sheet-foot" aria-hidden="true"><p class="slug">{hero.slug}</p></div>
+  </div>
+</section>

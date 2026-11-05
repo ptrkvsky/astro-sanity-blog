@@ -1,0 +1,81 @@
+---
+import { Picture } from 'astro:assets';
+import { essais } from '../content';
+
+const visuals = import.meta.glob<{ default: ImageMetadata }>(
+  '@assets/images/essais/*.webp',
+  { eager: true },
+);
+const visual = (slug: string) =>
+  visuals[`/src/assets/images/essais/${slug}.webp`]?.default;
+
+const f = essais.feature;
+---
+
+<section class="sec page" id="essais" aria-labelledby="t-essais">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">02</p>
+    <h2 id="t-essais">{essais.title}</h2>
+    <p class="note">{essais.note}</p>
+  </header>
+  <ol class="index">
+    {
+      essais.list.map((e) => (
+        <li>
+          <a href={e.url} rel="noopener">
+            <span class="n">{e.n}</span>
+            <span class="t">{e.title}</span>
+            <span class="r">{e.role}</span>
+            <span class="y">{e.year}</span>
+            <span class="s">{e.stack}</span>
+            {visual(e.slug) && (
+              <Picture
+                class="preview"
+                src={visual(e.slug)}
+                formats={['avif', 'webp']}
+                widths={[320, 480]}
+                sizes="20rem"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <article class="feature g12" aria-labelledby="t-feature">
+    <figure class="shot feature-shot">
+      <div class="frame">
+        <Picture
+          src={visual('safti')}
+          formats={['avif', 'webp']}
+          widths={[640, 960, 1440]}
+          sizes="(max-width: 64rem) 100vw, 58vw"
+          alt={f.figure.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption>
+        <span>{f.figure.caption}</span><span>{f.figure.hint}</span>
+      </figcaption>
+    </figure>
+    <div class="feature-body">
+      <p class="kicker"><span>Essai {f.n} · {f.year}</span><span>{f.stack}</span></p>
+      <h3 id="t-feature">{f.title}</h3>
+      <dl class="spec">
+        {
+          f.spec.map((s) => (
+            <div>
+              <dt>{s.dt}</dt>
+              <dd>{s.dd}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </article>
+</section>

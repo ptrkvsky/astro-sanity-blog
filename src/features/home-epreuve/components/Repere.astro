@@ -1,0 +1,12 @@
+---
+// Le repère en deux plaques décalées (rouge dessous, papier dessus). Décoratif : aria-hidden.
+interface Props {
+  class?: string;
+}
+const { class: className = 'mark' } = Astro.props;
+---
+
+<svg class={className} viewBox="-50 -50 100 100" aria-hidden="true">
+  <use href="#repere" class="plate-red"></use>
+  <use href="#repere" class="plate-paper"></use>
+</svg>

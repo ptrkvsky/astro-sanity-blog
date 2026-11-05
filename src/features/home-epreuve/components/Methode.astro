@@ -1,0 +1,31 @@
+---
+import Repere from './Repere.astro';
+import { methode } from '../content';
+---
+
+<section class="sec page" id="methode" aria-labelledby="t-methode">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">01</p>
+    <h2 id="t-methode">{methode.title}</h2>
+    <p class="note">{methode.note}</p>
+  </header>
+  <div class="pipeline">
+    <div class="steps-wrap">
+      <div class="axis-head" aria-hidden="true"><Repere /></div>
+      <ol class="steps">
+        {
+          methode.steps.map((s) => (
+            <li class="step">
+              <Repere class="step-mark mark" />
+              <p class="step-pair">
+                <span>{s.browser}</span> · {s.print}
+              </p>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>

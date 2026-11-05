@@ -109,6 +109,13 @@ export const controle = {
     { n: '05', label: 'Décalage visuel', key: 'cls' },
     { n: '06', label: 'Interaction la plus lente', key: 'inp' },
   ],
+  weights: [
+    { label: 'HTML', key: 'html' },
+    { label: 'CSS', key: 'css' },
+    { label: 'JavaScript', key: 'js' },
+    { label: 'Polices', key: 'fonts' },
+    { label: 'Images', key: 'images' },
+  ],
   strip: 'Valeurs de cette page, maintenant. "n/d" : mesure indisponible (API absente ou JavaScript désactivé).',
   checks: [
     { title: 'Performance', text: 'Temps de réponse serveur, poids des pages, rendu, suivi en production.', proof: 'Comment réduire le TTFB', href: '/posts/comment-reduire-ttfb' },

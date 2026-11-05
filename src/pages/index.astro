@@ -9,6 +9,7 @@ import Methode from '@features/home-epreuve/components/Methode.astro';
 import Essais from '@features/home-epreuve/components/Essais.astro';
 import Controle from '@features/home-epreuve/components/Controle.astro';
 import APropos from '@features/home-epreuve/components/APropos.astro';
+import Repere from '@features/home-epreuve/components/Repere.astro';
 import BonATirer from '@features/home-epreuve/components/BonATirer.astro';
 
 const description =
@@ -55,5 +56,12 @@ const schema = getGraphHome();
     <Controle />
     <APropos notes={notes} articleCount={articleCount} />
     <BonATirer />
+    <div class="calage-meter" aria-hidden="true"><span>Calage</span><b><output data-calage>100</output> %</b><i></i></div>
+    <div class="courier" aria-hidden="true"><Repere /></div>
   </div>
 </BaseLayout>
+
+<script>
+  // Couche d'expérience : chargée après le contenu, jamais sur les autres pages.
+  import '../scripts/experience/index.js';
+</script>

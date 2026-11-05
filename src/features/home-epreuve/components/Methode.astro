@@ -10,6 +10,7 @@ import { methode } from '../content';
     <p class="note">{methode.note}</p>
   </header>
   <div class="pipeline">
+    <p class="pipeline-counter" aria-hidden="true"><b>01</b><span>{methode.steps[0].browser}</span><i>{methode.steps[0].print}</i></p>
     <div class="steps-wrap">
       <div class="axis-head" aria-hidden="true"><Repere /></div>
       <ol class="steps">
@@ -26,6 +27,10 @@ import { methode } from '../content';
           ))
         }
       </ol>
+      <p class="layer-control">
+        <button type="button" class="btn" data-remove-layer hidden>Retirer la couche créative</button>
+        <span class="note" role="status" aria-live="polite" data-layer-status></span>
+      </p>
     </div>
   </div>
 </section>

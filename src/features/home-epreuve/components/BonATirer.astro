@@ -1,5 +1,5 @@
 ---
-import { contact, email } from '../content';
+import { contact, email, links, site } from '../content';
 ---
 
 <section class="sec page bat" id="contact" aria-labelledby="t-contact">
@@ -35,5 +35,10 @@ import { contact, email } from '../content';
       
     <h2 id="t-contact">{contact.title} <em>{contact.emphasis}</em></h2>
     <a class="mail" href={`mailto:${email}`}>{email.split('@')[0]}<span class="at">@</span>{email.split('@')[1]}</a>
+    <p class="contact-meta">
+      <span>{site.availability}</span>
+      <a href={links.linkedin} rel="me noopener">LinkedIn</a>
+      <a href={links.github} rel="me noopener">GitHub</a>
+    </p>
   </div>
 </section>

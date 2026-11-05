@@ -145,3 +145,4 @@ main { overflow-x: clip; }
   .index a:is(:hover, :focus-visible) .preview { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .index .preview { transition: none; } }
+.contact-meta a { color: var(--ink); }

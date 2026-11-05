@@ -1,6 +1,8 @@
 # Plan d'implémentation : Épreuve + Calage
 
-**Statut : validé par Johan le 05/11/2026 (direction Épreuve, concept Calage). Exécution en cours sur la branche `feat/calage`, lots 0 à 3 dans une première passe.**
+**Statut : validé par Johan le 05/11/2026 (direction Épreuve, concept Calage). Lots 0 à 3 faits et fusionnés dans `main` (local, non poussé) ; vérifications du lot 3 passées le 05/11/2026 (voir ci-dessous) ; lots 4 à 7 (couche d'expérience) à faire.**
+
+Vérifié sur l'accueil et les 5 autres pages (`/posts`, un article, une catégorie, `/mentions-legales`, `/plan-site`) à 360 px, en mouvement réduit : aucun débordement horizontal, aucun texte courant sous 4,5:1 de contraste, un seul h1 par page, aucune animation active ; accueil complète dans le HTML servi, sans JavaScript client ; lien d'évitement au premier Tab avec focus visible. Pas encore fait : parcours Tab complet, Safari/iOS, Android réel, lecteur d'écran.
 
 Décisions de validation :
 - Calage est retenu tel que recommandé (§ 6 de `experience-signature.md`), avec les deux reprises de la Vue éclatée : le bouton « retirer la couche créative » et le poids réel par poste.

@@ -33,6 +33,7 @@ const { notes, articleCount } = Astro.props;
       <dl class="facts-list">
         <dt>Basé à</dt><dd>{site.city}</dd>
         <dt>Depuis</dt><dd>{site.since}</dd>
+        <dt>Disponibilité</dt><dd>{site.availability}</dd>
         {articleCount && (<><dt>Écrit</dt><dd>{articleCount} articles publiés</dd></>)}
       </dl>
     </div>

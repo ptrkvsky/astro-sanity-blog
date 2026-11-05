@@ -4,11 +4,17 @@
 
 export const email = 'johan@developpeur-web.tech';
 
+export const links = {
+  linkedin: 'https://www.linkedin.com/in/johanpetrikovsky',
+  github: 'https://github.com/ptrkvsky',
+};
+
 export const site = {
   author: 'Johan Petrikovsky',
   role: 'Développeur frontend',
   city: 'Toulouse',
   since: 2012,
+  availability: 'Disponible',
 };
 
 export const hero = {
@@ -127,6 +133,6 @@ export const apropos = {
 };
 
 export const contact = {
-  title: 'Un projet, une refonte, un audit de performance ?',
+  title: 'Un projet, une refonte, un audit de performance\u00a0?',
   emphasis: 'Signons le bon à tirer.',
 };

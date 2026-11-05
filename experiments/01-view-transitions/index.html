@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Essais - prototype 01</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="vt.css">
+<script src="vt-head.js"></script>
+<script type="speculationrules">
+{ "prerender": [{ "where": { "selector_matches": ".index a, .prose a" }, "eagerness": "moderate" }] }
+</script>
+<script type="module" src="vt-bench.js"></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+<header class="top"><a href="index.html">Essais</a><span class="mono muted">Prototype 01 - transitions entre documents</span></header>
+<main id="contenu">
+<section class="case-head">
+  <span class="tape">Prototype 01</span>
+  <h1>Essais</h1>
+  <p class="muted">Cliquez sur un essai : la capture et le titre se déplacent vers la page de détail. Aucun JavaScript n'est nécessaire à la transition.</p>
+  <fieldset class="controls plate">
+    <legend>Réglages</legend>
+    <label for="vt-dur">Durée du déplacement <input id="vt-dur" type="range" min="0" max="1200" step="20" value="420"><output for="vt-dur">420ms</output></label>
+  </fieldset>
+</section>
+<ol class="index">
+  <li><a href="safti.html">
+    <span class="num">01</span>
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-safti-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-safti-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-safti-d-800.avif 800w, ../assets/projet-safti-d-1440.avif 1440w" sizes="14rem">
+  <img src="../assets/projet-safti-d-800.webp" width="800" height="500" alt="Page d'accueil de SAFTI.fr, capture du 27/10/2026" fetchpriority="high" decoding="async" style="view-transition-name: shot-safti">
+</picture>
+    <span><h2 style="view-transition-name: title-safti">SAFTI.fr</h2><p>Développement frontend - Next.js, TypeScript, Tailwind CSS</p></span>
+    <span class="num year">2022-2024</span>
+  </a></li>
+  <li><a href="bienestimer.html">
+    <span class="num">02</span>
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-bienestimer-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-bienestimer-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-bienestimer-d-800.avif 800w, ../assets/projet-bienestimer-d-1440.avif 1440w" sizes="14rem">
+  <img src="../assets/projet-bienestimer-d-800.webp" width="800" height="500" alt="Page d'accueil de Bien Estimer SAFTI, capture du 27/10/2026" fetchpriority="high" decoding="async" style="view-transition-name: shot-bienestimer">
+</picture>
+    <span><h2 style="view-transition-name: title-bienestimer">Bien Estimer SAFTI</h2><p>Développement frontend - Next.js, GA4</p></span>
+    <span class="num year">2023-2024</span>
+  </a></li>
+  <li><a href="join.html">
+    <span class="num">03</span>
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-join-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-join-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-join-d-800.avif 800w, ../assets/projet-join-d-1440.avif 1440w" sizes="14rem">
+  <img src="../assets/projet-join-d-800.webp" width="800" height="500" alt="Page d'accueil de Join SAFTI, capture du 27/10/2026" loading="lazy" decoding="async" style="view-transition-name: shot-join">
+</picture>
+    <span><h2 style="view-transition-name: title-join">Join SAFTI</h2><p>Intégration et développement - Sulu CMS, Twig, Tailwind CSS</p></span>
+    <span class="num year">2023</span>
+  </a></li>
+  <li><a href="als.html">
+    <span class="num">04</span>
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-als-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-als-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-als-d-800.avif 800w, ../assets/projet-als-d-1440.avif 1440w" sizes="14rem">
+  <img src="../assets/projet-als-d-800.webp" width="800" height="500" alt="Page d'accueil de ALS Action Canada, capture du 27/10/2026" loading="lazy" decoding="async" style="view-transition-name: shot-als">
+</picture>
+    <span><h2 style="view-transition-name: title-als">ALS Action Canada</h2><p>Refonte de gabarits - React, Gatsby, WordPress headless</p></span>
+    <span class="num year">2024</span>
+  </a></li>
+</ol>
+</main>
+</div>
+</body>
+</html>

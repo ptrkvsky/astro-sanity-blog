@@ -1,0 +1,42 @@
+/* Mise en page commune aux deux variantes : un titre épinglé (sticky) sur lequel
+   passent des planches. Sans animation, c'est déjà une page complète et lisible. */
+:root { --rise: 18vh; --tilt: 4deg; --lean-max: 6deg; }
+/* Non héritée : la changer sur une planche ne recalcule pas le style de ses descendants */
+@property --v { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+.intro { padding-block: clamp(2rem, 6vw, 5rem); display: grid; gap: 1rem; }
+.intro > .tape { justify-self: start; }
+.run { position: relative; }
+.run-title { position: sticky; top: 0; height: 100vh; height: 100svh; display: grid; place-items: center; margin: 0; pointer-events: none; }
+.run-title h2 { font-size: clamp(3rem, 16vw, 15rem); letter-spacing: -.05em; line-height: .9; text-align: center; }
+.plates { list-style: none; margin: -60vh 0 0; padding: 0 0 30vh; display: grid; gap: 22vh; position: relative; z-index: 1; }
+.plates li:nth-child(odd) { justify-self: start; }
+.plates li:nth-child(even) { justify-self: end; }
+/* L'inclinaison est portée par le li, pas par la figure animée : modifier le style
+   d'un élément animé force la réévaluation de son animation à chaque image. */
+.plates li { rotate: calc(var(--v) * var(--lean-max)); }
+.plates figure { margin: 0; width: min(36rem, 82vw); }
+.plates img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 1px solid var(--hair); }
+.plates figcaption { display: flex; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
+.outro { padding-block: 4rem 8rem; max-width: 62ch; }
+.progress { position: fixed; inset: 0 0 auto; height: 4px; background: var(--ink); transform-origin: 0 50%; scale: 1 1; z-index: 25; }
+
+/* Variante CSS : animations pilotées par le défilement, sans JavaScript.
+   Seulement si le navigateur sait faire ET si le visiteur n'a pas demandé moins de mouvement. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .css-driven .progress { scale: 0 1; animation: grow linear both; animation-timeline: scroll(root); }
+    /* Chaque planche monte et se redresse pendant son entrée dans l'écran */
+    .css-driven .plates figure { animation: plate-in linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+    /* Le titre recule pendant tout le passage des planches */
+    .css-driven .run { view-timeline: --run block; }
+    .css-driven .run-title h2 { animation: title-recede linear both; animation-timeline: --run; animation-range: contain 0% contain 100%; }
+  }
+}
+@keyframes grow { to { scale: 1 1; } }
+@keyframes plate-in { from { translate: 0 var(--rise); scale: .94; transform: rotate(var(--tilt)); } to { translate: 0 0; scale: 1; transform: rotate(0deg); } }
+@keyframes title-recede { from { scale: 1; color: var(--ink); } to { scale: .86; color: var(--muted); } }
+
+/* Sans support : la barre de progression n'a pas de sens, on la masque */
+@supports not (animation-timeline: view()) { .css-driven .progress { display: none; } }
+@media (prefers-reduced-motion: reduce) { .progress { display: none; } }

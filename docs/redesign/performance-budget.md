@@ -1,5 +1,7 @@
 # Budget de performance et stratégies de repli
 
+> **Révision 2.3 (28/10/2026)** : Johan accepte plus de JavaScript et de GPU pour une expérience signature. Le budget par couche qui remplace le § 2 pour l'accueil est en fin de document (§ 6). Les §§ 1 à 5 restent la référence de la phase 2.
+
 Ce document fixe les limites que la future implémentation ne doit pas dépasser, et ce que fait chaque effet quand l'appareil, le réseau ou les préférences du visiteur ne s'y prêtent pas. Les chiffres viennent de mesures réelles prises le 27/10/2026 ; leur méthode et leurs limites sont décrites en fin de document.
 
 ## 1. Points de repère mesurés
@@ -95,14 +97,29 @@ Légende de l'impact : LCP, INP, CLS ; "aucun" signifie que l'effet ne peut pas,
 | Critère | Évaluation |
 |---|---|
 | Technique | View Transitions natives entre documents (`@view-transition { navigation: auto }`), sans JS |
-| Coût | 0 Ko |
+| Coût | 0 Ko de JS, 1,2 Ko de CSS (prototype 01) |
+| Mesuré (mission 2.1) | 440 ms pour 420 ms réglées, retour arrière et mobile compris |
 | Navigateurs sans support | Navigation classique, sans dégradation |
-| `prefers-reduced-motion` | Désactivées |
+| `prefers-reduced-motion` | Désactivées (vérifié) |
+
+### 3.4 bis Effets ajoutés par la mission 2.1
+
+Mesures des micro-prototypes (`experiments/`) : Chrome 156 headless, 1 440 px, WebGL rendu en logiciel. Les conditions complètes sont dans chaque README.
+
+| Effet | Poids (gzip) | Coût mesuré | LCP | INP | CLS | Repli |
+|---|---|---|---|---|---|---|
+| Animations au défilement en CSS (02) | 1,2 Ko CSS | 7 ms de script pour 45 crans de molette à CPU x4 ; 0 LoAF | aucun | aucun | aucun (boîtes fixes) | État final statique |
+| Inclinaison selon la vitesse (02, facultatif) | 0,8 Ko JS | 65 ms de recalcul de style pour 45 crans à CPU x4, après correction (191 ms au départ) | aucun | faible | aucun | Aucun effet |
+| Révélation tramée Canvas 2D (03) | 2,6 Ko JS | 25 ms de préparation hors écran ; 0,38 ms par image d'animation (1,33 ms à CPU x4) | aucun : jamais sur une image visible au chargement | faible : 1 LoAF de 51 ms à CPU x4 | aucun : canvas superposé à l'image | `<img>` normale |
+| Spécimen relief en worker (04) | 2,9 Ko JS, chargés au clic | Page à 60 images/s ; interaction max 24 ms pendant le rendu, même à CPU x4 | aucun (au clic) | aucun mesurable | aucun | Image fixe AVIF 25 Ko |
+
+Ces effets tiennent dans le budget du § 2 : JS d'amélioration de 3,4 Ko gzip au plus sur une page d'étude de cas (révélation et inclinaison), sous les 15 Ko prévus ; couche créative de 2,9 Ko, sous les 10 Ko prévus.
 
 ### 3.5 Effets écartés
 
 | Effet | Raison |
 |---|---|
+| GSAP + ScrollTrigger pour les effets courants | 45,9 Ko gzip (gsap 3.13 : 28,1 Ko, ScrollTrigger : 17,8 Ko), soit 3 fois le budget de JS d'amélioration, pour un rendu identique au CSS natif (prototype 02, ±0,01) et 4 fois plus de script |
 | Défilement lissé ou détourné (Lenis, Locomotive) | Lenis détecté sur 5 références sur 26, Locomotive Scroll sur une autre ; sur deux références, le défilement programmé (`scrollTo`, celui qu'utilisent ancres et outils d'assistance) reste bloqué à 0 et seule la molette fonctionne ; la référence sous Locomotive a un CLS de 0,39. Ces bibliothèques compliquent les ancres, la recherche dans la page et la navigation clavier |
 | Three.js dans le bundle initial | Three 0.186.1 : 188 Ko compressés pour ses modules minifiés complets (`three.module` + `three.core`, mesuré sur jsDelivr), soit environ 65 fois le shader de 3.1. Le tree-shaking réduit ce chiffre, à mesurer sur la scène réelle. À reconsidérer uniquement pour une étude de cas qui en a besoin, en import dynamique |
 | Vidéo d'arrière-plan | Principale cause des poids de 13 à 142 Mo observés |
@@ -125,3 +142,64 @@ Légende de l'impact : LCP, INP, CLS ; "aucun" signifie que l'effet ne peut pas,
 - WebGL : détecté en interceptant `getContext` ; les canvas rendus dans un Web Worker (`OffscreenCanvas`) ne sont pas vus. Active Theory affiche ainsi 0 contexte malgré son moteur WebGL.
 - LCP à 0 : l'élément le plus grand est un canvas, que l'API LCP ignore.
 - Aucune mesure sur appareil mobile réel : à faire pendant l'implémentation (un Android d'entrée de gamme, Chrome, via WebPageTest ou un appareil physique).
+
+## 6. Révision 2.3 : budget par couche
+
+Le budget de 2.2 (200 Ko, 0 Ko de JS, GSAP exclu) empêchait toute expérience narrative. Il est remplacé par **un budget par couche** : la couche de lecture garde les exigences de 2.2, et la couche d'expérience a son propre plafond. Elle est chargée après le contenu, et peut être retirée sans rien perdre. Les chiffres viennent des prototypes E et F (`experience-signature.md`, § 7) : poids compressés par `gzip -9`, mesures dans Chrome 156 sur GPU Intel Iris Xe.
+
+### 6.1 Couche de lecture (toutes pages, tous niveaux)
+
+| Poste | Budget | Mesuré E - Calage | Mesuré F - Vue éclatée |
+|---|---|---|---|
+| HTML compressé | ≤ 30 Ko | 6,5 Ko | 5,4 Ko |
+| CSS compressé | ≤ 30 Ko | 7,3 Ko | 6,9 Ko |
+| Polices | ≤ 4 fichiers, ≤ 90 Ko | 4 fichiers, 88,7 Ko | idem |
+| JS nécessaire pour lire | **0 Ko** | 0 Ko | 0 Ko |
+| JS de base (mesures, détection, chargeur) | ≤ 12 Ko | 7,9 Ko | 10,6 Ko |
+| Images au premier écran | 0 (le LCP est le titre) | 0 | 0 |
+| **Total au premier rendu** | **≤ 160 Ko** | **≈ 110 Ko** | **≈ 112 Ko** |
+| LCP (p75, données réelles) | ≤ 2,0 s sur mobile | 56 à 116 ms en local | 56 à 140 ms en local |
+| CLS | ≤ 0,02 | 0,003 à 0,005 | 0,004 à 0,007 |
+
+### 6.2 Couche d'expérience (après le LCP, les fontes et un moment d'inactivité)
+
+| Poste | Budget Calage | Mesuré E | Budget Vue éclatée | Mesuré F |
+|---|---|---|---|---|
+| GSAP et greffons | ≤ 60 Ko | 55,6 Ko (cœur, ScrollTrigger, MorphSVG, DrawSVG) | ≤ 50 Ko | 45,9 Ko (cœur, ScrollTrigger) |
+| Moteur de rendu | ≤ 10 Ko | 5,9 Ko (WebGL brut : rendu, utilitaires, texte en texture) | ≤ 140 Ko | 134,2 Ko (Three.js élagué) ; 188,8 Ko dans le prototype (module complet) |
+| Code de la scène | ≤ 10 Ko | inclus ci-dessus | ≤ 10 Ko | 3,1 Ko |
+| Textures et images propres à l'expérience | ≤ 40 Ko | 34 Ko (capture AVIF du compte-fils, aussi utilisée sans WebGL) | ≤ 80 Ko | 171 Ko dans le prototype (5 captures en WebP 800 px) : **hors budget**, à passer en AVIF de 480 px |
+| **Total de la couche** | **≤ 80 Ko de code** | **61,5 Ko** | **≤ 200 Ko de code** | **183 Ko élagués** |
+
+Poids total de l'accueil une fois l'expérience chargée, images différées comprises : environ **220 Ko pour Calage**, et environ 365 Ko pour Vue éclatée après les corrections prévues (520 Ko dans le prototype). La médiane des 26 références est de 2 086 Ko (§ 1).
+
+### 6.3 Exécution
+
+| Indicateur | Budget | E - Calage | F - Vue éclatée |
+|---|---|---|---|
+| Images/s pendant le défilement, GPU intégré, CPU x4 | ≥ 55 | 59,5 | 59,0 |
+| p95 de la durée d'image, même condition | ≤ 20 ms | 16,8 ms | 16,7 ms |
+| LoAF pendant le défilement | aucune > 100 ms | 1 de 71 ms (démarrage du compte-fils) | **1 de 146 ms** (apparition des planches) : à corriger |
+| Images/s en rendu logiciel, CPU x4 | ≥ 30, sinon le niveau allégé s'impose | 47,3 | **28,4** |
+| INP | ≤ 200 ms | non mesuré au-delà des survols (aucune interaction lente observée) | idem |
+| Contextes WebGL simultanés | ≤ 2 | 2 (titre, compte-fils) | 1 |
+| Densité de pixels du rendu | ≤ 1,5 (complet), 1 (allégé) | respecté | respecté |
+| Délai de démarrage après l'inactivité | ≤ 250 ms | 48 à 111 ms | 17 à 221 ms |
+| Rendu au repos | aucun dessin | à la demande | arrêt après 3 images immobiles |
+
+### 6.4 Niveaux de capacité
+
+| Niveau | Quand | Ce qui est chargé |
+|---|---|---|
+| `full` | Pointeur fin, écran large, au moins 4 Go de mémoire, mouvement autorisé | Tout : épinglage, pointeur, WebGL en DPR 1,5 au plus, 3D (F) au-delà de 1 024 px |
+| `lite` | Écran tactile ou étroit, `saveData`, moins de 4 Go | GSAP sans épinglage ; WebGL en DPR 1 (pas de WebGL si `saveData`) ; pas de 3D |
+| `static` | `prefers-reduced-motion: reduce` | Aucun script d'expérience : états finaux de chaque motif, mesures seules |
+| sans WebGL ou contexte perdu | WebGL2 absent, ou `webglcontextlost` | Repli CSS (E) ou illustrations fixes (F), même narration |
+| sans JavaScript | - | Page complète, motifs à leur état final, mesures en "n/d" |
+
+### 6.5 Ce que la révision ne change pas
+
+- Le contenu, les liens et le contact sont dans le HTML ; aucun texte n'est servi en `opacity: 0` en attendant un script.
+- Pas de préchargeur, pas de défilement détourné (Lenis ou autre), pas de curseur personnalisé.
+- Un effet qui dépasse son budget est corrigé ou retiré avant la mise en ligne, pas "optimisé plus tard".
+- La vérification automatique en CI (lot 8 du plan) porte sur les deux couches séparément.

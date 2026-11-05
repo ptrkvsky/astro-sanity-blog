@@ -1,0 +1,51 @@
+/* Transitions entre documents, sans JavaScript : le navigateur capture l'ancienne
+   page, charge la nouvelle, puis anime chaque paire d'éléments qui partagent le
+   même view-transition-name. Sans support, la navigation reste classique. */
+@view-transition { navigation: auto; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
+
+:root { --vt-dur: 420ms; --vt-ease: cubic-bezier(.2, .8, .2, 1); }
+
+/* Le reste de la page : fondu court, pour que l'œil suive la planche qui se déplace */
+::view-transition-old(root) { animation: 160ms ease-out both vt-out; }
+::view-transition-new(root) { animation: 220ms 80ms ease-out both vt-in; }
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+
+/* Les éléments nommés : déplacement et redimensionnement */
+::view-transition-group(*) { animation-duration: var(--vt-dur); animation-timing-function: var(--vt-ease); }
+/* Les captures se remplacent sans fondu croisé (même image, deux tailles) */
+::view-transition-old(*):not(:only-child) { animation: none; opacity: 0; }
+::view-transition-new(*) { animation: none; }
+::view-transition-image-pair(*) { isolation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode: normal; }
+
+/* Index */
+.index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+.index li { border-bottom: 1px solid var(--ink); }
+.index a { display: grid; grid-template-columns: 3rem minmax(0, 14rem) minmax(0, 1fr) auto; gap: 1.2rem; align-items: center; padding: 1rem 0; text-decoration: none; }
+.index a:hover h2, .index a:focus-visible h2 { text-decoration: underline; text-decoration-thickness: 2px; }
+.index .num { font: var(--step--1) var(--mono); color: var(--muted); }
+.index img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--hair); background: var(--plate); }
+.index h2 { font-size: var(--step-1); width: fit-content; }
+.index p { margin: .3rem 0 0; color: var(--muted); font-size: var(--step--1); }
+
+/* Étude de cas */
+.case-head { display: grid; gap: 1.2rem; padding-block: clamp(1.5rem, 4vw, 3rem) 1.5rem; }
+.case-head h1 { font-size: var(--step-2); width: fit-content; }
+.case-shot img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border: 1px solid var(--hair); background: var(--plate); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.facts div { border-top: 1px solid var(--ink); padding-top: .5rem; }
+.facts dt { font: var(--step--1) var(--mono); color: var(--muted); }
+.facts dd { margin: .2rem 0 0; }
+.prose { max-width: 62ch; padding-bottom: 4rem; }
+
+@media (max-width: 40rem) {
+  .index a { grid-template-columns: 2rem 6.5rem minmax(0, 1fr); }
+  .index .year { display: none; }
+  .index img, .case-shot img { aspect-ratio: 390 / 600; }
+}
+
+.case-head > .tape { justify-self: start; }

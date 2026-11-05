@@ -144,7 +144,7 @@ Graphe unique par page (`@graph`), généré côté serveur, échappé correctem
 - Sitemap généré par `@astrojs/sitemap`, sans slash, excluant `/old` et toute page `noindex`, avec `lastmod` réel issu de Sanity (`_updatedAt`).
 - `robots.txt` : inchangé dans l'esprit (tout autorisé, lien vers `sitemap-index.xml`). Ne pas bloquer `/_astro/` (CSS et JS nécessaires au rendu).
 - `llms.txt` et une vue texte du site (`/index.txt` ou équivalent) générés au build depuis les mêmes contenus : coût de maintenance nul, et démonstration directe de la compétence SEO (idée observée chez basement.studio, voir `research.md`).
-- Pages de prototypes (`docs/redesign/prototypes`) : hors build, jamais publiées.
+- Pages de prototypes (`docs/redesign/prototypes`) et micro-prototypes (`experiments/`) : hors build, jamais publiées.
 
 ## 8. Rendu et accessibilité du contenu sans effets
 
@@ -168,16 +168,49 @@ Principe non négociable, valable pour les trois directions : **tout le contenu 
 
 ### 9.2 Couches de rendu
 
-1. **HTML + CSS** (Astro, zéro JS par défaut) : typographie, grille, contenu, navigation, états de focus, transitions de page natives (`@view-transition`) quand le navigateur les supporte.
-2. **Îlots interactifs** (Astro islands, hydratés `client:visible` ou `client:idle`) : formulaire de commentaire, démonstrations des études de cas, menu mobile si nécessaire.
-3. **Couche créative** (selon la direction) : chargée après le contenu principal, derrière une détection de capacités (`WebGL2`, mémoire, `prefers-reduced-motion`, `saveData`), avec repli statique. Détail et budgets : `performance-budget.md`.
+Mis à jour par la mission 2.1 : chaque couche a été vérifiée par un micro-prototype (`experiments/`). Les décisions détaillées sont dans `implementation-decisions.md` (D1 à D8).
+
+1. **HTML + CSS** (Astro, zéro JS par défaut). Cette couche porte :
+   - la typographie, la grille, le contenu, la navigation et les états de focus ;
+   - les **transitions de page natives entre documents** (`@view-transition { navigation: auto }`, noms construits à partir du slug), désactivées en mouvement réduit (D1, prototype 01) ;
+   - les **animations pilotées par le défilement** en CSS (`animation-timeline`), sous `@supports` et `no-preference` (D2, prototype 02) ;
+   - les **règles de spéculation** (`<script type="speculationrules">`, `prerender` au survol) sur les liens de l'index et des études de cas.
+2. **Îlots interactifs** (Astro islands, hydratés `client:visible` ou `client:idle`) : formulaire de commentaire, démonstrations des études de cas. Le menu mobile passe en HTML et CSS (`<details>` ou attribut `popover`) pour retirer GSAP du bundle global.
+3. **Améliorations légères en script classique** (un `<script>` Astro par composant, pas d'hydratation de framework) :
+   - révélation tramée des images en Canvas 2D (`reveal.js`, 2,6 Ko gzip, D4, prototype 03) ;
+   - inclinaison selon la vitesse, facultative (`lean.js`, 0,8 Ko gzip, D3, prototype 02).
+
+   Les deux sont désactivées en mouvement réduit et n'agissent jamais sur un élément visible au chargement.
+4. **Couche créative WebGL** : WebGL2 brut, sans bibliothèque.
+   - **Rendu** : dans un Web Worker via `OffscreenCanvas` quand c'est possible, sinon sur le fil principal (D5, prototype 04). Le code de rendu (`relief-core`) ne dépend pas du DOM, pour tourner dans les deux contextes.
+   - **Chargement** : en C, au clic (spécimen). En B, après le LCP, derrière une détection de capacités (`WebGL2`, `saveData`, `prefers-reduced-motion`, `deviceMemory`).
+   - **Repli** : une image fixe produite à partir du shader lui-même (AVIF, 25 Ko).
+
+**Règle de dessin (D6).** Un effet graphique sur un élément se dessine dans la boîte de cet élément (un canvas positionné dans le flux), jamais dans un canvas plein écran synchronisé au DOM : avec le défilement natif, ce dernier aurait une image de retard.
 
 ### 9.3 Dépendances
 
-- Pas de framework d'animation global par défaut. GSAP est déjà présent (menu mobile actuel) : il ne sera gardé que si une interaction le justifie et chargé seulement sur la page qui en a besoin.
-- Pas de bibliothèque de défilement doux (Lenis ou équivalent) : le défilement natif reste la norme. Les constats mesurés qui motivent ce choix sont dans `performance-budget.md` (§ 3.5).
-- Three.js uniquement si la direction retenue l'exige, importé dynamiquement, jamais dans le bundle initial (voir `performance-budget.md`).
-- React : conservé pour les îlots existants (fil d'Ariane, formulaire, pied de page) ; le fil d'Ariane et le pied de page peuvent devenir des composants `.astro` sans JS.
+- **Pas de framework d'animation.** GSAP n'est importé que par `NavMobile.astro`. Le prototype 02 montre que le CSS natif reproduit les effets de défilement visés aux mêmes valeurs (±0,01), pour 7 ms de script contre 28 ms, et sans les 45,9 Ko gzip de GSAP + ScrollTrigger. GSAP sera retiré avec le menu mobile, et réintroduit seulement pour un spécimen qui en aurait besoin, sur cette seule page.
+- **Pas de bibliothèque de défilement doux** (Lenis ou équivalent) : le défilement natif reste la norme. Les constats mesurés sont dans `performance-budget.md` (§ 3.5). La mission 2.1 ajoute une raison technique : ces bibliothèques servent aussi à synchroniser un canvas global avec le DOM, ce que la règle de dessin (D6) rend inutile.
+- **Pas de routeur client.** `<ClientRouter />` d'Astro n'est pas ajouté par défaut. Il ne se justifierait que pour conserver un état d'une page à l'autre.
+- **Pas de Three.js** pour le relief ni pour le tramage (188 Ko gzip pour des shaders de 2 Ko). Il reste envisageable pour une scène 3D d'étude de cas, en import dynamique, de préférence dans le worker.
+- **React** : conservé pour les îlots existants (fil d'Ariane, formulaire, pied de page). Le fil d'Ariane et le pied de page peuvent devenir des composants `.astro` sans JS.
+
+### 9.4 Organisation du code des effets (proposition)
+
+```
+src/effects/
+  view-transitions.css    règles @view-transition et ::view-transition-*
+  scroll-timeline.css     animations au défilement (planches, titres, progression)
+  reveal.ts               révélation tramée (Canvas 2D)
+  lean.ts                 inclinaison selon la vitesse (facultatif)
+  relief/
+    core.ts               rendu WebGL2, sans DOM
+    worker.ts             relais des messages
+    specimen.ts           page : détection, chargement au clic, replis
+```
+
+Chaque module est importé par le composant `.astro` qui en a besoin : un `<script>` Astro est empaqueté et dédupliqué, et n'est inclus que sur les pages qui l'utilisent. Les paramètres (durées, tailles) sont des propriétés CSS personnalisées ou des options de fonction, pour qu'une étude de cas puisse les ajuster sans copier le code.
 
 ## 10. Points dépendant de la direction retenue
 
@@ -186,9 +219,12 @@ Principe non négociable, valable pour les trois directions : **tout le contenu 
 | Structure de la home | index typographique long | champ plein écran + panneaux | suite de planches avec spécimens |
 | Projets | table index + pages longues | marqueurs sur le champ + liste HTML équivalente | planches avec démonstration intégrée |
 | Couche créative | aucune (CSS uniquement) | shader plein écran sur toutes les pages | spécimens locaux chargés à la demande |
+| Transitions et défilement (D1, D2) | CSS natif | CSS natif | CSS natif |
+| Révélation tramée des images (D4) | possible (index, aperçus) | inutile (le shader porte l'identité) | recommandée (planches, relevés) |
+| Rendu WebGL en worker (D5) | sans objet | hero continu, à mesurer sur appareil réel | spécimen au clic, vérifié (prototype 04) |
 | Risque SEO | très faible | moyen (discipline du HTML parallèle) | faible |
 
-Le détail de chaque direction est dans `directions.md`.
+Le détail de chaque direction est dans `directions.md`. Les mécanismes et leurs mesures sont dans `technical-research.md`.
 
 ## 11. À fournir par Johan avant l'implémentation
 

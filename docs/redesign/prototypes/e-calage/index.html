@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Johan Petrikovsky, développeur frontend - prototype 2.3 E "Calage"</title>
+<meta name="description" content="Prototype 2.3, concept Calage : une épreuve d'imprimerie qu'on cale jusqu'au bon à tirer, comme un navigateur compose une page.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../d-revue/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../d-revue/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../epreuve/tokens.css">
+<link rel="stylesheet" href="../epreuve/base.css">
+<link rel="stylesheet" href="calage.css">
+<script type="module" src="calage.js"></script>
+</head>
+<body>
+<div class="proto-bar" role="note">Outil de prototype 2.3 · <strong>E - Calage</strong> · <a href="../f-eclatee/">F - Vue éclatée</a> · <a href="../">Tous les prototypes</a> · Niveau : <output data-proto-tier>static (sans JS)</output> · <a href="?tier=static">static</a> / <a href="?tier=lite">lite</a> / <a href="?tier=full">full</a> / <a href="?simulate=nogl">sans WebGL</a></div>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<!-- Repère de calage : un symbole, deux plaques (rouge dessous, papier dessus) -->
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="repere">
+      <circle r="31" fill="none" stroke="currentColor" vector-effect="non-scaling-stroke"/>
+      <path d="M-48 0H48M0-48V48" fill="none" stroke="currentColor" vector-effect="non-scaling-stroke"/>
+      <circle r="12" fill="currentColor"/>
+      <path d="M-12 0H12M0-12V12" fill="none" style="stroke: var(--knock, #121210)" vector-effect="non-scaling-stroke"/>
+    </g>
+    <pattern id="tint-paper-50" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="4" cy="4" r="2.3" fill="#F1EEE6"/></pattern>
+    <pattern id="tint-paper-25" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="4" cy="4" r="1.4" fill="#F1EEE6"/></pattern>
+    <pattern id="tint-red-50" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><circle cx="4" cy="4" r="2.3" fill="#FF5A36"/></pattern>
+    <pattern id="tint-over" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><rect width="8" height="8" fill="#FF5A36"/><circle cx="4" cy="4" r="2" fill="#F1EEE6"/></pattern>
+  </defs>
+</svg>
+
+<header class="masthead page">
+  <div class="bar">
+    <a class="brand" href="#haut"><b>Johan Petrikovsky</b><span>Développeur frontend</span></a>
+    <nav class="nav" aria-label="Principale">
+      <ul>
+        <li><a href="#methode"><span class="n">01</span>Méthode</a></li>
+        <li><a href="#essais"><span class="n">02</span>Essais</a></li>
+        <li><a href="#controle"><span class="n">03</span>Contrôle</a></li>
+        <li><a href="#a-propos"><span class="n">04</span>À propos</a></li>
+        <li><a href="#contact"><span class="n">05</span>Contact</a></li>
+      </ul>
+    </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Principale (mobile)">
+        <ul>
+          <li><a href="#methode"><span class="n">01</span>Méthode</a></li>
+          <li><a href="#essais"><span class="n">02</span>Essais</a></li>
+          <li><a href="#controle"><span class="n">03</span>Contrôle</a></li>
+          <li><a href="#a-propos"><span class="n">04</span>À propos</a></li>
+          <li><a href="#contact"><span class="n">05</span>Contact</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+  <div class="edition">
+    <span>Épreuve n° 1<span class="hide-s"> · Toulouse</span> · 28 octobre 2026</span>
+    <span>Cette page : <output data-m="transferKB">n/d</output> transférés</span>
+  </div>
+</header>
+
+<main id="contenu">
+  <!-- Hero : une feuille d'épreuve, hors repère à l'arrivée -->
+  <section class="hero" id="haut" aria-labelledby="t-hero">
+    <div class="sheet page">
+      <div class="sheet-inner">
+        <p class="hero-kicker"><b>Johan Petrikovsky</b> · Développeur frontend senior · Toulouse, depuis 2012</p>
+        <h1 id="t-hero" class="hero-title">Des interfaces <em>rapides,</em> lisibles, trouvables.</h1>
+        <div class="hero-mark" data-mark aria-hidden="true">
+          <svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+        </div>
+        <div class="hero-body">
+          <p class="lede">Sites à fort trafic, outils métier, expériences interactives : je construis des interfaces qui se chargent vite, se lisent sans effort et se trouvent. Cette page en est l'épreuve. <span class="status">texte provisoire</span></p>
+          <div class="actions">
+            <a class="btn primary" href="mailto:johan@developpeur-web.tech">Écrire à Johan</a>
+            <a class="btn" href="#essais">Voir les essais</a>
+          </div>
+        </div>
+        <dl class="hero-spec">
+          <div><dt>Plaques</dt><dd>papier, rouge</dd></div>
+          <div><dt>Trame</dt><dd>45° et 15°</dd></div>
+          <div><dt>Calage</dt><dd><output data-calage>100</output> %</dd></div>
+        </dl>
+      </div>
+      <span class="crop tl" aria-hidden="true"></span><span class="crop tr" aria-hidden="true"></span><span class="crop bl" aria-hidden="true"></span><span class="crop br" aria-hidden="true"></span>
+      <div class="sheet-foot" aria-hidden="true"><p class="slug">developpeur-web.tech · épreuve 1/5 · Instrument Serif, PolySans, Plex Mono · 2 plaques</p><p class="hero-hint">Faites défiler : l'épreuve se cale ↓</p></div>
+    </div>
+  </section>
+
+  <!-- 01 Méthode : la chaîne d'impression répond au pipeline de rendu -->
+  <section class="sec page" id="methode" aria-labelledby="t-methode">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">01</p>
+      <h2 id="t-methode">Du balisage au pixel</h2>
+      <p class="note">Un navigateur compose une page comme un imprimeur tire une épreuve : en passes successives, chacune contrôlée. <span class="status">texte provisoire</span></p>
+    </header>
+    <div class="pipeline">
+      <p class="pipeline-counter" aria-hidden="true"><b>01</b><span>Balisage</span><i>Composition</i></p>
+      <div class="steps-wrap">
+      <div class="axis-head" data-mark aria-hidden="true">
+        <svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <svg class="step-mark mark" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          <p class="step-pair"><span>Balisage</span> · Composition</p>
+          <h3>Le contenu existe avant le script.</h3>
+          <p>Tout le texte, les liens et le contact sont dans le HTML servi. Un robot, un lecteur d'écran ou un navigateur sans JavaScript lisent la même page.</p>
+        </li>
+        <li class="step">
+          <svg class="step-mark mark" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          <p class="step-pair"><span>Style</span> · Imposition</p>
+          <h3>La mise en page tient seule.</h3>
+          <p>Grille, typographie et focus sont en CSS. Les animations s'ajoutent par-dessus : elles ne cachent jamais un contenu en attendant un script.</p>
+        </li>
+        <li class="step">
+          <svg class="step-mark mark" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          <p class="step-pair"><span>Mise en page</span> · Calage</p>
+          <h3>Rien ne bouge à l'arrivée.</h3>
+          <p>Chaque boîte connaît sa taille avant les images et les polices : le texte ne saute pas sous le doigt. Décalage visé : 0,02 au plus.</p>
+        </li>
+        <li class="step">
+          <svg class="step-mark mark" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          <p class="step-pair"><span>Peinture</span> · Encrage</p>
+          <h3>Ce qui s'affiche coûte ce qu'il doit.</h3>
+          <p>Images en AVIF à dimensions déclarées, polices réduites aux caractères utiles, aucune vidéo d'arrière-plan.</p>
+        </li>
+        <li class="step">
+          <svg class="step-mark mark" viewBox="-50 -50 100 100" aria-hidden="true"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          <p class="step-pair"><span>Composition des calques</span> · Tirage</p>
+          <h3>Les effets arrivent en dernier.</h3>
+          <p>Le WebGL de cette page se charge après le contenu, ne dessine que ce qui est visible et s'arrête hors de l'écran. Sans lui, rien ne manque.</p>
+        </li>
+      </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Essais -->
+  <section class="sec page" id="essais" aria-labelledby="t-essais">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">02</p>
+      <h2 id="t-essais">Essais</h2>
+      <p class="note">Six projets livrés : le problème, les contraintes, les décisions. Survolez une ligne : elle se cale.</p>
+    </header>
+    <ol class="index">
+      <li><a href="../d-revue/etude-de-cas.html"><span class="n">01</span><span class="t">SAFTI.fr</span><span class="r">Refonte d'architecture, SEO</span><span class="y">2022-2024</span><span class="s">Next.js · TypeScript · Jest</span></a></li>
+      <li><a href="#essais"><span class="n">02</span><span class="t">Omega</span><span class="r">Lead frontend, outil métier</span><span class="y">2024</span><span class="s">React · TypeScript · Storybook · Leaflet</span></a></li>
+      <li><a href="#essais"><span class="n">03</span><span class="t">Draw me a Sheep</span><span class="r">Développement complet, WebGL et GSAP</span><span class="y">2024</span><span class="s">Astro · Sanity · WebGL · GSAP</span></a></li>
+      <li><a href="#essais"><span class="n">04</span><span class="t">Bien Estimer</span><span class="r">SEO, plan de marquage GA4</span><span class="y">2023-2024</span><span class="s">Next.js · GA4</span></a></li>
+      <li><a href="#essais"><span class="n">05</span><span class="t">ALS Action Canada</span><span class="r">Refonte de templates</span><span class="y">2024</span><span class="s">React · Gatsby · WordPress headless</span></a></li>
+      <li><a href="#essais"><span class="n">06</span><span class="t">Join SAFTI</span><span class="r">Full-stack, multilingue</span><span class="y">2023</span><span class="s">Sulu CMS · PHP · Twig</span></a></li>
+    </ol>
+
+    <article class="feature grid" aria-labelledby="t-feature">
+      <figure class="shot feature-shot">
+        <div class="frame" data-loupe>
+          <picture>
+            <source type="image/avif" media="(max-width: 48rem)" srcset="../../../../experiments/assets/projet-safti-d-800.avif">
+            <source type="image/avif" srcset="../../../../experiments/assets/projet-safti-d-1440.avif">
+            <img src="../../../../experiments/assets/projet-safti-d-1440.webp" width="1440" height="900" alt="Page d'accueil de SAFTI.fr : moteur de recherche d'annonces immobilières" loading="lazy" decoding="async">
+          </picture>
+          <div class="loupe" data-mark aria-hidden="true">
+            <svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          </div>
+        </div>
+        <figcaption><span>Fig. 01 · safti.fr, capture d'octobre 2026</span><span>Au compte-fils : l'épreuve et le tirage</span></figcaption>
+      </figure>
+      <div class="feature-body">
+        <p class="kicker"><span>Essai 01 · 2022-2024</span><span>Next.js · TypeScript · Jest</span></p>
+        <h3 id="t-feature">Refondre un site d'annonces sans perdre son trafic</h3>
+        <dl class="spec">
+          <div><dt>Problème</dt><dd>Un site d'annonces dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</dd></div>
+          <div><dt>Décisions</dt><dd>Migration progressive vers l'App Router, optimisation technique du SEO, tests unitaires avec objectifs de couverture.</dd></div>
+          <div><dt>Résultat</dt><dd>Une fonctionnalité proposée et développée a accompagné le passage de la note Trustpilot de 2,1 à 4,8. <span class="status">à sourcer</span></dd></div>
+        </dl>
+        <a class="more" href="../d-revue/etude-de-cas.html">Lire l'étude de cas →</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- 03 Contrôle : la gamme de contrôle porte les mesures réelles -->
+  <section class="sec page" id="controle" aria-labelledby="t-controle">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">03</p>
+      <h2 id="t-controle">Contrôle, en direct</h2>
+      <p class="note">Au bas de chaque feuille, l'imprimeur mesure une gamme de contrôle. Ici, ce sont les mesures de cette page, prises par votre navigateur.</p>
+    </header>
+    <div class="strip-wrap">
+      <div class="strip-figure">
+      <div class="strip-mark" data-mark aria-hidden="true">
+        <svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+      </div>
+      <svg class="strip" viewBox="0 0 1200 160" aria-hidden="true">
+        <path class="strip-rule" d="M0 4H1200M0 156H1200"/>
+        <g class="patches">
+          <path class="patch" d="M8 24H192V136H8Z" fill="#F1EEE6"/>
+          <path class="patch" d="M208 24H392V136H208Z" fill="url(#tint-paper-50)"/>
+          <path class="patch" d="M408 24H592V136H408Z" fill="#FF5A36"/>
+          <path class="patch" d="M608 24H792V136H608Z" fill="url(#tint-red-50)"/>
+          <path class="patch" d="M808 24H992V136H808Z" fill="url(#tint-over)"/>
+          <path class="patch" d="M1008 24H1192V136H1008Z" fill="url(#tint-paper-25)"/>
+        </g>
+        <g class="patch-n">
+          <text x="18" y="17">01</text><text x="218" y="17">02</text><text x="418" y="17">03</text><text x="618" y="17">04</text><text x="818" y="17">05</text><text x="1018" y="17">06</text>
+        </g>
+      </svg>
+      </div>
+      <dl class="strip-values" aria-live="polite">
+        <div><dt><span>01</span> Poids transféré</dt><dd><output data-m="transferKB">n/d</output></dd></div>
+        <div><dt><span>02</span> Requêtes</dt><dd><output data-m="requests">n/d</output></dd></div>
+        <div><dt><span>03</span> JavaScript</dt><dd><output data-m="jsKB">n/d</output></dd></div>
+        <div><dt><span>04</span> Plus grand affichage</dt><dd><output data-m="lcp">n/d</output></dd></div>
+        <div><dt><span>05</span> Décalage visuel</dt><dd><output data-m="cls">n/d</output></dd></div>
+        <div><dt><span>06</span> Interaction la plus lente</dt><dd><output data-m="inp">n/d</output></dd></div>
+      </dl>
+    </div>
+    <p class="note strip-note">Valeurs de cette page, maintenant. "n/d" : mesure indisponible (API absente ou JavaScript désactivé). Le poids inclut la couche animée, chargée après le contenu.</p>
+
+    <div class="checks">
+      <div><h3>Performance</h3><p>Temps de réponse serveur, poids des pages, rendu, suivi en production.</p><a href="#controle">Comment réduire le TTFB</a></div>
+      <div><h3>SEO technique</h3><p>Rendu serveur, données structurées, maillage, migrations sans perte de trafic.</p><a href="#controle">Le rôle des développeurs dans le SEO</a></div>
+      <div><h3>Accessibilité</h3><p>Clavier, focus visible, mouvement réduit, composants qui disent ce qu'ils font.</p><a href="#controle">Les composants Tooltip ne devraient pas exister</a></div>
+      <div><h3>Architecture</h3><p>Applications React typées et testées, cache et rendu Next.js maîtrisés.</p><a href="#controle">Cache handler personnalisé pour Next.js 16</a></div>
+    </div>
+  </section>
+
+  <!-- 04 À propos : le motif se range en folio, la lecture reprend -->
+  <section class="sec page" id="a-propos" aria-labelledby="t-apropos">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">04</p>
+      <h2 id="t-apropos">À propos</h2>
+      <div class="folio" data-mark aria-hidden="true">
+        <svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+      </div>
+      <p class="note">D'abord l'agence, maintenant le produit : quatorze ans de frontend.</p>
+    </header>
+    <div class="about grid">
+      <figure class="portrait"><img src="../assets/johan.jpg" width="349" height="349" alt="Portrait de Johan Petrikovsky" loading="lazy" decoding="async"></figure>
+      <div class="bio">
+        <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript.</p>
+        <p>Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur. J'écris aussi sur ce que j'apprends.</p>
+        <dl class="facts-list">
+          <dt>Basé à</dt><dd>Toulouse</dd>
+          <dt>Depuis</dt><dd>2012</dd>
+          <dt>Écrit</dt><dd>69 articles publiés</dd>
+          <dt>Disponibilité</dt><dd><span class="status">à fournir</span></dd>
+        </dl>
+      </div>
+      <div class="quotes">
+        <blockquote><p>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."</p><footer>Perrine Sini-Berthonneau, fondatrice du studio Les Cerises</footer></blockquote>
+        <blockquote><p>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."</p><footer>Florent Pasquet, fondateur d'agence web</footer></blockquote>
+      </div>
+      <h3 class="notes-head" id="t-notes">Dernières notes</h3>
+      <ul class="notes-list" aria-labelledby="t-notes">
+        <li><span class="mono">Next.js</span><a href="#a-propos">Comment créer un cache handler personnalisé pour Next.js 16</a></li>
+        <li><span class="mono">Performance</span><a href="#a-propos">Comment réduire le TTFB</a></li>
+        <li><span class="mono">Accessibilité</span><a href="#a-propos">Les composants Tooltip ne devraient pas exister</a></li>
+        <li><span class="mono">React</span><a href="#a-propos">Comment faire une application React plus rapide ?</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 05 Contact : le bon à tirer résout le motif du hero -->
+  <section class="sec page bat" id="contact" aria-labelledby="t-contact">
+    <div class="bat-grid">
+      <p class="sec-num" aria-hidden="true">05</p>
+      <div class="stamp-wrap" aria-hidden="true">
+        <svg class="stamp" viewBox="-160 -160 320 320">
+          <defs>
+            <path id="stamp-path" d="M0,-104A104,104 0 1,1 -0.01,-104"/>
+            <mask id="stamp-mask" maskUnits="userSpaceOnUse" x="-160" y="-160" width="320" height="320"><circle class="stamp-mask-c" r="110" fill="none" stroke="#fff" stroke-width="44" transform="rotate(-90)"/></mask>
+            <filter id="ink" x="-10%" y="-10%" width="120%" height="120%">
+              <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2"/>
+            </filter>
+          </defs>
+          <g class="stamp-ink" filter="url(#ink)">
+            <g class="stamp-ring">
+              <path class="seg" d="M-1 -150A150 150 0 0 1 130.4 -74.1L110.4 -62.7A127 127 0 0 0 -0.9 -127Z"/>
+              <path class="seg" d="M129.4 -75.9A150 150 0 0 1 129.4 75.9L109.5 64.3A127 127 0 0 0 109.5 -64.3Z"/>
+              <path class="seg" d="M130.4 74.1A150 150 0 0 1 -1 150L-0.9 127A127 127 0 0 0 110.4 62.7Z"/>
+              <path class="seg" d="M1 150A150 150 0 0 1 -130.4 74.1L-110.4 62.7A127 127 0 0 0 0.9 127Z"/>
+              <path class="seg" d="M-129.4 75.9A150 150 0 0 1 -129.4 -75.9L-109.5 -64.3A127 127 0 0 0 -109.5 64.3Z"/>
+              <path class="seg" d="M-130.4 -74.1A150 150 0 0 1 1 -150L0.9 -127A127 127 0 0 0 -110.4 -62.7Z"/>
+              <circle r="92" class="inner"/>
+            </g>
+            <text class="stamp-text" mask="url(#stamp-mask)"><textPath href="#stamp-path" textLength="650" lengthAdjust="spacing">BON À TIRER · ÉPREUVE N° 1 · DEVELOPPEUR-WEB.TECH · 2026 ·</textPath></text>
+          </g>
+          <g class="stamp-mark" data-mark>
+            <svg class="mark" x="-56" y="-56" width="112" height="112" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg>
+          </g>
+        </svg>
+      </div>
+      <h2 id="t-contact">Un projet, une refonte, un audit de performance ? <em>Signons le bon à tirer.</em></h2>
+      <a class="mail" href="mailto:johan@developpeur-web.tech">johan<span class="at">@</span>developpeur-web.tech</a>
+      <p class="contact-meta"><span>Réponse sous 48 h <span class="status">démo</span></span><span>LinkedIn <span class="status">à fournir</span></span><span>GitHub <span class="status">à fournir</span></span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="colophon page">
+  <span>Composé en Instrument Serif, PolySans et IBM Plex Mono. Lisible sans JavaScript ; l'épreuve animée se charge après le contenu.</span>
+  <span><a href="#haut">Haut de page</a> · <a href="#contenu">Plan du site</a></span>
+</footer>
+
+<div class="calage-meter" aria-hidden="true"><span>Calage</span><b><output data-calage>100</output> %</b><i></i></div>
+<div class="courier" aria-hidden="true"><svg class="mark" viewBox="-50 -50 100 100"><use href="#repere" class="plate-red"/><use href="#repere" class="plate-paper"/></svg></div>
+</body>
+</html>

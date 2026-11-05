@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planches, CSS natif - prototype 02</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="scroll.css">
+<script type="module" src="css-run.js"></script>
+</head>
+<body class="css-driven">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="page">
+<header class="top"><a href="../index.html">Expériences</a><nav class="mono"><a href="index.html" aria-current="page">Variante CSS</a> / <a href="gsap.html">Variante GSAP</a></nav></header>
+<main id="contenu">
+<section class="intro">
+  <span class="tape">Prototype 02 - CSS natif</span>
+  <h1>Planches</h1>
+  <p class="muted">Montée des planches, recul du titre et barre de progression : CSS seul (animation-timeline). Le script de cette page ne gère que les réglages, l'inclinaison selon la vitesse et les instruments.</p>
+  <fieldset class="controls plate">
+    <legend>Réglages</legend>
+    <label for="rise">Montée à l'entrée <input id="rise" type="range" min="0" max="40" step="1" value="18"><output for="rise">18vh</output></label>
+    <label for="tilt">Rotation à l'entrée <input id="tilt" type="range" min="0" max="12" step=".5" value="4"><output for="tilt">4deg</output></label>
+    <label for="lean">Inclinaison selon la vitesse <input id="lean" type="range" min="0" max="12" step=".5" value="6"><output for="lean">6deg</output></label>
+  </fieldset>
+</section>
+<section class="run" aria-labelledby="run-title">
+  <div class="run-title"><h2 id="run-title">Essais</h2></div>
+  <ol class="plates">
+    <li><figure>
+      <picture>
+        <source type="image/avif" srcset="../assets/planche-topo-390.avif 390w, ../assets/planche-topo-800.avif 800w" sizes="min(36rem, 82vw)">
+        <img src="../assets/planche-topo-800.webp" width="800" height="533" alt="" loading="lazy" decoding="async">
+      </picture>
+      <figcaption><span>Relevé</span><span class="mono muted">Pl. 01 - image générée</span></figcaption>
+    </figure></li>
+    <li><figure>
+      <picture>
+        <source type="image/avif" srcset="../assets/planche-mesure-390.avif 390w, ../assets/planche-mesure-800.avif 800w" sizes="min(36rem, 82vw)">
+        <img src="../assets/planche-mesure-800.webp" width="800" height="533" alt="" loading="lazy" decoding="async">
+      </picture>
+      <figcaption><span>Mesure</span><span class="mono muted">Pl. 02 - image générée</span></figcaption>
+    </figure></li>
+    <li><figure>
+      <picture>
+        <source type="image/avif" srcset="../assets/planche-epreuve-390.avif 390w, ../assets/planche-epreuve-800.avif 800w" sizes="min(36rem, 82vw)">
+        <img src="../assets/planche-epreuve-800.webp" width="800" height="533" alt="" loading="lazy" decoding="async">
+      </picture>
+      <figcaption><span>Épreuve</span><span class="mono muted">Pl. 03 - image générée</span></figcaption>
+    </figure></li>
+    <li><figure>
+      <picture>
+        <source type="image/avif" srcset="../assets/planche-nuancier-390.avif 390w, ../assets/planche-nuancier-800.avif 800w" sizes="min(36rem, 82vw)">
+        <img src="../assets/planche-nuancier-800.webp" width="800" height="533" alt="" loading="lazy" decoding="async">
+      </picture>
+      <figcaption><span>Nuancier</span><span class="mono muted">Pl. 04 - image générée</span></figcaption>
+    </figure></li>
+  </ol>
+</section>
+<section class="outro">
+  <h2>Fin de l'essai</h2>
+  <p>Sous la section épinglée, le contenu reprend normalement : ancres, recherche dans la page et retour arrière fonctionnent, car le défilement reste celui du navigateur.</p>
+</section>
+</main>
+</div>
+</body>
+</html>

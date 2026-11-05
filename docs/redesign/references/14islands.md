@@ -42,6 +42,7 @@ Observé : effet de révélation tramée/pixelisée sur une image de projet (mob
 
 **Hypothèse**
 - Le tramage observé sur les images est un shader appliqué par le scroll-rig sur des `<img>` du DOM (les images existent en HTML, comme le montre la version sans JS).
+  - **Corrigé en mission 2.1** (27/10) : sur l'accueil, les `<img>` restent visibles pendant tout le défilement, et le shader lu est un dégradé d'accueil réactif au pointeur (`uMouse`, `uVelocity`). L'hypothèse ci-dessus n'est pas confirmée. Voir `technical-research.md` § 3.3.
 
 ## Mobile
 Capture mobile : logo + "MENU", textes de présentation décalés vers la droite, "Design & Technology" ramené sur deux lignes à ~50 px, puis un bloc vidéo noir avec un visuel de projet ("now form is abstract shape"). Mobile-mid : grille de projets passée en une colonne, très lisible. LCP mobile meilleur que desktop (752 ms contre 3224 ms).

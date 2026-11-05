@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALS Action Canada - prototype 01</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="vt.css">
+<script src="vt-head.js"></script>
+<script type="speculationrules">
+{ "prerender": [{ "where": { "selector_matches": ".index a, .prose a" }, "eagerness": "moderate" }] }
+</script>
+<script type="module" src="vt-bench.js"></script>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<div class="page">
+<header class="top"><a href="index.html">Essais</a><span class="mono muted">Prototype 01 - transitions entre documents</span></header>
+<main id="contenu">
+<article>
+  <div class="case-head">
+    <a class="mono" href="index.html">Retour aux essais</a>
+    <h1 style="view-transition-name: title-als">ALS Action Canada</h1>
+    <p class="muted">Site d'une association de lutte contre la SLA.</p>
+  </div>
+  <div class="case-shot">
+    <picture>
+  <source media="(max-width: 40rem)" type="image/avif" srcset="../assets/projet-als-m-390.avif">
+  <source media="(max-width: 40rem)" type="image/webp" srcset="../assets/projet-als-m-390.webp">
+  <source type="image/avif" srcset="../assets/projet-als-d-800.avif 800w, ../assets/projet-als-d-1440.avif 1440w" sizes="(min-width: 90rem) 86rem, 100vw">
+  <img src="../assets/projet-als-d-800.webp" width="800" height="500" alt="Page d'accueil de ALS Action Canada, capture du 27/10/2026" fetchpriority="high" decoding="async" style="view-transition-name: shot-als">
+</picture>
+  </div>
+  <dl class="facts">
+    <div><dt>Rôle</dt><dd>Refonte de gabarits</dd></div>
+    <div><dt>Période</dt><dd>2024</dd></div>
+    <div><dt>Technologies</dt><dd>React, Gatsby, WordPress headless</dd></div>
+  </dl>
+  <div class="prose">
+    <p>Texte de test. Dans le site final, cette page porte le problème, les contraintes, les décisions techniques et les résultats vérifiables du projet.</p>
+    <p><a href="safti.html">Essai suivant : SAFTI.fr</a></p>
+  </div>
+</article>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+/* Socle commun des micro-prototypes : jetons de la direction C (Banc d'essai).
+   Une seule police (PolySans, déjà servie par le site) et la mono du système. */
+@font-face { font-family: "PolySans"; src: url("../../public/assets/fonts/PolySans-Neutral.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  --bench: #E7E7E1;
+  --plate: #FAFAF7;
+  --ink: #111111;
+  --muted: #55554F;
+  --tape: #FFD43B;
+  --hair: #C9C9C1;
+  --sans: "PolySans", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --gutter: clamp(1rem, .5rem + 2vw, 2.25rem);
+  --step--1: clamp(.75rem, .73rem + .1vw, .82rem);
+  --step-0: clamp(1rem, .96rem + .2vw, 1.12rem);
+  --step-1: clamp(1.25rem, 1.1rem + .6vw, 1.7rem);
+  --step-2: clamp(1.8rem, 1.3rem + 2vw, 3.2rem);
+  --step-4: clamp(2.6rem, 1.3rem + 5.4vw, 7rem);
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--bench); color: var(--ink); }
+body { margin: 0; font: 400 var(--step-0)/1.5 var(--sans); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: .2em; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 6px var(--tape); }
+.page { max-width: 90rem; margin-inline: auto; padding-inline: var(--gutter); }
+.mono { font-family: var(--mono); font-size: var(--step--1); }
+.muted { color: var(--muted); }
+.tape { display: inline-block; background: var(--tape); color: var(--ink); font: 500 var(--step--1)/1.2 var(--mono); padding: .25rem .5rem; text-transform: uppercase; letter-spacing: .04em; }
+.skip { position: absolute; left: -999px; z-index: 30; background: var(--plate); padding: .5rem 1rem; }
+.skip:focus { left: 1rem; top: 1rem; }
+h1, h2, h3 { font-weight: 400; margin: 0; }
+h1 { font-size: var(--step-4); line-height: .95; letter-spacing: -.035em; }
+h2 { font-size: var(--step-2); line-height: 1; letter-spacing: -.025em; }
+h3 { font-size: var(--step-1); letter-spacing: -.015em; }
+
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 2rem; padding-block: 1rem; border-bottom: 1px solid var(--ink); }
+.top a { text-decoration: none; }
+.top a:hover { text-decoration: underline; }
+
+/* Planche : cadre à repères de coupe, sans arrondi */
+.plate { position: relative; background: var(--plate); border: 1px solid var(--hair); padding: clamp(1rem, 2.4vw, 2rem); }
+.plate::before, .plate::after { content: ""; position: absolute; width: 14px; height: 14px; border: 0 solid var(--ink); }
+.plate::before { top: -6px; left: -6px; border-top-width: 1px; border-left-width: 1px; }
+.plate::after { bottom: -6px; right: -6px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* Panneau de réglages et d'instruments */
+.controls { display: grid; gap: .6rem; margin: 0; padding: 0; border: 0; }
+.controls legend { font: 500 var(--step--1) var(--mono); text-transform: uppercase; letter-spacing: .04em; margin-bottom: .4rem; }
+.controls label { display: grid; grid-template-columns: minmax(9rem, 1fr) minmax(6rem, 2fr) 4.5rem; gap: .6rem; align-items: center; font-size: var(--step--1); }
+.controls output { font: var(--step--1) var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.controls input[type=range] { width: 100%; accent-color: var(--ink); }
+.btn { display: inline-block; font: inherit; padding: .7rem 1.1rem; text-decoration: none; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--ink); color: var(--plate); }
+.btn.primary:hover { background: var(--tape); color: var(--ink); }
+
+.bench { position: fixed; right: .75rem; bottom: .75rem; z-index: 20; background: var(--ink); color: var(--plate); font: 11px/1.45 var(--mono); padding: .5rem .7rem; max-width: min(19rem, calc(100vw - 1.5rem)); font-variant-numeric: tabular-nums; }
+.bench dl { display: grid; grid-template-columns: auto auto; gap: 0 .9rem; margin: 0; }
+.bench dt { color: #A9A9A3; }
+.bench dd { margin: 0; text-align: right; }
+
+@media (max-width: 40rem) {
+  .controls label { grid-template-columns: 1fr 4rem; }
+  .controls label input { grid-column: 1 / -1; grid-row: 2; }
+}

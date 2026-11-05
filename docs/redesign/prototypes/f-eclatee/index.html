@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Johan Petrikovsky, développeur frontend - prototype 2.3 F "Vue éclatée"</title>
+<meta name="description" content="Prototype 2.3, concept Vue éclatée : la page se démonte en calques mesurés, du modèle de boîte du titre au poids réel de chaque couche.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<link rel="preload" href="../d-revue/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../d-revue/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../epreuve/tokens.css">
+<link rel="stylesheet" href="../epreuve/base.css">
+<link rel="stylesheet" href="eclatee.css">
+<script type="importmap">{ "imports": { "three": "../vendor/three-0.186.1/three.module.min.js" } }</script>
+<script type="module" src="eclatee.js"></script>
+</head>
+<body>
+<div class="proto-bar" role="note">Outil de prototype 2.3 · <a href="../e-calage/">E - Calage</a> · <strong>F - Vue éclatée</strong> · <a href="../">Tous les prototypes</a> · Niveau : <output data-proto-tier>static (sans JS)</output> · <a href="?tier=static">static</a> / <a href="?tier=lite">lite</a> / <a href="?tier=full">full</a> / <a href="?simulate=nogl">sans WebGL</a></div>
+<a class="skip" href="#contenu">Aller au contenu</a>
+
+<header class="masthead page">
+  <div class="bar">
+    <a class="brand" href="#haut"><b>Johan Petrikovsky</b><span>Développeur frontend</span></a>
+    <nav class="nav" aria-label="Principale">
+      <ul>
+        <li><a href="#couches"><span class="n">01</span>Couches</a></li>
+        <li><a href="#essais"><span class="n">02</span>Essais</a></li>
+        <li><a href="#poids"><span class="n">03</span>Poids</a></li>
+        <li><a href="#a-propos"><span class="n">04</span>À propos</a></li>
+        <li><a href="#contact"><span class="n">05</span>Contact</a></li>
+      </ul>
+    </nav>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Principale (mobile)">
+        <ul>
+          <li><a href="#couches"><span class="n">01</span>Couches</a></li>
+          <li><a href="#essais"><span class="n">02</span>Essais</a></li>
+          <li><a href="#poids"><span class="n">03</span>Poids</a></li>
+          <li><a href="#a-propos"><span class="n">04</span>À propos</a></li>
+          <li><a href="#contact"><span class="n">05</span>Contact</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+  <div class="edition">
+    <span>Vue éclatée<span class="hide-s"> · Toulouse</span> · 28 octobre 2026</span>
+    <span>Fenêtre : <output data-viewport>n/d</output></span>
+  </div>
+</header>
+
+<main id="contenu">
+  <!-- Hero : le titre dans son modèle de boîte, coté en direct -->
+  <section class="hero page" id="haut" aria-labelledby="t-hero">
+    <div class="hero-grid">
+      <p class="hero-kicker"><b>Johan Petrikovsky</b> · Développeur frontend senior · Toulouse, depuis 2012</p>
+      <div class="bm bm-margin" data-box="margin">
+        <span class="bm-tag" aria-hidden="true">marge <output data-bm="margin">auto</output></span>
+        <div class="bm bm-border" data-box="border">
+          <span class="bm-tag" aria-hidden="true">bordure <output data-bm="border">1,5</output></span>
+          <div class="bm bm-padding" data-box="padding">
+            <span class="bm-tag" aria-hidden="true">marge interne <output data-bm="padding">auto</output></span>
+            <h1 id="t-hero" class="hero-title" data-box="content">Des interfaces <em>rapides,</em> lisibles, trouvables.</h1>
+          </div>
+        </div>
+        <span class="cote cote-w" aria-hidden="true"><i></i><output data-cote="w">auto</output><i></i></span>
+        <span class="cote cote-h" aria-hidden="true"><i></i><output data-cote="h">auto</output><i></i></span>
+        <span class="cote-type" aria-hidden="true">Instrument Serif · <output data-cote="fs">n/d</output> / interligne 0,86</span>
+      </div>
+      <div class="hero-body">
+        <p class="lede">Sites à fort trafic, outils métier, expériences interactives. Je conçois chaque interface en sachant ce qu'il y a sous chaque pixel : sa structure, ses styles, ses scripts et ce que chacun coûte. <span class="status">texte provisoire</span></p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:johan@developpeur-web.tech">Écrire à Johan</a>
+          <a class="btn" href="#essais">Voir les essais</a>
+        </div>
+      </div>
+      <p class="hero-hint" aria-hidden="true">Faites défiler : la page se démonte ↓</p>
+    </div>
+  </section>
+
+  <!-- 01 Couches : la page vue en éclaté, les quatre couches de rendu -->
+  <section class="sec page scrolly" id="couches" aria-labelledby="t-couches">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">01</p>
+      <h2 id="t-couches">Quatre couches, une seule obligatoire</h2>
+      <p class="note">Chaque page est construite en couches indépendantes. Retirez celles du dessus : ce qui reste se lit toujours. <span class="status">texte provisoire</span></p>
+    </header>
+    <div class="scrolly-grid">
+      <ol class="layers" data-steps>
+        <li class="layer-step" data-step="0">
+          <p class="kicker"><span>Couche 01</span> · HTML et CSS · 0 Ko de script</p>
+          <h3>Le contenu, d'abord et seul.</h3>
+          <p>Texte, liens, navigation, typographie, focus : tout est dans le HTML servi et mis en page en CSS. C'est la seule couche nécessaire, et elle suffit à tout lire.</p>
+        </li>
+        <li class="layer-step" data-step="1">
+          <p class="kicker"><span>Couche 02</span> · Îlots interactifs</p>
+          <h3>Ce qui réagit s'éveille quand on le voit.</h3>
+          <p>Un formulaire, une démonstration : chaque îlot est hydraté quand il entre dans l'écran, jamais au chargement de la page.</p>
+        </li>
+        <li class="layer-step" data-step="2">
+          <p class="kicker"><span>Couche 03</span> · Améliorations légères</p>
+          <h3>Quelques kilo-octets, chacun retirable.</h3>
+          <p>Mesures en direct, transitions entre pages, petits effets : du script classique, désactivé en mouvement réduit, sans lequel rien ne manque.</p>
+        </li>
+        <li class="layer-step" data-step="3">
+          <p class="kicker"><span>Couche 04</span> · Couche créative</p>
+          <h3>Le spectacle arrive en dernier.</h3>
+          <p>Cette vue éclatée est rendue en WebGL avec Three.js, chargée après le contenu et suspendue hors de l'écran. Retirez-la : la page reste entière.</p>
+          <button class="btn" type="button" data-toggle-layer aria-describedby="toggle-status">Retirer la couche créative</button>
+          <p class="mono muted" id="toggle-status" role="status" aria-live="polite"></p>
+        </li>
+      </ol>
+      <div class="stage-slot" data-slot="couches" aria-hidden="true">
+        <svg class="iso" viewBox="40 0 700 460">
+          <g class="iso-layer l1"><path d="M252.4 11.5L512.2 161.5L347.6 256.5L87.8 106.5Z"/><text x="526.2" y="165.5">04 Couche créative</text></g>
+          <g class="iso-layer l2"><path d="M252.4 73.5L512.2 223.5L347.6 318.5L87.8 168.5Z"/><text x="526.2" y="227.5">03 Améliorations</text></g>
+          <g class="iso-layer l3"><path d="M252.4 135.5L512.2 285.5L347.6 380.5L87.8 230.5Z"/><text x="526.2" y="289.5">02 Îlots</text></g>
+          <g class="iso-layer l4"><path d="M252.4 197.5L512.2 347.5L347.6 442.5L87.8 292.5Z"/><text x="526.2" y="351.5">01 HTML et CSS</text></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Essais : les calques deviennent des planches -->
+  <section class="sec page scrolly" id="essais" aria-labelledby="t-essais">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">02</p>
+      <h2 id="t-essais">Essais</h2>
+      <p class="note">Six projets livrés. Survolez ou parcourez la liste au clavier : la planche correspondante sort de la pile.</p>
+    </header>
+    <div class="scrolly-grid">
+      <ol class="index" data-index>
+        <li><a href="../d-revue/etude-de-cas.html" data-plate="0"><span class="n">01</span><span class="t">SAFTI.fr</span><span class="r">Refonte d'architecture, SEO</span><span class="y">2022-2024</span><span class="s">Next.js · TypeScript · Jest</span></a></li>
+        <li><a href="#essais" data-plate="1"><span class="n">02</span><span class="t">Omega</span><span class="r">Lead frontend, outil métier</span><span class="y">2024</span><span class="s">React · TypeScript · Storybook · Leaflet</span></a></li>
+        <li><a href="#essais" data-plate="2"><span class="n">03</span><span class="t">Draw me a Sheep</span><span class="r">Développement complet, WebGL et GSAP</span><span class="y">2024</span><span class="s">Astro · Sanity · WebGL · GSAP</span></a></li>
+        <li><a href="#essais" data-plate="3"><span class="n">04</span><span class="t">Bien Estimer</span><span class="r">SEO, plan de marquage GA4</span><span class="y">2023-2024</span><span class="s">Next.js · GA4</span></a></li>
+        <li><a href="#essais" data-plate="4"><span class="n">05</span><span class="t">ALS Action Canada</span><span class="r">Refonte de templates</span><span class="y">2024</span><span class="s">React · Gatsby · WordPress headless</span></a></li>
+        <li><a href="#essais" data-plate="5"><span class="n">06</span><span class="t">Join SAFTI</span><span class="r">Full-stack, multilingue</span><span class="y">2023</span><span class="s">Sulu CMS · PHP · Twig</span></a></li>
+      </ol>
+      <div class="stage-slot" data-slot="essais" aria-hidden="true">
+        <div class="plates">
+          <img src="../../../../experiments/assets/projet-safti-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async" data-plate-src>
+          <div class="plate-ph" data-plate-src>Omega · capture interne non publiable · visuel à fournir</div>
+          <img src="../assets/projects/drawmeasheep.jpg" width="1440" height="900" alt="" loading="lazy" decoding="async" data-plate-src>
+          <img src="../../../../experiments/assets/projet-bienestimer-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async" data-plate-src>
+          <img src="../../../../experiments/assets/projet-als-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async" data-plate-src>
+          <img src="../../../../experiments/assets/projet-join-d-800.webp" width="800" height="500" alt="" loading="lazy" decoding="async" data-plate-src>
+        </div>
+      </div>
+    </div>
+    <article class="feature grid" aria-labelledby="t-feature">
+      <div class="feature-body">
+        <p class="kicker"><span>Essai 01 · 2022-2024</span><span>Next.js · TypeScript · Jest</span></p>
+        <h3 id="t-feature">Refondre un site d'annonces sans perdre son trafic</h3>
+        <dl class="spec">
+          <div><dt>Problème</dt><dd>Un site d'annonces dont le trafic dépend du référencement naturel, à faire évoluer vers une architecture plus moderne.</dd></div>
+          <div><dt>Décisions</dt><dd>Migration progressive vers l'App Router, optimisation technique du SEO, tests unitaires avec objectifs de couverture.</dd></div>
+          <div><dt>Résultat</dt><dd>Une fonctionnalité proposée et développée a accompagné le passage de la note Trustpilot de 2,1 à 4,8. <span class="status">à sourcer</span></dd></div>
+        </dl>
+        <a class="more" href="../d-revue/etude-de-cas.html">Lire l'étude de cas →</a>
+      </div>
+    </article>
+  </section>
+
+  <!-- 03 Poids : les planches s'écrasent en histogramme du poids réel -->
+  <section class="sec page scrolly" id="poids" aria-labelledby="t-poids">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">03</p>
+      <h2 id="t-poids">Ce que pèse cette page</h2>
+      <p class="note">Les calques de tout à l'heure, pesés par votre navigateur, poste par poste. Rien n'est estimé.</p>
+    </header>
+    <div class="scrolly-grid">
+      <div class="weights">
+        <table class="weight-table">
+          <caption class="visually-hidden">Poids transféré par poste, mesuré sur cette page</caption>
+          <thead><tr><th scope="col">Poste</th><th scope="col">Couche</th><th scope="col">Transféré</th></tr></thead>
+          <tbody>
+            <tr data-kind="html"><th scope="row">HTML</th><td>01</td><td><output>n/d</output></td></tr>
+            <tr data-kind="css"><th scope="row">CSS</th><td>01</td><td><output>n/d</output></td></tr>
+            <tr data-kind="font"><th scope="row">Polices</th><td>01</td><td><output>n/d</output></td></tr>
+            <tr data-kind="img"><th scope="row">Images</th><td>01</td><td><output>n/d</output></td></tr>
+            <tr data-kind="app"><th scope="row">Code du prototype</th><td>03</td><td><output>n/d</output></td></tr>
+            <tr data-kind="gsap"><th scope="row">GSAP</th><td>04</td><td><output>n/d</output></td></tr>
+            <tr data-kind="three"><th scope="row">Three.js</th><td>04</td><td><output>n/d</output></td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row">Total</th><td></td><td><output data-kind-total>n/d</output></td></tr></tfoot>
+        </table>
+        <p class="note">Serveur local sans compression : en production, le JavaScript et le HTML seraient compressés (Three.js passe de 742 à 189 Ko). Les couches 01 à 03 restent sous 200 Ko.</p>
+        <dl class="vitals">
+          <div><dt>Plus grand affichage</dt><dd><output data-m="lcp">n/d</output></dd></div>
+          <div><dt>Décalage visuel</dt><dd><output data-m="cls">n/d</output></dd></div>
+          <div><dt>Interaction la plus lente</dt><dd><output data-m="inp">n/d</output></dd></div>
+        </dl>
+      </div>
+      <div class="stage-slot" data-slot="poids" aria-hidden="true">
+        <div class="bars" data-bars></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 À propos -->
+  <section class="sec page" id="a-propos" aria-labelledby="t-apropos">
+    <header class="sec-head grid">
+      <p class="sec-num" aria-hidden="true">04</p>
+      <h2 id="t-apropos">À propos</h2>
+      <p class="note">D'abord l'agence, maintenant le produit : quatorze ans de frontend.</p>
+    </header>
+    <div class="about grid">
+      <figure class="portrait"><img src="../assets/johan.jpg" width="349" height="349" alt="Portrait de Johan Petrikovsky" loading="lazy" decoding="async"></figure>
+      <div class="bio">
+        <p>Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript.</p>
+        <p>Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur. J'écris aussi sur ce que j'apprends.</p>
+        <dl class="facts-list">
+          <dt>Basé à</dt><dd>Toulouse</dd>
+          <dt>Depuis</dt><dd>2012</dd>
+          <dt>Écrit</dt><dd>69 articles publiés</dd>
+          <dt>Disponibilité</dt><dd><span class="status">à fournir</span></dd>
+        </dl>
+      </div>
+      <div class="quotes">
+        <blockquote><p>"Chaque projet m'a permis d'apprécier sa réactivité, son engagement professionnel et ses compétences."</p><footer>Perrine Sini-Berthonneau, fondatrice du studio Les Cerises</footer></blockquote>
+        <blockquote><p>"Toujours au fait des nouvelles techniques d'intégration, je le conseille à 100 %."</p><footer>Florent Pasquet, fondateur d'agence web</footer></blockquote>
+      </div>
+      <h3 class="notes-head" id="t-notes">Dernières notes</h3>
+      <ul class="notes-list" aria-labelledby="t-notes">
+        <li><span class="mono">Next.js</span><a href="#a-propos">Comment créer un cache handler personnalisé pour Next.js 16</a></li>
+        <li><span class="mono">Performance</span><a href="#a-propos">Comment réduire le TTFB</a></li>
+        <li><span class="mono">Accessibilité</span><a href="#a-propos">Les composants Tooltip ne devraient pas exister</a></li>
+        <li><span class="mono">React</span><a href="#a-propos">Comment faire une application React plus rapide ?</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 05 Contact : tout se referme en un curseur de saisie -->
+  <section class="sec page contact" id="contact" aria-labelledby="t-contact">
+    <div class="contact-grid">
+      <p class="sec-num" aria-hidden="true">05</p>
+      <h2 id="t-contact">Un projet, une refonte, un audit de performance ? <em>Le reste se construit ensemble.</em></h2>
+      <p class="mail-line"><a class="mail" href="mailto:johan@developpeur-web.tech">johan<span class="at">@</span>developpeur-web.tech</a></p>
+      <p class="contact-meta"><span>Réponse sous 48 h <span class="status">démo</span></span><span>LinkedIn <span class="status">à fournir</span></span><span>GitHub <span class="status">à fournir</span></span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="colophon page">
+  <span>Composé en Instrument Serif, PolySans et IBM Plex Mono. Lisible sans JavaScript ; la vue éclatée se charge après le contenu.</span>
+  <span><a href="#haut">Haut de page</a> · <a href="#contenu">Plan du site</a></span>
+</footer>
+
+<div class="scene" aria-hidden="true"><canvas class="scene-canvas"></canvas><div class="scene-labels"></div></div>
+</body>
+</html>

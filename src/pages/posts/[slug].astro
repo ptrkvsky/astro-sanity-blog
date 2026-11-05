@@ -5,7 +5,6 @@ import type { Post } from '@interfaces/index';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { TableOfContent } from '@features/blog/components/TableOfContent/';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
-import Header from '@features/layout/Header/Header.astro';
 import Breadcrumb from '@components/Breadcrumb';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
@@ -53,7 +52,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
 
 <link
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/atom-one-dark.min.css"
 />
 
 <BaseLayout
@@ -65,7 +64,6 @@ const breadcrumbItems = getBreadcrumbItems(post);
 >
   <div slot="main" class="post">
     <ObserverTableOfContent />
-    <Header slot="before-main" />
 
     <div class="wrapper-post">
       {
@@ -181,7 +179,7 @@ const breadcrumbItems = getBreadcrumbItems(post);
   }
   .post-content {
     @apply max-w-2xl relative z-10 px-4 lg:px-0;
-    background-color: #fff;
+    background-color: var(--paper);
   }
   .post-content strong {
     @apply text-pink-500;

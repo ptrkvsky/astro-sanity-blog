@@ -1,7 +1,6 @@
 ---
 import type { Frontmatter } from '@interfaces/Frontmatter';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import Header from '@features/layout/Header/Header.astro';
 import getPostsByCategory from '@helpers/getPostsByCategory';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
@@ -15,7 +14,6 @@ const categoriesPosts = sanityPosts && getPostsByCategory(sanityPosts.allPost);
   description="Plan du site internet de Johan Petrikovsky, développeur freelance React. Retrouvez une liste de toutes les pages du site internet"
   canonical="/plan-site"
 >
-  <Header slot="before-main" />
   <section slot="main" class="py-12 max-w-6xl mx-auto">
     <h1>Plan du site</h1>
     <ul class="my-6">

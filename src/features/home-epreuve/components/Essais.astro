@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import Repere from './Repere.astro';
 import { essais } from '../content';
 
 const visuals = import.meta.glob<{ default: ImageMetadata }>(
@@ -48,7 +49,7 @@ const f = essais.feature;
 
   <article class="feature g12" aria-labelledby="t-feature">
     <figure class="shot feature-shot">
-      <div class="frame">
+      <div class="frame" data-loupe>
         <Picture
           src={visual('safti')}
           formats={['avif', 'webp']}
@@ -58,6 +59,7 @@ const f = essais.feature;
           loading="lazy"
           decoding="async"
         />
+        <div class="loupe" aria-hidden="true"><Repere /></div>
       </div>
       <figcaption>
         <span>{f.figure.caption}</span><span>{f.figure.hint}</span>

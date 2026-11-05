@@ -7,10 +7,12 @@
 @font-face { font-family: "PolySans"; src: url("/assets/fonts/PolySans-Neutral.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Plex Mono"; src: url("/assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 
-/* Polices de repli ajustées : le texte garde sa taille et sa hauteur de ligne quand la police arrive (CLS) */
-@font-face { font-family: "Instrument Serif Fallback"; src: local("Georgia"); size-adjust: 90%; ascent-override: 96%; descent-override: 28%; line-gap-override: 0%; }
-@font-face { font-family: "PolySans Fallback"; src: local("Arial"); size-adjust: 100%; ascent-override: 92%; descent-override: 24%; line-gap-override: 0%; }
-@font-face { font-family: "Plex Mono Fallback"; src: local("Courier New"); size-adjust: 100%; ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; }
+/* Polices de repli ajustées : le texte garde sa taille et sa hauteur de ligne quand la police arrive (CLS).
+   Valeurs mesurées dans Chrome (canvas, 1000 px) contre les polices métriquement équivalentes à Times New Roman,
+   Arial et Courier New (Liberation Serif, Sans, Mono) ; local() vise d'abord les polices de Windows et macOS. */
+@font-face { font-family: "Instrument Serif Fallback"; src: local("Times New Roman"), local("Liberation Serif"); size-adjust: 82.43%; ascent-override: 120.09%; descent-override: 37.61%; line-gap-override: 0%; }
+@font-face { font-family: "PolySans Fallback"; src: local("Arial"), local("Liberation Sans"); size-adjust: 102.56%; ascent-override: 98.28%; descent-override: 18.72%; line-gap-override: 0%; }
+@font-face { font-family: "Plex Mono Fallback"; src: local("Courier New"), local("Liberation Mono"); size-adjust: 99.98%; ascent-override: 102.52%; descent-override: 27.5%; line-gap-override: 0%; }
 
 :root {
   /* Encre et papier inversés : la feuille est noire, l'encre est claire */

@@ -1,6 +1,8 @@
 # Plan d'implémentation : Épreuve + Calage
 
-**Statut : validé par Johan le 05/11/2026 (direction Épreuve, concept Calage). Lots 0 à 3 faits et fusionnés dans `main` (local, non poussé) ; vérifications du lot 3 passées le 05/11/2026 (voir ci-dessous) ; lots 4 à 7 (couche d'expérience) à faire.**
+**Statut : validé par Johan le 05/11/2026 (direction Épreuve, concept Calage). Lots 0 à 3 faits et fusionnés dans `main` (local, non poussé) ; vérifications du lot 3 passées le 05/11/2026 (voir ci-dessous) ; lots 4 à 7 (couche d'expérience) faits sur la branche `feat/experience` le 05/11/2026 (non fusionnés).**
+
+Couche d'expérience mesurée en développement (Chrome, DPR 1) : 60 images/s sur un défilement complet avec le CPU bridé x4, 0 tâche longue (LoAF), CLS de 0,024 après remplacement des polices de repli par des métriques mesurées (0,43 avant), 67,6 Ko compressés de code (GSAP 55,7 Ko, notre code 11,9 Ko) pour un budget de 80 Ko. Niveaux `static` (aucun script), `lite` sans WebGL (repli `text-shadow`) et perte de contexte (`?simulate=lost`) vérifiés ; le bouton « Retirer la couche créative » libère le WebGL et tous les déclencheurs. Pas encore vérifié : build de production, Safari/iOS, Android réel, mobile en conditions réelles.
 
 Vérifié sur l'accueil et les 5 autres pages (`/posts`, un article, une catégorie, `/mentions-legales`, `/plan-site`) à 360 px, en mouvement réduit : aucun débordement horizontal, aucun texte courant sous 4,5:1 de contraste, un seul h1 par page, aucune animation active ; accueil complète dans le HTML servi, sans JavaScript client ; lien d'évitement au premier Tab avec focus visible. Pas encore fait : parcours Tab complet, Safari/iOS, Android réel, lecteur d'écran.
 

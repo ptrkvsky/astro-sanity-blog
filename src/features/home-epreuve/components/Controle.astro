@@ -20,12 +20,13 @@ const patches = [
   </header>
   <div class="strip-wrap">
     <div class="strip-figure">
+      <div class="strip-mark" aria-hidden="true"><Repere /></div>
       <svg class="strip" viewBox="0 0 1200 160" aria-hidden="true">
         <path class="strip-rule" d="M0 4H1200M0 156H1200"></path>
         <g class="patches">
           {
             patches.map((p) => (
-              <path d={`M${p.x} 24H${p.x + 184}V136H${p.x}Z`} fill={p.fill}></path>
+              <path class="patch" d={`M${p.x} 24H${p.x + 184}V136H${p.x}Z`} fill={p.fill}></path>
             ))
           }
         </g>
@@ -49,6 +50,16 @@ const patches = [
       }
     </dl>
   </div>
+  <dl class="weights" aria-label="Poids transféré par poste">
+    {
+      controle.weights.map((w) => (
+        <div>
+          <dt>{w.label}</dt>
+          <dd><output data-w={w.key}>n/d</output></dd>
+        </div>
+      ))
+    }
+  </dl>
   <p class="note strip-note">{controle.strip}</p>
 
   <div class="checks">

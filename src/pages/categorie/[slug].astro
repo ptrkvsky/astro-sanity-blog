@@ -1,5 +1,7 @@
 ---
+import '@assets/style/blog.css';
 import PostCard from '@features/blog/components/PostCard/index.astro';
+import ArticleBreadcrumb from '@features/blog/components/ArticleBreadcrumb.astro';
 import { getCategoriesUrlParams } from '@features/blog/functions/getCategoriesUrlParams';
 import type { Category } from '@features/blog/interfaces/Category';
 import type { SanityAllCategories } from '@features/blog/interfaces/SanityAllCategories';
@@ -8,59 +10,71 @@ import fetchSanity from '@helpers/fetchSanity';
 import type { Post } from '@interfaces/SanitySchema';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { client } from '@lib/sanityClient';
-import getMostRecentDate from 'src/helpers/getMostRecentDate';
+import { sortPosts } from '@features/blog/functions/articleContent';
 import getSchemaBlogListing from 'src/helpers/getSchemaBlogListing';
 
-interface AstroProps {
+interface Props {
   category: Category;
-  params: {
-    slug: {
-      current: string;
-    };
-  };
 }
-
 export const prerender = true;
-
 export async function getStaticPaths() {
-  const sanityCategories =
-    await fetchSanity<SanityAllCategories>(queryAllCategories);
-  const params = sanityCategories && getCategoriesUrlParams(sanityCategories);
-  return params;
+  const result = await fetchSanity<SanityAllCategories>(queryAllCategories);
+  if (!result) throw new Error('Blog : chargement des catégories impossible');
+  return getCategoriesUrlParams(result);
 }
-
-const { category } = Astro.props as AstroProps;
-const queryPostByCat = `*[_type == "post"  && references($categorieId)]`;
-const params = { categorieId: category._id };
-const posts = await client.fetch<Post[]>(queryPostByCat, params);
-
-if (!posts) return;
-const mostRecentDate = getMostRecentDate(posts);
-
-/* SEO */
-const title = `Liste d'articles dans la catégorie ${category.title} écrit par Johan Petrikovsky`;
-const description = `${category.title} - Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité`;
-const schema = getSchemaBlogListing(mostRecentDate);
+const { category } = Astro.props;
+const posts = sortPosts(
+  await client.fetch<Post[]>(
+    '*[_type == "post" && defined(slug.current) && references($categorieId)]',
+    { categorieId: category._id },
+  ),
+);
+const title = `Articles ${category.title} — Johan Petrikovsky`;
+const description =
+  category.description ||
+  `Articles et retours d’expérience sur ${category.title}, par Johan Petrikovsky, développeur frontend.`;
+const path = `/categorie/${category.slug.current}`;
+const schema = getSchemaBlogListing({ title, description, path, posts });
 ---
 
 <BaseLayout
   title={title}
   description={description}
   schema={schema}
-  canonical={`/categorie/${category.slug.current}`}
+  canonical={path}
 >
-  <div slot="main" class="wrapper">
-    <h1 class="font-semibold text-purple-900 mt-10 mb-6 text-4xl">
-      {category.title}
-    </h1>
-    <ul class="grid grid-cols-1 gap-16 lg:grid-cols-2">
-      {posts.map((post) => <PostCard post={post} />)}
+  <div slot="main" class="blog page">
+    <ArticleBreadcrumb
+      items={[
+        { name: 'Accueil', path: '/' },
+        { name: 'Articles', path: '/posts' },
+        { name: category.title },
+      ]}
+    />
+    <header class="blog-header">
+      <p class="blog-kicker">Le journal · Catégorie</p>
+      <h1>
+        {category.title}
+        <span class="blog-title-dot" aria-hidden="true">
+          .
+        </span>
+      </h1>
+      {category.description && <p class="blog-intro">{category.description}</p>}
+      <p class="blog-meta">
+        {posts.length} article{posts.length > 1 ? 's' : ''} ·{' '}
+        <a href="/posts">Tous les articles</a>
+      </p>
+    </header>
+    <ul class="blog-entries">
+      {posts.map((post) => (
+        <PostCard post={post} headingLevel="h2" />
+      ))}
     </ul>
+    {posts.length === 0 && (
+      <p class="blog-empty">
+        Aucun article dans cette catégorie pour le moment.{' '}
+        <a href="/posts">Parcourir le journal</a>.
+      </p>
+    )}
   </div>
 </BaseLayout>
-
-<style lang="scss">
-  .wrapper {
-    @apply mx-auto lg:px-0 max-w-5xl px-4 relative z-10;
-  }
-</style>

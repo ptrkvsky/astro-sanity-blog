@@ -1,38 +1,18 @@
 ---
 import type { Comment } from '@interfaces/SanitySchema';
-import { capitalizeFirstLetter, getFrenchDate } from 'src/utils';
-
-interface AstroProps {
+import { formatArticleDate } from '../functions/articleContent';
+interface Props {
   comment: Comment;
 }
-
-const { comment } = Astro.props as AstroProps;
-
-const dateComment = getFrenchDate(comment._createdAt);
+const { comment } = Astro.props;
 ---
 
-<article class="comment">
-  <p class="pseudo">
-    {capitalizeFirstLetter(comment.pseudo)}<span class="separator">,</span>
-    <span class="date"> le {dateComment}</span>
+<article class="blog-comment">
+  <p class="blog-meta">
+    <span>{comment.pseudo}</span>
+    <time datetime={comment._createdAt}>
+      {formatArticleDate(comment._createdAt)}
+    </time>
   </p>
-  <p class="content">{comment.content}</p>
+  <p>{comment.content}</p>
 </article>
-
-<style lang="scss">
-  article {
-    margin-bottom: 1rem;
-  }
-  .pseudo {
-    font-weight: bold;
-  }
-  .date,
-  .separator {
-    @apply font-normal text-sm;
-  }
-  .content {
-    margin-top: 0.5rem;
-    line-height: 1.2;
-    color: #000;
-  }
-</style>

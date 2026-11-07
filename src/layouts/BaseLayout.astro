@@ -48,7 +48,7 @@ const { title, schema, description, image, canonical } = Astro.props as Props;
     <Favicons />
     {
       canonical && (
-        <link rel="canonical" href={`${seoConfig.baseURL}${canonical}`} />
+        <link rel="canonical" href={new URL(canonical, Astro.site || seoConfig.productionURL).href} />
       )
     }
     <!-- <link rel="manifest" href="/manifest.webmanifest" /> -->

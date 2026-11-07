@@ -1,29 +1,29 @@
 ---
+import '@assets/style/blog.css';
 import ListingSection from '@features/blog/components/ListingSection.astro';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import fetchSanity from '@helpers/fetchSanity';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import getMostRecentDate from 'src/helpers/getMostRecentDate';
 import getPostsByCategory from 'src/helpers/getPostsByCategory';
 import getSchemaBlogListing from 'src/helpers/getSchemaBlogListing';
 
-const posts = await fetchSanity<SanityAllPost>(queryAllPosts);
-if (!posts) return;
-const mostRecentDate = getMostRecentDate(posts.allPost);
-
-/* SEO */
-const title =
-  "Liste d'articles sur le développement informatique écrit par Johan Petrikovsky";
+const result = await fetchSanity<SanityAllPost>(queryAllPosts);
+if (!result?.allPost)
+  throw new Error('Blog : chargement des articles impossible');
+const posts = result.allPost.filter(
+  (post) => post.slug?.current && post.type !== 'definition',
+);
+const categoriesPosts = getPostsByCategory(posts);
+const title = 'Articles React, TypeScript et performance web';
 const description =
-  "Des articles et des informations pour les développeurs Frontend qui veulent suivre l'actualité";
-const schema = getSchemaBlogListing(mostRecentDate);
-
-const postsNoDefinitions = posts
-  ? posts.allPost.filter((post) => post.type !== 'definition')
-  : [];
-
-const categoriesPosts = getPostsByCategory(postsNoDefinitions);
+  'Notes de terrain, explications et retours d’expérience sur le développement frontend, React, TypeScript, la performance et le SEO technique.';
+const schema = getSchemaBlogListing({
+  title,
+  description,
+  path: '/posts',
+  posts,
+});
 ---
 
 <BaseLayout
@@ -32,18 +32,36 @@ const categoriesPosts = getPostsByCategory(postsNoDefinitions);
   schema={schema}
   canonical="/posts"
 >
-  <div slot="main" class="wrapper">
-    <h1 class="font-semibold text-purple-900 mb-6 text-4xl">Articles</h1>
-    {
-      categoriesPosts.map((categoryPosts) => (
-        <ListingSection categoryPosts={categoryPosts} />
-      ))
-    }
+  <div slot="main" class="blog page">
+    <header class="blog-header">
+      <p class="blog-kicker">Le journal · Développement frontend</p>
+      <h1>
+        Articles
+        <span class="blog-title-dot" aria-hidden="true">
+          .
+        </span>
+      </h1>
+      <p class="blog-intro">
+        Notes de terrain, explications et retours d’expérience sur les
+        interfaces, le code et ce qui les rend plus solides.
+      </p>
+      <p class="blog-meta">{posts.length} articles · Johan Petrikovsky</p>
+    </header>
+    <nav class="blog-categories" aria-label="Explorer les catégories">
+      {categoriesPosts
+        .filter((group) => group.category.slug?.current)
+        .map(({ category }) => (
+          <a href={`/categorie/${category.slug.current}`}>
+            {category.title}
+            <span aria-hidden="true"> ↗</span>
+          </a>
+        ))}
+    </nav>
+    {categoriesPosts.map((categoryPosts) => (
+      <ListingSection categoryPosts={categoryPosts} />
+    ))}
+    {posts.length === 0 && (
+      <p class="blog-empty">Aucun article n’est publié pour le moment.</p>
+    )}
   </div>
 </BaseLayout>
-
-<style lang="scss">
-  .wrapper {
-    @apply mx-auto lg:px-0 max-w-5xl py-12 px-4 relative z-10;
-  }
-</style>

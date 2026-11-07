@@ -1,34 +1,30 @@
 ---
 import type { CategoryPosts } from '@features/blog/interfaces/CategoryPosts';
-import PostCard from '@features/blog/components/PostCard/index.astro';
-
-interface AstroProps {
+import PostCard from './PostCard/index.astro';
+interface Props {
   categoryPosts: CategoryPosts;
 }
-
-const { categoryPosts } = Astro.props as AstroProps;
+const {
+  categoryPosts: { category, posts },
+} = Astro.props;
 ---
 
-{
-  <section class="my-10">
-    <h2 class="font-semibold text-purple-900 mt-10 mb-6 text-3xl">
-      {categoryPosts.category.title}
+<section class="blog-list-section">
+  <header class="blog-section-heading">
+    <h2>
+      {category.slug?.current ? (
+        <a href={`/categorie/${category.slug.current}`}>{category.title}</a>
+      ) : (
+        category.title
+      )}
     </h2>
-    <ul class="grid grid-cols-1 gap-16 lg:grid-cols-2">
-      {categoryPosts.posts.map((post) => (
-        <PostCard post={post} />
-      ))}
-    </ul>
-  </section>
-}
-
-<style>
-  .post-card h3,
-  .post-card .read-more {
-    transition: color 0.15s linear;
-  }
-  .post-card:hover h3,
-  .post-card:hover .read-more {
-    @apply text-purple-500;
-  }
-</style>
+    <p class="blog-meta">
+      {posts.length} article{posts.length > 1 ? 's' : ''}
+    </p>
+  </header>
+  <ul class="blog-entries">
+    {posts.map((post) => (
+      <PostCard post={post} />
+    ))}
+  </ul>
+</section>

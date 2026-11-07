@@ -1,37 +1,26 @@
-import type { Post } from '@interfaces/SanitySchema';
 import type { SanityAllPost } from '../interfaces/SanityAllPost';
-
-/**
- * Get posts and return an object to build post's pages
- * @param sanityPosts
- * @returns object
- */
+import { sortPosts } from './articleContent';
 export function getPostsUrlParams(sanityPosts: SanityAllPost) {
-  return sanityPosts.allPost.map((post) => {
-    const relatedPosts = sanityPosts.allPost
-      .filter(
-        (relatedPost) =>
-          relatedPost._id !== post._id &&
-          relatedPost.categories[0].slug.current ===
-            post.categories[0].slug.current &&
-          new Date(relatedPost._createdAt).getTime() <
-            new Date(post._createdAt).getTime(),
-      )
-      .sort(
-        (a, b) =>
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-      )
-      .slice(0, 3);
-
-    const param = {
-      params: {
-        slug: post?.slug?.current,
-      },
-      props: {
-        post,
-        relatedPosts,
-      },
+  const posts = sortPosts(
+    sanityPosts.allPost.filter((post) => post.slug?.current),
+  );
+  return posts.map((post) => {
+    const category = post.categories?.find((item) => item?.slug?.current)?.slug
+      .current;
+    const relatedPosts = category
+      ? posts
+          .filter(
+            (related) =>
+              related._id !== post._id &&
+              related.categories?.some(
+                (item) => item?.slug?.current === category,
+              ),
+          )
+          .slice(0, 3)
+      : [];
+    return {
+      params: { slug: post.slug.current },
+      props: { post, relatedPosts },
     };
-    return param;
   });
 }

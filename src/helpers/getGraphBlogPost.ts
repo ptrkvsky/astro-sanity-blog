@@ -1,37 +1,78 @@
-import { getGraphBreadcrumbItems } from "@features/blog/functions/getGraphBreadcrumbItems";
-import type { BreadcrumbGraphItem } from "@interfaces/BreadcrumbGraphItem";
-import type { FAQItem } from "@interfaces/FAQItem";
-import type { Post } from "@interfaces/SanitySchema";
-import type { Graph } from "schema-dts";
-import { getBreadcrumb } from "./getBreadcrumb";
-import { getFaq } from "./getFaq";
-import getGraphWebsite from "./getGraphWebsite";
-import { type ParamsGetWebPage, getWebPage } from "./getWebPage";
+import type { Post } from '@interfaces/SanitySchema';
+import type { Graph } from 'schema-dts';
+import { seoConfig } from '../config';
+import getGraphWebsite from './getGraphWebsite';
+import { getFaq } from './getFaq';
 
-export function getGraphBlogPost(post: Post) {
-  const website = getGraphWebsite();
-  const graphBreadcrumbItems: BreadcrumbGraphItem[] =
-    getGraphBreadcrumbItems(post);
-  const faqItems = post.questionsAnswers as FAQItem[];
-  post.questionsAnswers;
-
-  const paramsGetWebPage: ParamsGetWebPage = {
-    url: `/${post.slug?.current}/`,
-    datePublishedISO: post._createdAt,
-    dateModifiedISO: post._updatedAt,
-    breadcrumbId: "#breadcrumb",
-    name: post.title,
-    description: post.seoDescription,
+export function getGraphBlogPost(post: Post): Graph {
+  const base = seoConfig.productionURL;
+  const url = `${base}/posts/${post.slug.current}`;
+  const category = post.categories?.find((item) => item?.slug?.current);
+  const crumbs = [
+    { name: 'Accueil', item: `${base}/` },
+    { name: 'Articles', item: `${base}/posts` },
+    ...(category
+      ? [
+          {
+            name: category.title,
+            item: `${base}/categorie/${category.slug.current}`,
+          },
+        ]
+      : []),
+    { name: post.title, item: url },
+  ];
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      getGraphWebsite(seoConfig.productionURL),
+      {
+        '@type': 'Person',
+        '@id': `${base}/#person`,
+        name: 'Johan Petrikovsky',
+        url: base,
+      },
+      {
+        '@type': 'BlogPosting',
+        '@id': `${url}#article`,
+        url,
+        headline: post.title,
+        description: post.seoDescription || post.description || post.title,
+        inLanguage: 'fr-FR',
+        dateCreated: post._createdAt,
+        ...(post._updatedAt ? { dateModified: post._updatedAt } : {}),
+        ...(post.seoImage?.asset?.url
+          ? { image: post.seoImage.asset.url }
+          : {}),
+        author: { '@id': `${base}/#person` },
+        isPartOf: { '@id': `${base}/#website` },
+        mainEntityOfPage: { '@id': `${url}#webpage` },
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${url}#webpage`,
+        url,
+        name: post.title,
+        breadcrumb: { '@id': `${url}#breadcrumb` },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${url}#breadcrumb`,
+        itemListElement: crumbs.map((crumb, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          ...crumb,
+        })),
+      },
+      ...(post.questionsAnswers?.length
+        ? [
+            getFaq(
+              post.questionsAnswers.map((item) => ({
+                question: item.question || '',
+                answer: item.answer || '',
+              })),
+            ),
+          ]
+        : []),
+    ],
   };
-
-  const webpage = getWebPage(paramsGetWebPage);
-  const FAQPage = getFaq(faqItems);
-  const breadcrumbList = getBreadcrumb(graphBreadcrumbItems);
-
-  const schema: Graph = {
-    "@context": "https://schema.org",
-    "@graph": [website, webpage, FAQPage, breadcrumbList],
-  };
-
-  return schema;
 }

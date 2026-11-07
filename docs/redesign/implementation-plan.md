@@ -1,6 +1,11 @@
 # Plan d'implémentation : Épreuve + Calage
 
-**Statut : validé par Johan le 05/11/2026 (direction Épreuve, concept Calage). Lots 0 à 3 faits et fusionnés dans `main` (local, non poussé) ; vérifications du lot 3 passées le 05/11/2026 (voir ci-dessous) ; lots 4 à 7 (couche d'expérience) faits sur la branche `feat/experience` le 05/11/2026 (non fusionnés).**
+**Mise à jour : 07/11/2026. Direction Épreuve et concept Calage validés par Johan le 05/11/2026. Lots 0 à 3 et 4 à 7 faits et fusionnés dans `main` ; vérifications du lot 3 consignées le 05/11/2026. Le lot 3 bis est intégré à `main`, avec recette Chrome passée et vérifications sur appareils réels encore ouvertes ; les lots 8 à 11 restent à réaliser. La mise en ligne n'est pas vérifiée par ce suivi.**
+
+Dernières intégrations :
+- `0fc1dea` (05/11) : vérifications de l'accueil, liens LinkedIn et GitHub, disponibilité, suppression de l'ancienne accueil Sanity.
+- `d899e9e` (05/11) : fusion de `feat/experience`, couche d'expérience Calage (lots 4 à 7).
+- `0c8553e` (07/11) : six nouveaux visuels de projets (« Digital Artifacts »), adaptation des plaques de la loupe aux photos. Ces changements ne clôturent pas le lot 8 et restent à inclure dans la revue visuelle.
 
 Couche d'expérience mesurée en développement (Chrome, DPR 1) : 60 images/s sur un défilement complet avec le CPU bridé x4, 0 tâche longue (LoAF), CLS de 0,024 après remplacement des polices de repli par des métriques mesurées (0,43 avant), 67,6 Ko compressés de code (GSAP 55,7 Ko, notre code 11,9 Ko) pour un budget de 80 Ko. Niveaux `static` (aucun script), `lite` sans WebGL (repli `text-shadow`) et perte de contexte (`?simulate=lost`) vérifiés ; le bouton « Retirer la couche créative » libère le WebGL et tous les déclencheurs. Pas encore vérifié : build de production, Safari/iOS, Android réel, mobile en conditions réelles.
 
@@ -9,19 +14,19 @@ Vérifié sur l'accueil et les 5 autres pages (`/posts`, un article, une catégo
 Décisions de validation :
 - Calage est retenu tel que recommandé (§ 6 de `experience-signature.md`), avec les deux reprises de la Vue éclatée : le bouton « retirer la couche créative » et le poids réel par poste.
 - Les 4 fichiers de police (88,7 Ko) et le budget par couche de `performance-budget.md` (§ 6) sont acceptés.
-- Le contenu de la nouvelle accueil est **en dur dans le code**, sans Sanity. Les textes marqués « texte provisoire » restent à valider.
+- Le contenu éditorial de la nouvelle accueil est **en dur dans le code** (`src/features/home-epreuve/content.ts`) ; les derniers articles et leur nombre restent lus depuis Sanity. La validation finale des textes reste à confirmer.
 - **L'identité Épreuve s'applique à tout le site, blog compris.** L'ancienne direction artistique n'est pas conservée. Dans un premier temps, le blog hérite des jetons (palette Tailwind remappée) et doit seulement rester lisible ; sa refonte approfondie fera l'objet d'un lot ultérieur, après le lot 3.
 
 Références : `architecture.md` (arborescence, SEO, couches de rendu), `implementation-decisions.md` (D1 à D11), `performance-budget.md` (budget, § 6 par couche), `design-system.md` (jetons et composants), `experience-signature.md` (parcours, bilan technique), `prototypes/e-calage/` et `prototypes/epreuve/` (rendu et code cibles).
 
-## 0. Préalables (bloquants)
+## 0. Préalables et contenus à confirmer
+
+Acquis : concept Calage, quatre polices et budget validés le 05/11/2026 ; liens LinkedIn et GitHub et disponibilité intégrés dans `main`. Les autres éléments ci-dessous restent à confirmer ou à fournir pour les lots concernés.
 
 | Préalable | Qui | Pourquoi |
 |---|---|---|
-| Validation de Calage, des 4 polices et du budget par couche | Johan | conditionne tous les lots (`experience-signature.md`, § 10) |
-| Textes « provisoires » validés ou réécrits | Johan | lot 3 |
+| Validation finale des textes de l'accueil | Johan | accueil intégrée au lot 3 ; validation éditoriale à confirmer |
 | Contenus des études de cas (rôle, période, ce qui peut être montré, résultat vérifiable) | Johan | `architecture.md` § 11 ; sans eux, les pages restent marquées « à fournir » (lot 9) |
-| Liens LinkedIn et GitHub, disponibilité | Johan | contact et `sameAs` |
 | Justificatifs des chiffres (note Trustpilot, etc.) ou accord pour les retirer | Johan | aucune donnée non sourcée en production |
 | Export Search Console sur 16 mois | Johan | redirections et priorités SEO (`architecture.md` § 3.2) |
 | Un iPhone, un Android d'entrée de gamme et un service de mesure | Johan | vérifications non faites en 2.3 (§ 3 ci-dessous) |
@@ -30,9 +35,25 @@ Références : `architecture.md` (arborescence, SEO, couches de rendu), `impleme
 
 Chaque lot est une merge request autonome, livrable seule. Le site reste fonctionnel entre deux lots.
 
+### État au 07/11/2026
+
+| Lots | État | Suite |
+|---|---|---|
+| 0 à 3 | Faits et fusionnés dans `main` | Compléter les vérifications ci-dessous et confirmer les textes |
+| 3 bis | Intégré à `main` le 07/11 ; recette réelle à compléter | Sous-lots B0 à B4 réalisés ; B5 vérifié sur build et Chrome, Safari/iOS, Android réel et lecteur d'écran à faire. Voir [le plan du blog](blog-implementation-plan.md) et [la recette](blog-validation.md) |
+| 4 à 7 | Faits et fusionnés dans `main` (`d899e9e`) | Valider le build de production et les appareils/navigateurs restants ; mesures disponibles en développement seulement |
+| 8 | À faire | Corrections et revue visuelle de l'accueil, y compris les visuels du 07/11 |
+| 9 | À faire, contenus à fournir | Études de cas et redirections |
+| 10 | À faire après le lot 9 | Transitions et défilement hors accueil |
+| 11 | À faire, peut démarrer maintenant | Contrôle automatique des budgets par couche en CI |
+
+Les lots indiqués comme faits décrivent l'intégration du code ; les vérifications encore ouvertes ne sont pas considérées comme passées.
+
+### Périmètre et critères des lots
+
 | Lot | Contenu | Dépend de | Critères de sortie |
 |---|---|---|---|
-| 0. Historique | Commiter `docs/redesign/`, `docs/redesign/prototypes/` et `experiments/`, aujourd'hui hors historique | | branche `docs/redesign` propre |
+| 0. Historique | Versionner `docs/redesign/`, `docs/redesign/prototypes/` et `experiments/` (fait) | | documentation et prototypes présents dans l'historique |
 | 1. Jetons et polices | `prototypes/epreuve/tokens.css` et `base.css` portés dans la feuille globale ; 4 fichiers woff2 auto-hébergés (Instrument Serif romain et italique, PolySans Neutral déjà dans `public/assets/fonts/`, IBM Plex Mono) ; préchargement de la fonte de titre ; métriques de repli (`size-adjust`, `ascent-override`) | arbitrage polices | CLS de 0 au chargement sur 5 passages ; polices ≤ 88,7 Ko |
 | 2. Gabarit et navigation | Refonte de `src/layouts/BaseLayout.astro` : bandeau, ligne d'édition, menu mobile en `<details>` (**retrait de GSAP** du bundle global), pied de page en `.astro` (remplace `src/components/Footer.tsx`), lien d'évitement | 1 | 0 Ko de JS au premier écran ; navigation au clavier ; aucun débordement de 360 à 1 440 px |
 | 3. Accueil, couche de lecture | `src/pages/index.astro` suit le parcours de 2.3 : hero, 01 méthode (5 passes), 02 essais, 03 contrôle, 04 à propos, 05 bon à tirer. Chaque motif en **SVG à l'état final** (D9), h1 réel, HTML complet sans JavaScript | 2, textes validés | rendu conforme au prototype (captures comparées) ; page complète sans JS et en mouvement réduit |
@@ -52,12 +73,17 @@ Chaque lot est une merge request autonome, livrable seule. Le site reste fonctio
 
 Le site est publiable après le lot 3 (couche de lecture complète) : la couche d'expérience (lots 4 à 8) s'ajoute sans rien casser, et le niveau `static` reste toujours disponible.
 
+**Prochaine étape : lot 8 et vérifications de production de l'accueil.** Revoir le rendu à 1 440, 1 024 et 390 px avec les nouveaux visuels, corriger les titres hors repère et le trajet du repère, puis vérifier le build et les replis en production. Le lot 11 peut être mené en parallèle ; le lot 3 bis attend sa recette sur appareils réels et le lot 9 attend ses contenus.
+
 ## 3. Ce qui reste à vérifier pendant l'implémentation
 
-Points non vérifiés en 2.3 (`experience-signature.md`, § 7).
+Vérifications encore ouvertes après l'intégration des lots 0 à 7, y compris les points non vérifiés en 2.3 (`experience-signature.md`, § 7). Les mesures en tête de document sont celles consignées le 05/11 ; elles n'ont pas été rejouées pour cette mise à jour documentaire.
 
 | Point | Méthode | Lot |
 |---|---|---|
+| Build de production et comportement de l'accueil construite (chargement différé, mesures, replis et retrait de la couche créative) | build puis prévisualisation de production | 4 à 8, 11 |
+| Revue visuelle après remplacement des illustrations du 07/11 | captures à 1 440, 1 024 et 390 px, inspection des aperçus et de la loupe | 8 |
+| Parcours clavier complet de l'accueil intégrée, y compris pendant l'épinglage | Tab et Maj+Tab ; focus visible et absence de piège | 3, 5 à 8 |
 | Safari et iOS : métriques de fonte du titre en texture (`fontBoundingBoxAscent`), épinglage et barre d'adresse | appareil réel ou service de test | 5, 6 |
 | Android réel et écran à 120 Hz | Android de référence | 5, 6 |
 | Décalage d'une image entre le repère fixe et les repères en ligne au moment du relais | vrai défilement tactile | 6 |
@@ -68,7 +94,7 @@ Points non vérifiés en 2.3 (`experience-signature.md`, § 7).
 
 ## 4. Hors périmètre
 
-- Refonte du blog au-delà du gabarit commun (lots 1 et 2) : à planifier après l'accueil.
+- Refonte approfondie du blog : livraison distincte de l'accueil, implémentée au lot 3 bis ; recette sur appareils réels encore à compléter.
 - Mode sombre : jetons prévus, réalisation à arbitrer.
 - Nouveaux spécimens (dessin de zone d'Omega, scène de Draw me a Sheep) : un par étude de cas, après le lot 7.
 - Vue éclatée (F) et Isohypses : non retenues.

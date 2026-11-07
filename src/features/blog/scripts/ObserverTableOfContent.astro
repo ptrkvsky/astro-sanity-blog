@@ -1,28 +1,58 @@
----
----
-
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!document) return;
-        const id = entry.target.getAttribute('id');
-        if (entry.intersectionRatio > 0) {
-          document
-            .querySelectorAll(`#table-of-content li.active`)
-            ?.forEach((el) => {
-              el.classList.remove('active');
-            });
-          document
-            .querySelector(`#table-of-content li a[href="#${id}"]`)
-            ?.parentElement?.classList.add('active');
-        }
+  const links = [
+    ...document.querySelectorAll<HTMLAnchorElement>('#table-of-content a'),
+  ];
+  const headings = links
+    .map((link) =>
+      document.getElementById(decodeURIComponent(link.hash.slice(1))),
+    )
+    .filter((heading): heading is HTMLElement => !!heading);
+  const active = new Set<Element>();
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries)
+        entry.isIntersecting
+          ? active.add(entry.target)
+          : active.delete(entry.target);
+      const current = headings.find((heading) => active.has(heading));
+      if (!current) return;
+      for (const link of links) {
+        if (decodeURIComponent(link.hash.slice(1)) === current.id)
+          link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    },
+    { rootMargin: '0px 0px -55% 0px' },
+  );
+  headings.forEach((heading) => observer.observe(heading));
+  document
+    .querySelectorAll<HTMLAnchorElement>('[data-video]')
+    .forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+          return;
+        event.preventDefault();
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube-nocookie.com/embed/${link.dataset.video}`;
+        iframe.title = 'Vidéo YouTube';
+        iframe.allowFullscreen = true;
+        iframe.allow = 'encrypted-media; picture-in-picture';
+        link.replaceWith(iframe);
       });
     });
-
-    // Track all sections that have an `id` applied
-    document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((hn) => {
-      observer.observe(hn);
+  // Tables keep their native semantics inside a keyboard-accessible scrolling region.
+  document
+    .querySelectorAll<HTMLTableElement>('.post-content table')
+    .forEach((table) => {
+      const region = document.createElement('div');
+      region.className = 'blog-table';
+      region.tabIndex = 0;
+      region.setAttribute('role', 'region');
+      region.setAttribute(
+        'aria-label',
+        table.caption?.textContent || 'Tableau, défilement horizontal',
+      );
+      table.before(region);
+      region.append(table);
     });
-  });
 </script>

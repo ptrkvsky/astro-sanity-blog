@@ -1,222 +1,142 @@
 ---
+import '@assets/style/blog.css';
 import { toHTML } from '@portabletext/to-html';
 import type { SanityAllPost } from '@features/blog/interfaces/SanityAllPost';
-import type { Post } from '@interfaces/index';
+import type { Post } from '@interfaces/SanitySchema';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { TableOfContent } from '@features/blog/components/TableOfContent/';
+import TableOfContent from '@features/blog/components/TableOfContent/TableOfContent.astro';
 import ObserverTableOfContent from '@features/blog/scripts/ObserverTableOfContent.astro';
-import Breadcrumb from '@components/Breadcrumb';
+import ArticleBreadcrumb from '@features/blog/components/ArticleBreadcrumb.astro';
 import fetchSanity from '@helpers/fetchSanity';
 import { queryAllPosts } from '@features/blog/queries/queryAllPosts';
 import { getPostsUrlParams } from '@features/blog/functions/getPostsUrlParams';
-import { getHeadings } from '@features/blog/functions/getHeadings';
-import { portableTextComponents } from '@helpers/portableTextComponents';
+import {
+  articleHeadings,
+  prepareArticleBlocks,
+  formatArticleDate,
+} from '@features/blog/functions/articleContent';
+import { createPortableTextComponents } from '@helpers/portableTextComponents';
 import { getGraphBlogPost } from '@helpers/getGraphBlogPost';
-import { getBreadcrumbItems } from '@features/blog/functions';
 import FormComment from '@features/blog/components/FormComment/FormComment';
 import getPostComments from '@features/blog/functions/getPostsComments';
 import SectionComments from '@features/blog/components/SectionComments.astro';
 import Faq from '@features/blog/components/Faq.astro';
-import { SectionPosts } from '@features/blog/components/SectionPosts';
+import SectionPosts from '@features/blog/components/SectionPosts/SectionPosts.astro';
 
 interface Props {
   post: Post;
   relatedPosts: Post[];
-  params: {
-    slug: {
-      current: string;
-    };
-  };
 }
-
 export const prerender = true;
-
 export async function getStaticPaths() {
-  const sanityProjects = await fetchSanity<SanityAllPost>(queryAllPosts);
-  const params = sanityProjects && getPostsUrlParams(sanityProjects);
-
-  return params;
+  const result = await fetchSanity<SanityAllPost>(queryAllPosts);
+  if (!result?.allPost)
+    throw new Error('Blog : chargement des articles impossible');
+  return getPostsUrlParams(result);
 }
-
 const { post, relatedPosts } = Astro.props;
-if (!post) return;
-const comments = await getPostComments(post._id);
-const graphPost = getGraphBlogPost(post);
-const postContent = toHTML(post.bodyRaw, {
-  components: portableTextComponents,
-});
-
-const headings = getHeadings(post.bodyRaw || []);
-const breadcrumbItems = getBreadcrumbItems(post);
+const blocks = prepareArticleBlocks(post.bodyRaw || []);
+const [comments, components] = await Promise.all([
+  getPostComments(post._id),
+  createPortableTextComponents(blocks),
+]);
+const postContent = toHTML(blocks, { components });
+const headings = articleHeadings(post.bodyRaw || []);
+const categories = (post.categories || []).filter(
+  (category) => category?.slug?.current,
+);
+const category = categories[0];
+const breadcrumb = [
+  { name: 'Accueil', path: '/' },
+  { name: 'Articles', path: '/posts' },
+  ...(category
+    ? [{ name: category.title, path: `/categorie/${category.slug.current}` }]
+    : []),
+  { name: post.title },
+];
+const title = post.seoTitle?.trim() || `${post.title} — Johan Petrikovsky`;
+const description =
+  post.seoDescription?.trim() ||
+  post.description?.trim() ||
+  `Un article de Johan Petrikovsky : ${post.title}.`;
+const date = formatArticleDate(post._createdAt);
+const questionsAnswers = post.questionsAnswers || [];
 ---
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/atom-one-dark.min.css"
-/>
-
 <BaseLayout
-  title={post?.seoTitle || ''}
-  schema={graphPost}
-  description={post?.seoDescription || ''}
+  title={title}
+  schema={getGraphBlogPost(post)}
+  description={description}
   image={post.seoImage?.asset?.url}
   canonical={`/posts/${post.slug.current}`}
 >
-  <div slot="main" class="post">
+  <div slot="main" class="blog blog-article page">
+    <ArticleBreadcrumb items={breadcrumb} />
+    <header class="blog-header blog-article-header">
+      <p class="blog-kicker">
+        Le journal
+        {categories.map((category) => (
+          <>
+            {' '}
+            ·{' '}
+            <a href={`/categorie/${category.slug.current}`}>{category.title}</a>
+          </>
+        ))}
+      </p>
+      <h1 id="article-title">{post.title}</h1>
+      {post.description && <p class="blog-intro">{post.description}</p>}
+      <p class="blog-meta">
+        <a href="/#a-propos">Johan Petrikovsky</a>
+        {date && (
+          <span>
+            Créé le <time datetime={post._createdAt}>{date}</time>
+          </span>
+        )}
+      </p>
+    </header>
+    <div class:list={['blog-reading-grid', { 'has-toc': headings.length > 0 }]}>
+      {headings.length > 0 && (
+        <aside class="blog-sidebar">
+          <TableOfContent headings={headings} />
+        </aside>
+      )}
+      <div class="blog-reading-column">
+        <article
+          class="post-content"
+          aria-labelledby="article-title"
+          set:html={postContent}
+        />
+        {questionsAnswers.length > 0 && (
+          <Faq questionsAnswers={questionsAnswers} />
+        )}
+        {relatedPosts.length > 0 && (
+          <SectionPosts relatedPosts={relatedPosts} />
+        )}
+        <section class="blog-contact blog-end-section">
+          <p class="blog-kicker">Du code au projet</p>
+          <h2>Une interface à rendre plus solide ?</h2>
+          <p>
+            Performance, accessibilité, architecture frontend :{' '}
+            <a href="/#contact">parlons de votre projet</a>.
+          </p>
+        </section>
+        <section id="commentaires" class="blog-end-section">
+          <FormComment
+            client:visible
+            postId={post._id}
+            postTitle={post.title}
+          />
+          <noscript>
+            <p>
+              Pour envoyer un commentaire, activez JavaScript ou{' '}
+              <a href="/#contact">contactez-moi directement</a>. Les
+              commentaires publiés restent consultables ci-dessous.
+            </p>
+          </noscript>
+          <SectionComments comments={comments} />
+        </section>
+      </div>
+    </div>
     <ObserverTableOfContent />
-
-    <div class="wrapper-post">
-      {
-        headings.length > 0 && (
-          <aside class="wrapper-table-of-content px-4 lg:px-0 bg-white">
-            <TableOfContent headings={headings} />
-          </aside>
-        )
-      }
-      <div>
-        <Breadcrumb client:only="react" breadcrumbItems={breadcrumbItems} />
-
-        <h1 class="pb-8 font-bold conteneur">{post.title}</h1>
-
-        <article class="post-content" set:html={postContent} />
-      </div>
-    </div>
-    <div class="sm:pb-16">
-      <div class="mx-auto max-w-2xl lg:max-w-7xl">
-        {
-          post.questionsAnswers && (
-            <Faq questionsAnswers={post.questionsAnswers} />
-          )
-        }
-      </div>
-      {relatedPosts.length > 0 && <SectionPosts relatedPosts={relatedPosts} />}
-
-      <div class="mx-auto max-w-2xl lg:max-w-7xl">
-        <FormComment client:visible postId={post._id} postTitle={post.title} />
-        <SectionComments postTitle={post.title} comments={comments} />
-      </div>
-    </div>
   </div>
 </BaseLayout>
-
-<style is:global>
-  h1 {
-    @apply mb-3 text-2xl lg:text-4xl;
-  }
-
-  .post-content {
-    @apply pb-8;
-  }
-  .post-content ul {
-    @apply list-disc ml-6;
-  }
-  .post-content ul li {
-    @apply m-0;
-  }
-  .post-content a {
-    @apply text-pink-600;
-  }
-
-  .post-content img {
-    aspect-ratio: attr(data-width) / attr(data-height);
-  }
-
-  .post-content iframe {
-    @apply mb-4;
-    max-width: calc(100vw - 2rem);
-  }
-
-  .post-content h1,
-  .post-content h2,
-  .post-content h3,
-  .post-content h4,
-  .post-content h5,
-  .post-content h6 {
-    @apply font-semibold text-indigo-600;
-  }
-
-  .post-content h2,
-  .post-content h3,
-  .post-content h4,
-  .post-content h5,
-  .post-content h6 {
-    @apply font-semibold text-indigo-600 mt-10 mb-6 text-2xl lg:text-3xl;
-  }
-
-  .post-content p,
-  .post-content ul,
-  .post-content li,
-  .post-content strong {
-    @apply my-6 text-base;
-  }
-
-  .post-content blockquote {
-    @apply relative italic my-7 w-full px-12 py-4 bg-purple-50 border-l-4 border-gray-300;
-  }
-
-  .post-content blockquote p {
-    @apply m-0;
-  }
-
-  .post-content blockquote:before {
-    content: '“';
-    position: absolute;
-    left: -8px;
-    top: 4px;
-    font-family: 'Times New Roman', serif;
-    font-size: 6em;
-    line-height: 1;
-    font-weight: bold;
-    opacity: 0.25;
-  }
-
-  .post-content pre {
-    @apply mb-3 px-6 py-4 bg-gray-200 border-l-4 border-gray-300 w-full overflow-auto;
-    max-width: calc(100vw - 2.8rem);
-  }
-  .wrapper-post {
-    @apply relative max-w-6xl mx-auto lg:grid lg:grid-cols-2 gap-4 pt-16 lg:pt-0;
-  }
-  .post-content {
-    @apply max-w-2xl relative z-10 px-4 lg:px-0;
-    background-color: var(--paper);
-  }
-  .post-content strong {
-    @apply text-pink-500;
-  }
-  .post-content .time {
-    @apply mt-0 pt-4 mb-4 lg:mb-5 text-sm text-gray-800;
-  }
-  .post-content .time .highlight {
-    @apply text-pink-500;
-  }
-
-  .wrapper-table-of-content {
-    @apply lg:max-w-xs max-h-screen relative lg:sticky order-last top-0;
-  }
-
-  .toc ul {
-    max-height: calc(100vh - 45px);
-    overflow: auto;
-  }
-  .toc ul::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  li.active {
-    @apply border-pink-500;
-  }
-  li.active:hover {
-    @apply border-pink-600;
-  }
-  li.active:hover a {
-    @apply text-pink-600;
-  }
-  li.active a {
-    @apply text-pink-500 font-bold;
-  }
-
-  .secondary-title {
-    @apply text-4xl mb-4;
-  }
-</style>

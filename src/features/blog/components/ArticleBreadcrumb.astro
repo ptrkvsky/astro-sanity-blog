@@ -1,0 +1,22 @@
+---
+interface Props {
+  items: { name: string; path?: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav class="blog-breadcrumb" aria-label="Fil d’Ariane">
+  <ol>
+    {items
+      .filter((item) => item.name)
+      .map((item, index) => (
+        <li>
+          {item.path ? (
+            <a href={item.path}>{item.name}</a>
+          ) : (
+            <span aria-current="page">{item.name}</span>
+          )}
+        </li>
+      ))}
+  </ol>
+</nav>

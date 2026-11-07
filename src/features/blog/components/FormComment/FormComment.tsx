@@ -1,136 +1,92 @@
-import { useEffect, useState } from 'react';
-import { seoConfig } from 'src/config';
-import styles from './FormComment.module.css';
-interface IFormComment {
-  _id: string;
-  pseudo: string;
-  comment: string;
-}
+import { useEffect, useRef, useState } from 'react';
+import { submitComment } from './submitComment';
 
-interface FormComment {
+interface Props {
   postId: string;
   postTitle: string;
 }
-
-export default function FormComment({
-  postId,
-  postTitle,
-}: Readonly<FormComment>) {
-  const initForm: IFormComment = {
-    _id: postId,
-    pseudo: '',
-    comment: '',
-  };
-  const [formState, setFormState] = useState<IFormComment>(initForm);
-  const [errorsForm, setErrorsForm] = useState<string[]>([]);
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+export default function FormComment({ postId, postTitle }: Props) {
+  const [pseudo, setPseudo] = useState('');
+  const [comment, setComment] = useState('');
+  const [status, setStatus] = useState<
+    'idle' | 'sending' | 'success' | 'error'
+  >('idle');
+  const [ready, setReady] = useState(false);
+  const sending = useRef(false);
   useEffect(() => {
-    // Init form
-    if (formState) {
-      setFormState({ ...formState, _id: postId });
-    }
+    setReady(true);
   }, []);
 
-  function handleChangePseudo(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormState({ ...formState, pseudo: e.currentTarget.value });
-  }
-
-  function handleChangeComment(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setFormState({ ...formState, comment: e.currentTarget.value });
-  }
-
-  function cleanForm() {
-    const cleanFormState = {
-      ...formState,
-      pseudo: '',
-      comment: '',
-    };
-    setFormState(cleanFormState);
-  }
-
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsLoading(true);
-    fetch(`${seoConfig.baseURL}/api/save-comment.json`, {
-      method: 'POST',
-      body: JSON.stringify({ ...formState, postTitle }),
-      headers: new Headers({
-        'Content-Type': 'application/json; charset=UTF-8',
-      }),
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          setIsSuccess(false);
-          setErrorsForm([...errorsForm, 'Une erreur inconnue est survenue']);
-        } else {
-          setErrorsForm([]);
-          cleanForm();
-          setIsSuccess(true);
-          return response.json();
-        }
-      })
-      .then((result) => {
-        if (result) {
-          setIsSuccess(true);
-        }
-      })
-      .catch((err) => {
-        console.error('👨‍🚒 err', err);
-      })
-      .finally(() => {
-        setIsLoading(false);
+    if (sending.current) return;
+    sending.current = true;
+    setStatus('sending');
+    try {
+      await submitComment({
+        _id: postId,
+        postTitle,
+        pseudo: pseudo.trim(),
+        comment: comment.trim(),
       });
+      setStatus('success');
+      setPseudo('');
+      setComment('');
+    } catch {
+      setStatus('error');
+    } finally {
+      sending.current = false;
+    }
   }
-
-  if (isSuccess) {
-    sessionStorage.setItem('dateComment', `${Date.now()}`);
-  }
-
   return (
-    <section className="px-0 sm:pr-16">
-      <h2 className="font-semibold text-indigo-600 mt-10 mb-4 text-2xl lg:text-3xl">
-        Laisser un commentaire
-      </h2>
-      <form onSubmit={handleSubmit}>
-        {errorsForm.map((errorForm) => (
-          <p key={errorForm}>{errorForm}</p>
-        ))}
-        <label htmlFor="pseudo">
+    <div className="blog-comment-form">
+      <h2>Laisser un commentaire</h2>
+      <p>Les commentaires sont relus avant publication.</p>
+      <form onSubmit={handleSubmit} aria-busy={status === 'sending'}>
+        <label htmlFor="comment-pseudo">
           Pseudo
           <input
+            id="comment-pseudo"
+            name="pseudo"
             required
-            type="text"
-            onChange={handleChangePseudo}
-            id="pseudo"
-            value={formState.pseudo}
+            maxLength={100}
+            autoComplete="nickname"
+            value={pseudo}
+            onChange={(event) => setPseudo(event.currentTarget.value)}
           />
         </label>
-        <label htmlFor="comment">
-          Commentaire{' '}
+        <label htmlFor="comment-text">
+          Commentaire
           <textarea
+            id="comment-text"
+            name="comment"
             required
-            id="comment"
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              handleChangeComment(e)
-            }
-            value={formState.comment}
+            rows={6}
+            maxLength={10000}
+            value={comment}
+            onChange={(event) => setComment(event.currentTarget.value)}
           />
         </label>
-
-        {isSuccess && (
-          <p className={styles.success}>
-            Votre message a été envoyé avec succès. Merci !
+        <p className="blog-form-status" role="status" aria-live="polite">
+          {status === 'sending'
+            ? 'Envoi en cours…'
+            : status === 'success'
+              ? 'Votre commentaire a été envoyé. Il sera visible après validation.'
+              : ''}
+        </p>
+        {status === 'error' && (
+          <p role="alert">
+            L’envoi a échoué. Votre texte est conservé ; vous pouvez réessayer.
           </p>
         )}
-
-        {isLoading ? (
-          <div className={styles.loader} />
-        ) : (
-          <input type="submit" value="Envoyer" />
-        )}
+        <button
+          className="btn"
+          type="submit"
+          disabled={!ready || status === 'sending'}
+        >
+          Envoyer le commentaire
+        </button>
       </form>
-    </section>
+    </div>
   );
 }

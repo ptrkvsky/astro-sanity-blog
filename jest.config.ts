@@ -16,6 +16,23 @@ export default {
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
 
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: {
+        module: 'CommonJS',
+        moduleResolution: 'node',
+        target: 'ES2022',
+        verbatimModuleSyntax: false,
+        isolatedModules: true,
+        esModuleInterop: true,
+        jsx: 'react-jsx',
+      },
+      diagnostics: false,
+    }],
+  },
+  moduleNameMapper: { '^@lib/(.*)$': '<rootDir>/src/lib/$1' },
+
   // Indicates whether the coverage information should be collected while executing the test
   collectCoverage: true,
 

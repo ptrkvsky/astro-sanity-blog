@@ -1,94 +1,106 @@
 import { client } from '@lib/sanityClient';
-import { slugify } from '@lib/slugify';
 import type { PortableTextHtmlComponents } from '@portabletext/to-html';
 import hljs from 'highlight.js';
-//@ts-ignore
 import imageUrlBuilder from '@sanity/image-url';
-import getPost from '@features/blog/functions/getPost';
 
 const builder = imageUrlBuilder(client);
-
-function getSanityImageURL(source: any) {
-  return builder.image(source);
+export const escapeHTML = (value: unknown) =>
+  String(value ?? '').replace(
+    /[&<>"']/g,
+    (char) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[
+        char
+      ]!,
+  );
+export function safeURL(value: unknown) {
+  const url = String(value || '').trim();
+  return /^(https?:\/\/|mailto:|tel:|\/(?!\/)|#)/i.test(url) ? url : '';
 }
 
-export const portableTextComponents: Partial<PortableTextHtmlComponents> = {
-  types: {
-    mainImage: ({ value }) => {
-      return `
-        <picture>
-          <source
-            srcset="${getSanityImageURL(value.asset).format('webp').url()}"
-            type="image/webp"
-          />
-          <img
-            class="responsive__img"
-            src="${getSanityImageURL(value.asset).url()}"
-            alt="${value.alt}"
-          />
-        </picture>
-      `;
+// Internal references are resolved once per article, before the synchronous HTML renderer.
+export async function createPortableTextComponents(
+  blocks: any[],
+): Promise<Partial<PortableTextHtmlComponents>> {
+  const refs = [
+    ...new Set(
+      blocks
+        .flatMap((block) =>
+          (block.markDefs || [])
+            .filter((mark: any) => mark._type === 'internalLink')
+            .map((mark: any) => mark.reference?._ref),
+        )
+        .filter(Boolean),
+    ),
+  ];
+  const links = new Map<string, string>();
+  if (refs.length) {
+    const posts = await client.fetch<{ _id: string; slug: string }[]>(
+      '*[_type == "post" && _id in $refs]{_id,"slug":slug.current}',
+      { refs },
+    );
+    for (const post of posts)
+      if (post.slug) links.set(post._id, `/posts/${post.slug}`);
+  }
+  const heading =
+    (tag: string) =>
+    ({ value, children }: any) =>
+      `<${tag} id="${escapeHTML(value.blogHeadingId)}">${children}</${tag}>`;
+  return {
+    block: {
+      ...Object.fromEntries(
+        ['h2', 'h3', 'h4', 'h5', 'h6'].map((tag) => [tag, heading(tag)]),
+      ),
+      code: ({ children }: any) => `<p><code>${children}</code></p>`,
     },
-    code: (elem) => {
-      const code = hljs.highlight(elem.value.code, {
-        language: elem.value.language,
-      }).value;
-      return `<pre class="language-${elem.value.language}"><code>${code}</code></pre>`;
+    types: {
+      mainImage: ({ value }: any) => {
+        const ref = value.asset?._ref || value.asset?._id || '';
+        const dimensions = ref.match(/-(\d+)x(\d+)-/);
+        const width =
+          value.asset?.metadata?.dimensions?.width || Number(dimensions?.[1]);
+        const height =
+          value.asset?.metadata?.dimensions?.height || Number(dimensions?.[2]);
+        if (!value.asset) return '<p>Image indisponible.</p>';
+        const image = builder.image(value.asset).auto('format').fit('max');
+        const sizes = [390, 640, 960, 1440].filter((w) => !width || w <= width);
+        if (width && !sizes.includes(width) && width < 1440) sizes.push(width);
+        const srcset = sizes
+          .map((w) => `${escapeHTML(image.width(w).url())} ${w}w`)
+          .join(', ');
+        return `<figure><img src="${escapeHTML(image.width(Math.min(width || 960, 960)).url())}" srcset="${srcset}" sizes="(max-width: 64rem) calc(100vw - 2rem), 44rem" ${width && height ? `width="${width}" height="${height}"` : ''} alt="${escapeHTML(value.alt || '')}" loading="lazy" decoding="async">${value.caption ? `<figcaption>${escapeHTML(value.caption)}</figcaption>` : ''}</figure>`;
+      },
+      code: ({ value }: any) => {
+        const language =
+          typeof value.language === 'string' ? value.language : '';
+        const code =
+          language && hljs.getLanguage(language)
+            ? hljs.highlight(value.code || '', { language }).value
+            : escapeHTML(value.code);
+        return `<div class="code-block"><p class="code-language">${escapeHTML(language || 'Code')}</p><pre tabindex="0" aria-label="Extrait de code"><code class="hljs">${code}</code></pre></div>`;
+      },
+      youtube: ({ value }: any) => {
+        const id = String(value.idYoutube || '');
+        if (!/^[\w-]{11}$/.test(id)) return '<p>Vidéo indisponible.</p>';
+        return `<figure class="video-link"><a data-video="${id}" href="https://www.youtube.com/watch?v=${id}"><img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" width="480" height="360" loading="lazy" alt=""><span>Regarder la vidéo sur YouTube ↗</span></a></figure>`;
+      },
     },
-    //ts-ignore
-    youtube: (elem) => {
-      return `<div>
-      <iframe
-      width="100%"
-      height="500"
-      src="https://www.youtube.com/embed/${elem.value.idYoutube}&autoplay=1"
-      srcdoc="<style>*{padding:0;margin:0;ov560erflow:hidden}html,body{height:100%}img,span{position:absolute;width:100%;top:0;bottom:0;margin:auto}span{height:1.5em;text-align:center;font:48px/1.5 sans-serif;color:white;text-shadow:0 0 0.5em black}</style><a href=https://www.youtube.com/embed/${elem.value.idYoutube}?autoplay=1><img src=https://img.youtube.com/vi/${elem.value.idYoutube}/hqdefault.jpg alt='Video The Dark Knight Rises: What Went Wrong? – Wisecrack Edition'><span>▶</span></a>"
-      frameborder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-      </div>`;
+    marks: {
+      internalLink: ({ value, children }: any) => {
+        const href = links.get(value.reference?._ref);
+        return href
+          ? `<a href="${escapeHTML(href)}">${children}</a>`
+          : children;
+      },
+      link: ({ value, children }: any) => {
+        const href = safeURL(value.href);
+        return href
+          ? `<a href="${escapeHTML(href)}">${children}</a>`
+          : children;
+      },
     },
-  },
-  marks: {
-    //@ts-ignore
-    internalLink: async (prop) => {
-      const post = await getPost(prop.value.reference._ref);
-      return `<a href="${post[0].slug.current}" class="internalLink">${prop.children}</a>`;
+    unknownType: ({ value }: any) => {
+      console.warn(`Blog : bloc non pris en charge : ${value._type}`);
+      return '<p class="content-notice">Ce contenu ne peut pas être affiché dans ce format.</p>';
     },
-    link: ({ text, value }: any) => {
-      return `<a href="${value.href}">${text}</a>`;
-    },
-  },
-
-  block: {
-    h2: ({ value }: any) => {
-      return `<h2 id="${slugify(value.children[0].text)}">${
-        value.children[0].text
-      }</h2>`;
-    },
-    h3: ({ value }: any) => {
-      return `<h2 id="${slugify(value.children[0].text)}">${
-        value.children[0].text
-      }</h2>`;
-    },
-    h4: ({ value }: any) => {
-      return `<h2 id="${slugify(value.children[0].text)}">${
-        value.children[0].text
-      }</h2>`;
-    },
-    h5: ({ value }: any) => {
-      return `<h2 id="${slugify(value.children[0].text)}">${
-        value.children[0].text
-      }</h2>`;
-    },
-    h6: ({ value }: any) => {
-      return `<h2 id="${slugify(value.children[0].text)}">${
-        value.children[0].text
-      }</h2>`;
-    },
-    code: ({ value }: any) => {
-      return `<code>${value.children[0].text}</code>`;
-    },
-  },
-};
+  };
+}

@@ -1,24 +1,24 @@
 ---
 import type { Post } from '@interfaces/SanitySchema';
-
-interface AstroProps {
+import { formatArticleDate } from '../../functions/articleContent';
+interface Props {
   post: Post;
+  headingLevel?: 'h2' | 'h3';
 }
-
-const { post } = Astro.props as AstroProps;
+const { post, headingLevel: Heading = 'h3' } = Astro.props;
+const date = formatArticleDate(post._createdAt);
 ---
 
-<li class="bg-white rounded-lg p-4 lg:p-8 drop-shadow-lg overflow-hidden">
-  <article class="post-card h-full">
-    <a
-      class="flex flex-col h-full place-content-between"
-      href={`/posts/${post.slug.current}`}
-    >
-      <div>
-        <h3 class="font-semibold text-xl mb-4">{post.title}</h3>
-        <p class="mb-4">{post.description}</p>
-      </div>
-      <span class="read-more font-semibold tracking-wide">En savoir plus</span>
-    </a>
+<li class="blog-entry">
+  <article>
+    {date && (
+      <p class="blog-meta">
+        <time datetime={post._createdAt}>{date}</time>
+      </p>
+    )}
+    <Heading>
+      <a href={`/posts/${post.slug.current}`}>{post.title}</a>
+    </Heading>
+    {post.description && <p class="blog-excerpt">{post.description}</p>}
   </article>
 </li>

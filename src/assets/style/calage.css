@@ -13,7 +13,7 @@
 .sheet-inner { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; column-gap: var(--gutter); row-gap: var(--space-3); }
 .hero-kicker { grid-column: 1 / span 9; grid-row: 1; font: var(--step--1)/1.35 var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .hero-kicker b { color: var(--ink); font-weight: 400; }
-.hero-title { grid-column: 1 / -1; grid-row: 2; align-self: center; font-size: var(--step-hero); line-height: .86; letter-spacing: -.022em; text-wrap: wrap; padding-block: .06em; }
+.hero-title { grid-column: 1 / -1; grid-row: 2; align-self: center; font-family: var(--f-display); font-weight: 400; font-size: var(--step-hero); line-height: .86; letter-spacing: -.022em; text-wrap: wrap; padding-block: .06em; }
 .hero-title em { color: var(--red); }
 /* Le centre du repère se pose sur la ligne de base de la dernière ligne du titre */
 .hero-mark { --mw: clamp(6.5rem, 2rem + 11vw, 14rem); grid-column: 9 / span 4; grid-row: 2; justify-self: end; align-self: end; width: var(--mw); margin-bottom: calc(var(--step-hero) * .165 - var(--mw) / 2); position: relative; }

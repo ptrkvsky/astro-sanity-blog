@@ -18,11 +18,11 @@ export const site = {
 };
 
 export const hero = {
-  kicker: 'Développeur frontend senior · Toulouse, depuis 2012',
+  kicker: 'Développeur React freelance à Toulouse · Web depuis 2012',
   titleBefore: 'Des interfaces ',
   titleEmphasis: 'rapides,',
   titleAfter: ' lisibles, trouvables.',
-  lede: "Sites à fort trafic, outils métier, expériences interactives : je construis des interfaces qui se chargent vite, se lisent sans effort et se trouvent. Cette page en est l'épreuve.",
+  lede: "Sites à fort trafic, outils métier, expériences interactives : j'accompagne les entreprises et les agences dans la création et la refonte de sites internet et d'applications web avec React, Next.js et TypeScript. Cette page en est l'épreuve.",
   slug: 'developpeur-web.tech · épreuve 1/5 · Instrument Serif, PolySans, Plex Mono · 2 plaques',
 };
 
@@ -74,7 +74,7 @@ export type Essai = {
 };
 
 export const essais = {
-  title: 'Essais',
+  title: 'Projets React et développement web',
   note: 'Six projets livrés : le problème, les contraintes, les décisions. Survolez une ligne : elle se cale.',
   list: [
     { n: '01', slug: 'safti', title: 'SAFTI.fr', role: "Refonte d'architecture, SEO", year: '2022', stack: 'Next.js · TypeScript · Tailwind · Jest', url: 'https://www.safti.fr/' },
@@ -126,11 +126,13 @@ export const controle = {
 };
 
 export const apropos = {
-  title: 'À propos',
+  title: 'Votre développeur freelance à Toulouse',
   note: "D'abord l'agence, maintenant le produit : quatorze ans de frontend.",
   bio: [
-    "Développeur depuis 2012, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript.",
-    "Je travaille aujourd'hui sur des sites à fort trafic et des outils métier, en alliant performance, SEO et expérience utilisateur. J'écris aussi sur ce que j'apprends.",
+    "Développeur web depuis 2012 et basé à Toulouse, j'ai commencé en agence sur PHP et WordPress avant de me spécialiser dans l'écosystème JavaScript, React et TypeScript.",
+    "En freelance, j'interviens sur la création d'applications web, la refonte de sites internet et le développement frontend d'outils métier. Selon le projet, je prends en charge l'intégration HTML et CSS, les composants React, la connexion aux API ou l'architecture Next.js.",
+    "Mes missions associent développement, tests et optimisation des performances, avec une attention au référencement naturel et à l'accessibilité. Les projets SAFTI, Omega et ALS Action Canada présentés plus haut illustrent ce travail avec les équipes produit et les développeurs backend.",
+    "Je peux travailler avec votre équipe à Toulouse et en périphérie, ou à distance pour des clients dans toute la France. Pour préparer une mission, écrivez-moi avec le contexte du projet, les besoins techniques et le calendrier envisagé. J'écris aussi sur ce que j'apprends.",
   ],
   quotes: [
     { text: 'Chaque projet m’a permis d’apprécier sa réactivité, son engagement professionnel et ses compétences.', author: 'Perrine Sini-Berthonneau, fondatrice du studio Les Cerises' },

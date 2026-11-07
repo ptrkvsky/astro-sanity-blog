@@ -94,7 +94,7 @@ export const essais = {
       { dt: 'Décisions', dd: "Montée de version de Next.js vers l'App Router, optimisation technique du SEO, tests unitaires avec objectifs de couverture atteints, suppression des code smells remontés par SonarQube." },
       { dt: 'Résultat', dd: "Une fonctionnalité proposée et développée a fait passer la note Trustpilot de 2,1 à 4,8." },
     ],
-    figure: { alt: "Illustration de l'essai SAFTI.fr : maisons et repères de carte en trame, un repère rouge, une barre de recherche vide", caption: 'Fig. 01 · illustration générée, pas une capture du site', hint: 'Épreuve en trame à 45° et 15°' },
+    figure: { alt: "Illustration de l'essai SAFTI.fr : trois volumes de béton clair, taillés en biseau, posés sur un plan gravé de courbes de niveau et de parcelles cadastrales ; un jalon rouge est planté sur le toit le plus bas", caption: 'Fig. 01 · maquette illustrée, pas une capture du site', hint: 'Volumes, courbes de niveau, parcellaire' },
   },
 };
 

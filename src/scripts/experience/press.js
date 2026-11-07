@@ -133,12 +133,13 @@ void main() {
   vec2 p = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y);
   // Épreuve : la capture tirée en deux plaques sur feuille noire
   vec2 cp = cellCenter(p, uCell, .785398);
-  float paper = halftoneDot(p, cp, uCell, lum(texture(uImg, cp / uRes).rgb) * .9);
+  float paper = halftoneDot(p, cp, uCell, smoothstep(.16, .8, lum(texture(uImg, cp / uRes).rgb)) * .95);
   vec2 q = p - uOffset;
   vec2 cr = cellCenter(q, uCell, .261799);
   vec3 cq = texture(uImg, cr / uRes).rgb;
   float sat = max(cq.r, max(cq.g, cq.b)) - min(cq.r, min(cq.g, cq.b));
-  float red = halftoneDot(q, cr, uCell, clamp(sat * 1.4 + (1. - lum(cq)) * .4, 0., 1.));
+  // La plaque rouge n'encre que le corail de l'image : les fonds sombres restent noirs
+  float red = halftoneDot(q, cr, uCell, smoothstep(.22, .6, sat));
   vec3 proof = mix(mix(uBg, uRed, red), uPaper, paper);
   // Compte-fils : le tirage net, légèrement grossi, avec l'ombre du verre
   float d = length(p - uLoupe);

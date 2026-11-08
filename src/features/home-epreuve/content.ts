@@ -2,6 +2,11 @@
 // Sources : parcours de docs/redesign/experience-signature.md (§ 4) et projets saisis par Johan dans Sanity.
 // Un champ absent n'est pas rendu : rien n'est affiché tant que l'information n'a pas été fournie.
 
+export const homeSeo = {
+  title: 'Développeur React freelance à Toulouse | Johan Petrikovsky',
+  description: 'Développeur React freelance à Toulouse. Création et refonte de sites et applications web avec Next.js et TypeScript : performance, SEO et accessibilité.',
+};
+
 export const email = 'johan@developpeur-web.tech';
 
 export const links = {
@@ -144,4 +149,56 @@ export const apropos = {
 export const contact = {
   title: 'Un projet, une refonte, un audit de performance\u00a0?',
   emphasis: 'Signons le bon à tirer.',
+};
+
+
+// Intercalaires éditoriaux : compétences illustrées par les projets ci-dessus.
+export const expertise = {
+  title: 'React et TypeScript, côté projet',
+  note: 'Feuille de prestations · partir de votre besoin, choisir les bons outils.',
+  items: [
+    {
+      title: 'Créer une interface React',
+      text: "Un espace de travail, une carte interactive, des formulaires : je développe le frontend de vos applications web, de l’intégration HTML et CSS aux composants TypeScript connectés à vos API. Les règles métier et les états de chargement font partie du travail, autant que l’écran final.",
+      proof: 'Omega · outil métier en React',
+      href: 'https://omega.safti.fr/',
+    },
+    {
+      title: 'Structurer un site avec Next.js',
+      text: "Pour un site dont le contenu doit être trouvé, l’architecture de rendu compte. J’interviens sur le rendu serveur, le cache, les parcours et le SEO technique. Sur SAFTI.fr, cette approche accompagne la refonte de l’architecture et la migration vers l’App Router.",
+      proof: 'SAFTI.fr · Next.js et référencement',
+      href: 'https://www.safti.fr/',
+    },
+    {
+      title: 'Faire évoluer un frontend existant',
+      text: "Une refonte ne demande pas toujours de tout réécrire. Je peux reprendre des templates, moderniser des composants et travailler sur les performances, les tests et l’accessibilité. Le projet ALS Action Canada illustre ce travail sur React et un CMS WordPress headless.",
+      proof: 'ALS Action Canada · refonte de templates',
+      href: 'https://www.alsactioncanada.org/',
+    },
+  ],
+};
+
+export const collaboration = {
+  title: 'Du premier échange à la livraison',
+  note: 'Fiche de préparation · cadrer le travail avant d’écrire le code.',
+  intro: "Travailler avec un freelance, c’est échanger directement avec la personne qui développe. Je peux rejoindre votre équipe produit ou intervenir sur un périmètre frontend défini. Une agence garde son intérêt si votre projet demande plusieurs métiers à coordonner : le choix dépend du besoin, pas du statut.",
+  steps: [
+    { title: 'Comprendre le besoin', text: 'Décrivez les utilisateurs, le problème à résoudre et les contraintes. Une maquette, un site existant ou un accès au code permettent de rendre la discussion concrète.' },
+    { title: 'Définir le périmètre', text: 'Les fonctionnalités, les dépendances avec le backend et les critères de validation servent de base à la proposition. Le budget, le calendrier et le mode de facturation se discutent à cette étape.' },
+    { title: 'Développer et vérifier', text: 'Le travail avance par étapes à valider ensemble : interfaces, intégration des données et tests. Des retours réguliers permettent d’ajuster les priorités avant la livraison.' },
+    { title: 'Préparer la suite', text: 'La livraison se prépare avec les vérifications et les éléments nécessaires à la reprise du code. Le déploiement et un éventuel accompagnement après livraison sont à préciser dans le périmètre de la mission.' },
+  ],
+};
+
+export const questions = {
+  title: 'Avant de lancer le projet',
+  note: 'Questions de cadrage · budget, délais et collaboration.',
+  items: [
+    { question: 'Pourquoi faire appel à un développeur React freelance ?', answer: 'Pour renforcer une équipe ou confier une interface à un interlocuteur technique direct. Regardez surtout les réalisations, le rôle tenu sur chaque projet et la capacité à expliquer les choix. Mes projets ci-dessus permettent de situer mon expérience en développement frontend, SEO technique et outils métier.' },
+    { question: 'Combien coûte un développeur React freelance à Toulouse ?', answer: 'Le coût dépend du périmètre, de l’état du code, des intégrations et du niveau d’accompagnement attendu. Un forfait correspond à un livrable bien défini ; une facturation au temps passé convient davantage à un périmètre évolutif. Le mode retenu et le tarif sont à convenir ensemble dans la proposition, après examen du besoin.' },
+    { question: 'Quels projets développer avec React et Next.js ?', answer: 'React se prête aux interfaces interactives : tableaux de bord, espaces clients ou applications métier. Next.js ajoute notamment des possibilités de rendu serveur pour des sites riches en contenu. Une simple page de présentation ne justifie pas toujours cette stack : le contenu, les usages et les contraintes de maintenance guident le choix.' },
+    { question: 'Combien de temps prend le développement d’une application React ?', answer: 'Le nombre d’écrans ne suffit pas à l’estimer. Les règles métier, la disponibilité des maquettes et des API, la migration de données et les validations influencent le délai. Un premier échange permet de repérer ces dépendances ; un calendrier réaliste demande ensuite un périmètre suffisamment précis.' },
+    { question: 'Comment se déroule une collaboration avec un développeur freelance ?', answer: 'Nous commençons par le contexte et les besoins utilisateurs, puis le périmètre, les priorités et les critères de livraison. Le développement s’appuie sur des échanges et des validations intermédiaires. Pour une reprise de projet, partager la stack et les difficultés actuelles aide à préparer cette première discussion.' },
+    { question: 'Peut-on travailler ensemble à distance ?', answer: 'Oui. Je suis basé à Toulouse et peux travailler avec des clients partout en France. Le partage des maquettes, du code et des retours permet de collaborer à distance. Les modalités d’échange et les éventuels rendez-vous sur place se définissent selon votre organisation et les besoins du projet.' },
+  ],
 };

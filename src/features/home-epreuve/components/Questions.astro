@@ -1,0 +1,28 @@
+---
+import PressDial from './PressDial.astro';
+import { questions } from '../content';
+---
+
+<section class="sec page" id="questions" aria-labelledby="t-questions">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">C</p>
+    <h2 id="t-questions">{questions.title}</h2>
+    <p class="note">{questions.note}</p>
+  </header>
+  <div class="questions-layout">
+  <div class="question-margin" aria-hidden="true">
+    <span class="question-glyph">?</span>
+    <div class="question-seal"><PressDial variant="questions" /></div>
+    <p class="press-label">Notes en marge <span data-question-count>01 / 06</span></p>
+  </div>
+  <div class="questions-sheet">
+    {questions.items.map((item, i) => (
+      <details open={i === 0}>
+        <summary><span class="mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><span>{item.question}</span></summary>
+        <p>{item.answer}</p>
+      </details>
+    ))}
+  </div>
+  </div>
+  <p class="questions-contact"><a class="more" href="#contact">Discuter de votre besoin</a> <span class="note">Contexte, site existant, calendrier : quelques lignes suffisent pour commencer.</span></p>
+</section>

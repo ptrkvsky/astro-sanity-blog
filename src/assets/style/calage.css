@@ -188,3 +188,42 @@ main { overflow-x: clip; }
 .weights div { display: flex; gap: .6rem; }
 .weights dt { color: var(--muted); }
 .layer-control { margin-top: var(--space-3); display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.2rem; }
+
+
+/* Intercalaires A–C : mêmes filets, grille et caractères que l’épreuve. */
+.service-sheet, .brief-stages { list-style: none; padding: 0; }
+.service-sheet li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-2) var(--gutter); border-bottom: 1px solid var(--hair); padding-block: var(--space-4); }
+.service-sheet li:first-child { padding-top: 0; }
+.service-no { grid-column: 1 / span 2; color: var(--red); }
+.service-sheet h3 { grid-column: 3 / span 4; font-size: var(--step-2); line-height: 1.05; }
+.service-copy { grid-column: 8 / span 5; display: grid; gap: var(--space-2); }
+.service-copy p, .brief-stages p { max-width: var(--measure); }
+.service-copy a { justify-self: start; }
+.brief-sheet { row-gap: var(--space-4); }
+.brief-intro { grid-column: 1 / span 4; display: grid; align-content: start; gap: var(--space-3); }
+.brief-stages { grid-column: 6 / span 7; }
+.brief-stages li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: var(--space-2); border-top: 1px solid var(--hair); padding-block: var(--space-3); }
+.brief-stages li > span { color: var(--red); }
+.brief-stages h3 { font-size: var(--step-1); margin-bottom: .6rem; }
+.questions-sheet { border-top: 1px solid var(--hair); }
+.questions-sheet details { border-bottom: 1px solid var(--hair); }
+.questions-sheet summary { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 1rem; align-items: baseline; gap: var(--space-2); cursor: pointer; padding-block: var(--space-3); list-style: none; font: 400 var(--step-1)/1.3 var(--f-display); }
+.questions-sheet summary::-webkit-details-marker { display: none; }
+.questions-sheet summary .mono { color: var(--red); }
+.questions-sheet summary::after { content: '+'; color: var(--red); font-family: var(--f-mono); }
+.questions-sheet details[open] > summary::after { content: '−'; }
+.questions-sheet summary:hover { color: var(--red); }
+.questions-sheet details > p { max-width: var(--measure); margin-left: 3rem; padding-bottom: var(--space-3); }
+.questions-contact { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--gutter); margin-top: var(--space-3); align-items: baseline; }
+@media (max-width: 64rem) {
+  .service-no { grid-column: 1 / span 1; }
+  .service-sheet h3 { grid-column: 2 / span 5; }
+  .service-copy { grid-column: 7 / span 6; }
+  .brief-intro { grid-column: 1 / span 5; }
+  .brief-stages { grid-column: 7 / span 6; }
+}
+@media (max-width: 48rem) {
+  .service-sheet h3 { grid-column: 2 / -1; }
+  .service-copy { grid-column: 2 / -1; }
+  .brief-intro, .brief-stages { grid-column: 1 / -1; }
+}

@@ -1,0 +1,19 @@
+---
+interface Props { variant?: 'plates' | 'route' | 'questions'; }
+const { variant = 'plates' } = Astro.props;
+---
+<svg class={`press-dial press-dial--${variant}`} viewBox="0 0 400 400" aria-hidden="true">
+  <circle class="dial-boundary" cx="200" cy="200" r="182" />
+  <g class="dial-ticks">
+    {Array.from({length: 60}, (_, i) => <path d={`M200 ${i % 5 === 0 ? 18 : 24}V${i % 5 === 0 ? 38 : 31}`} transform={`rotate(${i * 6} 200 200)`} />)}
+  </g>
+  <g class="dial-plate dial-plate-red">
+    {Array.from({length: 16}, (_, i) => <ellipse cx="200" cy="200" rx="145" ry="54" transform={`rotate(${i * 11.25} 200 200)`} />)}
+  </g>
+  <g class="dial-plate dial-plate-ink">
+    {Array.from({length: 16}, (_, i) => <ellipse cx="200" cy="200" rx="145" ry="54" transform={`rotate(${i * 11.25} 200 200)`} />)}
+  </g>
+  <circle class="dial-hub" cx="200" cy="200" r="44" />
+  <path class="dial-cross" d="M182 200h36M200 182v36" />
+  <circle class="dial-progress" cx="200" cy="200" r="173" pathLength="1" transform="rotate(-90 200 200)" />
+</svg>

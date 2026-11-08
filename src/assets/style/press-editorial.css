@@ -1,0 +1,71 @@
+/* L’atelier : séparer, caler, annoter. Les états de repos sont complets. */
+.press-label, .plate-caption { display:flex; justify-content:space-between; gap:1rem; font:var(--step--1)/1.4 var(--f-mono); text-transform:uppercase; letter-spacing:.05em; }
+.press-label { border-top:1px solid currentColor; padding-top:.8rem; }
+.press-label span { color:var(--red); }
+.plate-layout { display:grid; grid-template-columns:5fr 6fr; gap:8%; align-items:start; }
+.plate-machine { position:sticky; top:6vh; min-width:0; }
+.plate-art { position:relative; aspect-ratio:1; margin-block:1.5rem; isolation:isolate; }
+.press-dial { width:100%; height:auto; fill:none; stroke:var(--ink); stroke-width:.65; }
+.dial-boundary, .dial-ticks { opacity:.55; }
+.dial-plate-red { stroke:var(--red); transform:translate(6px,-4px); }
+.dial-plate-ink { opacity:.8; }
+.dial-hub { fill:var(--paper); stroke:var(--red); }
+.dial-cross { stroke:var(--red); stroke-width:1.5; }
+.dial-progress { stroke:var(--red); stroke-width:3; stroke-dasharray:1; stroke-dashoffset:0; }
+.plate-grain { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:.7; mix-blend-mode:screen; }
+.plate-letter { position:absolute; inset:0; display:grid; place-items:center; font:italic 400 clamp(9rem,20vw,24rem)/1 var(--f-display); color:var(--ink); text-shadow:4px 2px var(--red); pointer-events:none; }
+.plate-art .dial-hub, .plate-art .dial-cross { visibility:hidden; }
+.plate-caption { padding-block:1rem; border-block:1px solid var(--hair); }
+.plate-legend { margin-top:.8rem; color:var(--muted); font:italic var(--step-1)/1.2 var(--f-display); }
+.plate-layout .service-sheet li { display:grid; grid-template-columns:3rem 1fr; padding:3rem 0; min-height:65vh; align-content:center; gap:1.4rem; position:relative; }
+.plate-layout .service-sheet li:first-child { padding-top:1rem; }
+.plate-layout .service-no { grid-column:1; font:italic 400 var(--step-2)/1 var(--f-display); }
+.plate-layout .service-sheet h3 { grid-column:2; font-size:clamp(2.8rem,4.8vw,5.2rem); line-height:.95; }
+.plate-layout .service-copy { grid-column:2; gap:1.5rem; }
+.plate-layout .service-copy a { border-bottom:1px solid var(--red); padding-bottom:.4rem; text-decoration:none; }
+/* Une feuille claire marque le passage du savoir-faire au travail partagé. */
+.collaboration-press { --paper:#F1EEE6; --ink:#121210; --muted:#57534b; --hair:#b9b2a5; --red:#a72e18; background:var(--paper); color:var(--ink); margin-top:var(--space-6); padding-bottom:var(--space-5); }
+.collaboration-press .sec-head { margin-bottom:var(--space-4); }
+.collaboration-press .brief-intro { position:sticky; top:3vh; }
+.route-machine { position:relative; max-width:26rem; }
+.route-machine .press-dial { padding:1rem; }
+.route-machine .dial-plate { opacity:.35; }
+.route-machine .dial-cross { display:none; }
+.route-counter { position:absolute; top:calc(50% - 1.25rem); left:50%; translate:-50% -50%; font:400 2.4rem/1 var(--f-display); }
+.collaboration-press .brief-stages li { min-height:40vh; align-content:center; grid-template-columns:3rem 1fr; padding-block:3rem; }
+.collaboration-press .brief-stages li > span { font:italic 400 var(--step-2)/1 var(--f-display); }
+.collaboration-press .brief-stages h3 { font-size:var(--step-2); line-height:1; margin-bottom:1rem; }
+.collaboration-press .brief-stages li:last-child { border-bottom:1px solid var(--hair); }
+.questions-layout { display:grid; grid-template-columns:3fr 7fr; gap:8%; align-items:start; }
+.question-margin { position:sticky; top:5vh; }
+.question-glyph { display:block; font:italic 400 clamp(12rem,24vw,30rem)/.9 var(--f-display); color:var(--red); text-align:center; }
+.question-seal { position:absolute; width:55%; right:-8%; top:25%; mix-blend-mode:screen; }
+.question-seal .dial-hub { fill:var(--paper); }
+.question-margin .press-label { margin-top:2rem; }
+.questions-layout summary { padding-block:1.7rem; font-size:clamp(1.5rem,2.25vw,2.3rem); }
+.questions-layout details[open] > summary { color:var(--red); }
+.questions-layout details > p { padding:0 0 1.8rem; }
+@media (max-width:64rem) {
+  .plate-layout { gap:5%; grid-template-columns:4fr 6fr; }
+  .plate-layout .service-sheet li { min-height:55vh; }
+  .questions-layout { grid-template-columns:2fr 7fr; gap:6%; }
+  .question-margin .press-label { flex-direction:column; }
+}
+@media (max-width:48rem) {
+  .plate-layout, .questions-layout { grid-template-columns:1fr; gap:2rem; }
+  .plate-machine { position:relative; top:auto; max-width:28rem; width:100%; margin:auto; }
+  .plate-art { max-width:22rem; margin:1rem auto; }
+  .plate-letter { font-size:11rem; }
+  .plate-layout .service-sheet li { min-height:0; padding:2rem 0; grid-template-columns:2rem 1fr; gap:1rem; }
+  .plate-layout .service-sheet h3 { font-size:2.8rem; }
+  .collaboration-press .brief-intro { position:static; }
+  .route-machine { width:70%; max-width:18rem; margin:auto; }
+  .collaboration-press .brief-stages li { min-height:0; padding-block:2rem; }
+  .question-margin { position:relative; top:auto; display:flex; align-items:end; justify-content:space-between; }
+  .question-glyph { font-size:9rem; }
+  .question-seal { width:7rem; left:2rem; top:0; }
+  .question-margin .press-label { width:50%; margin:0 0 1rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .plate-machine, .collaboration-press .brief-intro, .question-margin { position:relative; top:auto; }
+}

@@ -1,0 +1,31 @@
+---
+import PressDial from './PressDial.astro';
+import { collaboration, email } from '../content';
+---
+
+<section class="sec page collaboration-press" id="collaboration" aria-labelledby="t-collaboration">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">B</p>
+    <h2 id="t-collaboration">{collaboration.title}</h2>
+    <p class="note">{collaboration.note}</p>
+  </header>
+  <div class="brief-sheet g12">
+    <div class="brief-intro">
+      <div class="route-machine" aria-hidden="true">
+        <PressDial variant="route" />
+        <span class="route-counter">01</span>
+        <p class="press-label">Feuille de route <span>4 passes</span></p>
+      </div>
+      <p>{collaboration.intro}</p>
+      <a class="more" href={`mailto:${email}`}>Parlons de votre projet</a>
+    </div>
+    <ol class="brief-stages">
+      {collaboration.steps.map((step, i) => (
+        <li data-route-stage>
+          <span class="mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <div><h3>{step.title}</h3><p>{step.text}</p></div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

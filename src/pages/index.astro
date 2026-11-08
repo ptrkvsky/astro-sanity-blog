@@ -3,6 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { getGraphHome } from '@helpers/getGraphHome';
 import { client } from 'src/lib/sanityClient';
 import '@assets/style/calage.css';
+import '@assets/style/press-editorial.css';
 import Defs from '@features/home-epreuve/components/Defs.astro';
 import Hero from '@features/home-epreuve/components/Hero.astro';
 import Methode from '@features/home-epreuve/components/Methode.astro';
@@ -12,8 +13,10 @@ import APropos from '@features/home-epreuve/components/APropos.astro';
 import Repere from '@features/home-epreuve/components/Repere.astro';
 import BonATirer from '@features/home-epreuve/components/BonATirer.astro';
 
-const description =
-  'Développeur React freelance à Toulouse. Création et refonte de sites et applications web avec Next.js et TypeScript : performance, SEO et accessibilité.';
+import { homeSeo } from '@features/home-epreuve/content';
+import Expertise from '@features/home-epreuve/components/Expertise.astro';
+import Collaboration from '@features/home-epreuve/components/Collaboration.astro';
+import Questions from '@features/home-epreuve/components/Questions.astro';
 
 interface Note {
   title: string;
@@ -43,8 +46,8 @@ const schema = getGraphHome();
 ---
 
 <BaseLayout
-  title="Développeur React freelance à Toulouse | Johan Petrikovsky"
-  description={description}
+  title={homeSeo.title}
+  description={homeSeo.description}
   schema={schema}
   canonical="/"
 >
@@ -54,7 +57,10 @@ const schema = getGraphHome();
     <Methode />
     <Essais />
     <Controle />
+    <Expertise />
     <APropos notes={notes} articleCount={articleCount} />
+    <Collaboration />
+    <Questions />
     <BonATirer />
     <div class="calage-meter" aria-hidden="true"><span>Calage</span><b><output data-calage>100</output> %</b><i></i></div>
     <div class="courier" aria-hidden="true"><Repere /></div>

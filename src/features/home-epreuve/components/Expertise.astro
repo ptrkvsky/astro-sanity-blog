@@ -1,0 +1,32 @@
+---
+import PressDial from './PressDial.astro';
+import { expertise } from '../content';
+---
+
+<section class="sec page" id="expertise" aria-labelledby="t-expertise">
+  <header class="sec-head g12">
+    <p class="sec-num" aria-hidden="true">A</p>
+    <h2 id="t-expertise">{expertise.title}</h2>
+    <p class="note">{expertise.note}</p>
+  </header>
+  <div class="plate-layout">
+    <div class="plate-machine" aria-hidden="true">
+      <p class="press-label">Séparation des plaques <span>01 — 03</span></p>
+      <div class="plate-art"><PressDial /><canvas class="plate-grain"></canvas><span class="plate-letter">R</span></div>
+      <div class="plate-caption"><span data-plate-name>Interface</span><span data-plate-count>01 / 03</span></div>
+      <p class="plate-legend">Une interface. Plusieurs passes.</p>
+    </div>
+    <ol class="service-sheet">
+    {expertise.items.map((item, i) => (
+      <li data-service-plate>
+        <span class="service-no mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{item.title}</h3>
+        <div class="service-copy">
+          <p>{item.text}</p>
+          <a class="mono" href={item.href} rel="noopener">{item.proof}</a>
+        </div>
+      </li>
+    ))}
+  </ol>
+  </div>
+</section>

@@ -121,7 +121,8 @@ async function start() {
   gsap.to(hero, { intro: 1, duration: 1.4, ease: 'power3.out', onUpdate: applyHero });
   gsap.to(hero, {
     h: 1, ease: 'none', onUpdate: applyHero,
-    scrollTrigger: full
+    // Une entrée par ancre ne doit pas être déplacée par l’épinglage tardif du hero.
+    scrollTrigger: full && (!location.hash || location.hash === '#haut')
       ? { trigger: '.hero', start: 'top top', end: '+=65%', pin: true, scrub: .6 }
       : { trigger: '.hero', start: 'top top', end: 'bottom 35%', scrub: .4 },
   });
@@ -287,6 +288,10 @@ async function start() {
   applyHero();
   ScrollTrigger.refresh();
 
+  const { startEditorial } = await import('./editorial.js');
+  const stopEditorial = startEditorial({ gsap, ScrollTrigger, full });
+  addEventListener('pagehide', (e) => { if (!e.persisted) stopEditorial(); });
+
   // ---------- « Retirer la couche créative » : la page garde tout son contenu ----------
   const removeBtn = $('[data-remove-layer]');
   const layerStatus = $('[data-layer-status]');
@@ -294,6 +299,7 @@ async function start() {
     removeBtn.hidden = false;
     removeBtn.addEventListener('click', () => {
       removed = true;
+      stopEditorial();
       press?.destroy(); press = null;
       loupe?.destroy(); loupe = null;
       ScrollTrigger.getAll().forEach((t) => t.kill(true));
@@ -307,5 +313,9 @@ async function start() {
       removeBtn.hidden = true;
       if (layerStatus) layerStatus.textContent = 'Couche créative retirée : plus aucun WebGL ni animation, la page reste complète.';
     }, { once: true });
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    const onMotion = () => { if (motion.matches && !removed) removeBtn.click(); };
+    motion.addEventListener('change', onMotion);
+    addEventListener('pagehide', (e) => { if (!e.persisted) motion.removeEventListener('change', onMotion); });
   }
 }

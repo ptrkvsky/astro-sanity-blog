@@ -4,7 +4,6 @@
 
   // Personnalisation des couleurs de VSCode avec #4f46e5 comme couleur de base
   "workbench.colorCustomizations": {
-    "activityBar.activeBorder": "#4f46e5",
     "sideBar.background": "#2f2d8f",
     "sideBar.foreground": "#FFFFFF",
     "sideBarSectionHeader.background": "#4f46e5",

@@ -4,6 +4,8 @@ import Sib from 'sib-api-v3-sdk';
 export default async function sendMail(postTitle: string) {
   try {
     const sibClient = Sib.ApiClient.instance;
+    // Rester sous le délai de soumission du formulaire (15 secondes).
+    sibClient.timeout = 5000;
     const apiKey = sibClient.authentications['api-key'];
     apiKey.apiKey = import.meta.env.SENDIN_BLUE;
 
@@ -37,7 +39,6 @@ export default async function sendMail(postTitle: string) {
 
     return result;
   } catch (error: any) {
-    console.error('🔥 Error sending email:', error.text);
-    throw error; // Re-throw the error if you want calling code to handle it
+    throw error;
   }
 }

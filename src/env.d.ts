@@ -8,7 +8,8 @@ interface ImportMetaEnv {
   readonly PUBLIC_SANITY_READ_TOKEN: string;
   readonly PUBLIC_URL: string;
   readonly SANITY_READ_TOKEN: string;
-  // more env variables...
+  readonly SANITY_MANAGE_TOKEN: string;
+  readonly SENDIN_BLUE?: string;
 }
 
 interface ImportMeta {

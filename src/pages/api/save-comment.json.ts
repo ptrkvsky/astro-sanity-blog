@@ -3,53 +3,23 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { createClient } from '@sanity/client';
 import sendMail from '@features/blog/functions/sendMail';
+import { saveComment } from '@features/blog/functions/saveComment';
 
-const sanityConfig = {
-  projectId: 'nrxsmjzk',
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET,
-  token: import.meta.env.SANITY_READ_TOKEN,
-  apiVersion: '2021-03-25',
-  useCdn: true,
-};
-
-export const sanityClient = createClient(sanityConfig);
-
-export const POST: APIRoute = async ({ request }) => {
-  if (
-    request.headers.get('Content-Type') === 'application/json; charset=UTF-8'
-  ) {
-    try {
-      const body = await request.json();
-      const { _id, comment, pseudo, postTitle } = body;
-
-      const newComment = {
-        _type: 'comment',
-        post: {
-          _type: 'reference',
-          _ref: _id,
-        },
-        pseudo,
-        content: comment,
-        isActive: false,
-      };
-
-      await sendMail(postTitle);
-      const commentCreated = await sanityClient.create(newComment);
-      return new Response(JSON.stringify(commentCreated), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
+export const POST: APIRoute = ({ request }) =>
+  saveComment(request, {
+    save: async (comment) => {
+      const token = import.meta.env.SANITY_MANAGE_TOKEN;
+      if (!token) throw new Error('SANITY_MANAGE_TOKEN manquant.');
+      const client = createClient({
+        projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
+        dataset: import.meta.env.PUBLIC_SANITY_DATASET,
+        token,
+        apiVersion: '2021-03-25',
+        useCdn: false,
       });
-    } catch (err) {
-      console.error('👩‍🚒', err);
-      return new Response(JSON.stringify(err), {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    }
-  }
-  return new Response(null, { status: 400 });
-};
+      return client.create(comment);
+    },
+    notify: async (postTitle) => {
+      if (import.meta.env.SENDIN_BLUE) await sendMail(postTitle);
+    },
+  });

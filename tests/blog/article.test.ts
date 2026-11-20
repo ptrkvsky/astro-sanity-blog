@@ -180,3 +180,33 @@ test('images dimensionnées et alt échappé, sans script injecté', async () =>
   expect(html).toContain('srcset=');
   expect(html).not.toContain('<script>');
 });
+
+test('démo intégrée : iframe isolée limitée aux pages de /demos/', async () => {
+  const components = await createPortableTextComponents([]);
+  const html = toHTML(
+    [
+      {
+        _type: 'demoEmbed',
+        _key: 'a',
+        path: '/demos/animation-bouton-alerte/',
+        title: 'Démo "avant et après"',
+        height: 5000,
+      },
+      {
+        _type: 'demoEmbed',
+        _key: 'b',
+        path: 'https://example.com/',
+        title: 'x',
+      },
+      { _type: 'demoEmbed', _key: 'c', path: '/demos/../admin/', title: 'x' },
+    ],
+    { components },
+  );
+  expect(html).toContain('src="/demos/animation-bouton-alerte/"');
+  expect(html).toContain('sandbox="allow-scripts"');
+  expect(html).toContain('height="900"');
+  expect(html).toContain('title="Démo &quot;avant et après&quot;"');
+  expect(html).not.toContain('example.com');
+  expect(html).not.toContain('admin');
+  expect(html.match(/Démonstration indisponible/g)).toHaveLength(2);
+});

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrée d'un bouton flottant, avant et après</title>
+<style>
+  :root {
+    --bg: #f4f4f1;
+    --plate: #ffffff;
+    --ink: #151515;
+    --muted: #5d5d57;
+    --line: #d8d8d2;
+    --skeleton: #e6e6e1;
+    --accent: #1f2937;
+    --accent-hover: #111827;
+    --slow: 1;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --out: cubic-bezier(0, 0, 0.2, 1);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151514; --plate: #1f1f1d; --ink: #f2f2ee; --muted: #a3a39b;
+      --line: #34342f; --skeleton: #2c2c29; --accent: #f2f2ee; --accent-hover: #ffffff;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 64rem; margin: 0 auto; padding: 2rem 1rem 3rem; }
+  h1 { font-size: clamp(1.4rem, 1rem + 1.5vw, 2rem); font-weight: 600; margin: 0 0 .25rem; letter-spacing: -.01em; }
+  .lead { color: var(--muted); margin: 0 0 1.5rem; max-width: 42rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: .75rem 1rem; align-items: center; margin-bottom: 1.5rem; }
+  .controls label { color: var(--muted); font-size: .9rem; }
+  button.ctl, select { font: inherit; font-size: .9rem; padding: .45rem .9rem; border-radius: 999px; border: 1px solid var(--line); background: var(--plate); color: var(--ink); cursor: pointer; }
+  button.ctl:hover, select:hover { border-color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+  figure { margin: 0; }
+  figcaption { margin-top: .75rem; font-size: .92rem; }
+  figcaption strong { display: block; font-size: 1rem; margin-bottom: .25rem; }
+  figcaption ul { margin: .25rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+  .tag { display: inline-block; font: 600 .75rem/1 ui-monospace, Menlo, monospace; text-transform: uppercase; letter-spacing: .06em; padding: .3rem .5rem; border-radius: 4px; margin-bottom: .5rem; }
+  .tag.before { background: #fde7d3; color: #7a3b05; }
+  .tag.after { background: #d6f0dc; color: #14532d; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tag.before { background: #4a2a10; color: #fcd9b6; } :root:not([data-theme="light"]) .tag.after { background: #14391f; color: #b7e8c4; } }
+
+  .screen { position: relative; height: 26rem; overflow: hidden; background: var(--plate); border: 1px solid var(--line); border-radius: 14px; padding: 1rem; }
+  .skel { background: var(--skeleton); border-radius: 8px; }
+  .skel.title { height: 1.1rem; width: 55%; margin-bottom: 1rem; }
+  .skel.card { height: 5.2rem; margin-bottom: .75rem; }
+
+  .dock { position: absolute; left: 0; right: 0; bottom: 20px; display: flex; justify-content: center; pointer-events: none; }
+  .pill { pointer-events: auto; display: inline-flex; align-items: center; gap: .4rem; height: 2.5rem; padding: 0 1.25rem 0 1rem; border: 0; border-radius: 999px; background: var(--accent); color: var(--plate); font: 500 1rem/1 system-ui, sans-serif; box-shadow: 0 8px 24px -8px rgba(0,0,0,.35); cursor: pointer; }
+  .pill:hover { background: var(--accent-hover); }
+  .bell { width: 20px; height: 20px; flex: none; transform-origin: top center; }
+
+  /* AVANT : animation CSS jouée dès le premier rendu, freinage brutal, cloche statique */
+  @keyframes before-in { from { transform: translateY(calc(100% + 20px)); } to { transform: translateY(0); } }
+  .before .dock { animation: before-in calc(500ms * var(--slow)) var(--out) both; }
+
+  /* APRES : délai, courbe à ressort, cloche qui sonne une fois après l'arrêt */
+  .after .dock { transform: translateY(calc(100% + 20px)); }
+  .after.is-armed .dock { transition: transform calc(300ms * var(--slow)) var(--spring); }
+  .after.is-entered .dock { transform: translateY(0); }
+  @keyframes ring {
+    0%, 43% { transform: rotate(0); }
+    1%, 9% { transform: rotate(20deg); }
+    3%, 11% { transform: rotate(-18deg); }
+    5% { transform: rotate(24deg); }
+    7% { transform: rotate(-22deg); }
+    13% { transform: rotate(16deg); }
+    15% { transform: rotate(-14deg); }
+    17% { transform: rotate(12deg); }
+    19% { transform: rotate(-10deg); }
+    21% { transform: rotate(8deg); }
+    23% { transform: rotate(-6deg); }
+    25% { transform: rotate(4deg); }
+    27% { transform: rotate(-2deg); }
+    29% { transform: rotate(1deg); }
+    31% { transform: rotate(-1deg); }
+  }
+  .after.is-ringing .bell { animation: ring calc(1800ms * var(--slow)) ease-in-out calc(400ms * var(--slow)) 1; }
+
+  .code { margin-top: 2rem; background: var(--plate); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.25rem; overflow-x: auto; font: .85rem/1.55 ui-monospace, Menlo, Consolas, monospace; }
+  .code h2 { font: 600 .95rem system-ui, sans-serif; margin: 0 0 .5rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .before .dock { animation: none; }
+    .after .dock { transition: none !important; }
+    .after.is-ringing .bell { animation: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Entrée d'un bouton flottant : avant et après</h1>
+  <p class="lead">Même bouton, même page. Seule la façon d'arriver change : un mouvement qui s'arrête net contre un mouvement qui a de l'inertie, suivi d'un signal qui retient le regard.</p>
+
+  <div class="controls">
+    <button class="ctl" id="replay-all" type="button">Rejouer les deux</button>
+    <label>Vitesse
+      <select id="speed">
+        <option value="1">Normale</option>
+        <option value="3">Ralentie x3</option>
+        <option value="6">Ralentie x6</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="grid">
+    <figure>
+      <div class="screen before" id="before" aria-label="Démonstration de l'ancienne animation">
+        <div class="skel title"></div><div class="skel card"></div><div class="skel card"></div><div class="skel card"></div>
+        <div class="dock"><button class="pill" type="button">
+          <svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          Créer une alerte</button></div>
+      </div>
+      <figcaption>
+        <span class="tag before">Avant</span>
+        <strong>Glissement CSS, ease-out, 500 ms</strong>
+        <ul>
+          <li>Démarre au premier rendu, souvent avant que la page soit vue.</li>
+          <li>Décélération très forte : le bouton s'arrête net.</li>
+          <li>Rejouée à chaque chargement, cloche immobile.</li>
+        </ul>
+        <button class="ctl" type="button" data-replay="before" style="margin-top:.75rem">Rejouer</button>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="screen after" id="after" aria-label="Démonstration de la nouvelle animation">
+        <div class="skel title"></div><div class="skel card"></div><div class="skel card"></div><div class="skel card"></div>
+        <div class="dock"><button class="pill" type="button">
+          <svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          Créer une alerte</button></div>
+      </div>
+      <figcaption>
+        <span class="tag after">Après</span>
+        <strong>Délai, courbe à ressort, cloche qui sonne</strong>
+        <ul>
+          <li>Arrive 1,5 s après le chargement, sur une page stabilisée.</li>
+          <li>Léger dépassement puis retour : un mouvement avec de l'inertie.</li>
+          <li>La cloche sonne une fois, après l'arrêt complet.</li>
+        </ul>
+        <button class="ctl" type="button" data-replay="after" style="margin-top:.75rem">Rejouer</button>
+      </figcaption>
+    </figure>
+  </div>
+
+  <section class="code" aria-label="Code">
+    <h2>L'essentiel du code</h2>
+<pre style="margin:0">/* Courbe à ressort : dépasse la cible d'environ 12 % puis revient */
+--spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+.dock { transition: transform 300ms var(--spring); }
+
+/* La cloche attend 0,4 s après l'arrêt du bouton, puis sonne une seule fois */
+.is-ringing .bell { animation: ring 1.8s ease-in-out 0.4s 1; transform-origin: top center; }
+
+// Déclenché après le montage : le HTML serveur reste identique
+setTimeout(() =&gt; el.classList.add('is-entered'), 1500);
+dock.addEventListener('transitionend', (e) =&gt; {
+  if (e.target === dock) el.classList.add('is-ringing');
+});</pre>
+  </section>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const before = document.getElementById('before');
+  const after = document.getElementById('after');
+  const speedSelect = document.getElementById('speed');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const INTRO_DELAY_MS = 1500;
+  let timer = 0;
+  let slow = 1;
+
+  const reflow = (el) => void el.offsetWidth;
+
+  function playBefore() {
+    const dock = before.querySelector('.dock');
+    dock.style.animation = 'none';
+    reflow(dock);
+    dock.style.animation = '';
+  }
+
+  function playAfter() {
+    clearTimeout(timer);
+    after.classList.remove('is-armed', 'is-entered', 'is-ringing');
+    reflow(after);
+    after.classList.add('is-armed');
+    timer = setTimeout(() => after.classList.add('is-entered'), INTRO_DELAY_MS * slow);
+  }
+
+  const dock = after.querySelector('.dock');
+  dock.addEventListener('transitionend', (event) => {
+    if (event.target === dock && after.classList.contains('is-entered') && !reduced.matches) {
+      after.classList.add('is-ringing');
+    }
+  });
+  after.querySelector('.bell').addEventListener('animationend', () => after.classList.remove('is-ringing'));
+
+  const playAll = () => { playBefore(); playAfter(); };
+
+  speedSelect.addEventListener('change', () => {
+    slow = Number(speedSelect.value);
+    root.style.setProperty('--slow', slow);
+    playAll();
+  });
+  document.getElementById('replay-all').addEventListener('click', playAll);
+  document.querySelectorAll('[data-replay]').forEach((btn) =>
+    btn.addEventListener('click', () => (btn.dataset.replay === 'before' ? playBefore() : playAfter()))
+  );
+
+  playAll();
+})();
+</script>
+</body>
+</html>

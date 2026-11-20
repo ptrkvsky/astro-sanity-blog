@@ -429,3 +429,10 @@
   border: 0;
   display: block;
 }
+
+.blog .demo-embed iframe {
+  width: 100%;
+  display: block;
+  border: 1px solid var(--muted);
+  background: var(--sheet);
+}

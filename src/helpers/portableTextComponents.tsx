@@ -17,6 +17,8 @@ export function safeURL(value: unknown) {
   return /^(https?:\/\/|mailto:|tel:|\/(?!\/)|#)/i.test(url) ? url : '';
 }
 
+const DEMO_PATH_PATTERN = /^\/demos\/[a-z0-9-]+\/$/;
+
 // Internal references are resolved once per article, before the synchronous HTML renderer.
 export async function createPortableTextComponents(
   blocks: any[],
@@ -77,6 +79,16 @@ export async function createPortableTextComponents(
             ? hljs.highlight(value.code || '', { language }).value
             : escapeHTML(value.code);
         return `<div class="code-block"><p class="code-language">${escapeHTML(language || 'Code')}</p><pre tabindex="0" aria-label="Extrait de code"><code class="hljs">${code}</code></pre></div>`;
+      },
+      demoEmbed: ({ value }: any) => {
+        const path = String(value.path || '');
+        if (!DEMO_PATH_PATTERN.test(path))
+          return '<p>Démonstration indisponible.</p>';
+        const height = Math.min(
+          Math.max(Number(value.height) || 460, 200),
+          900,
+        );
+        return `<figure class="demo-embed"><iframe src="${escapeHTML(path)}" title="${escapeHTML(value.title || 'Démonstration')}" height="${height}" loading="lazy" sandbox="allow-scripts"></iframe><figcaption><a href="${escapeHTML(path)}">Ouvrir la démonstration dans une page</a></figcaption></figure>`;
       },
       youtube: ({ value }: any) => {
         const id = String(value.idYoutube || '');

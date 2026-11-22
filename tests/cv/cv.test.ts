@@ -61,3 +61,10 @@ describe('contenu publié', () => {
     expect(cvSeo.description.length).toBeLessThanOrEqual(155);
   });
 });
+
+describe('compétences', () => {
+  it('chaque entrée est une compétence unique, sans virgule', () => {
+    const labels = skillGroups.flatMap((g) => g.skills.map((s) => s.label));
+    expect(labels.filter((label) => label.includes(','))).toEqual([]);
+  });
+});

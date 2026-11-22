@@ -4,7 +4,7 @@
 //     sauf en mouvement réduit. 3. WebGL (titre et compte-fils) si WebGL2 est disponible.
 
 import { detect } from './capabilities.js';
-import { whenIdleAfterLoad, loadScripts, gsapFiles } from './boot.js';
+import { whenIdleAfterLoad } from './boot.js';
 import { observeMeasures, fmt } from './measure.js';
 
 const caps = detect();
@@ -46,7 +46,6 @@ if (weightOutputs.length) {
 if (caps.tier !== 'static') {
   await whenIdleAfterLoad();
   try {
-    await loadScripts(gsapFiles('ScrollTrigger', 'MorphSVGPlugin', 'DrawSVGPlugin'));
     await start();
   } catch (e) {
     console.warn("Couche d'expérience indisponible : la page reste dans son état final.", e);
@@ -69,8 +68,12 @@ function setK(svg, k, jx = 0, jy = 0) {
 }
 
 async function start() {
-  const { gsap, ScrollTrigger, MorphSVGPlugin, DrawSVGPlugin } = window;
-  gsap.registerPlugin(ScrollTrigger, MorphSVGPlugin, DrawSVGPlugin);
+  const [{ gsap, ScrollTrigger }, { MorphSVGPlugin }, { DrawSVGPlugin }] = await Promise.all([
+    import('./gsap-core.js'),
+    import('gsap/MorphSVGPlugin'),
+    import('gsap/DrawSVGPlugin'),
+  ]);
+  gsap.registerPlugin(MorphSVGPlugin, DrawSVGPlugin);
   const full = caps.tier === 'full';
   const clamp01 = gsap.utils.clamp(0, 1);
   root.classList.add('xp');
@@ -292,6 +295,9 @@ async function start() {
   const stopEditorial = startEditorial({ gsap, ScrollTrigger, full });
   addEventListener('pagehide', (e) => { if (!e.persisted) stopEditorial(); });
 
+  const { startHomeFx } = await import('./home-fx.js');
+  const textLayer = await startHomeFx(caps);
+
   // ---------- « Retirer la couche créative » : la page garde tout son contenu ----------
   const removeBtn = $('[data-remove-layer]');
   const layerStatus = $('[data-layer-status]');
@@ -299,6 +305,7 @@ async function start() {
     removeBtn.hidden = false;
     removeBtn.addEventListener('click', () => {
       removed = true;
+      textLayer.remove();
       stopEditorial();
       press?.destroy(); press = null;
       loupe?.destroy(); loupe = null;

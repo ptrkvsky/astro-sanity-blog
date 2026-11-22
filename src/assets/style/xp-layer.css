@@ -1,0 +1,15 @@
+/* Couche d'expérience partagée (D12) : filet de section, curseur, progression, Lenis. Classe racine : xp-layer. */
+.xp-layer .sec-head { position: relative; border-bottom-color: transparent; }
+.xp-layer .sec-head::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: var(--ink); transform: scaleX(var(--rule, 1)); transform-origin: left; }
+
+.xp-progress { position: fixed; inset: 0 0 auto; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; z-index: 60; pointer-events: none; }
+
+.xp-cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--red); mix-blend-mode: difference; pointer-events: none; z-index: 70; }
+.xp-cursor-on, .xp-cursor-on a, .xp-cursor-on button, .xp-cursor-on summary, .xp-cursor-on .btn { cursor: none; }
+
+html.lenis { scroll-behavior: auto !important; }
+
+@media print {
+  .xp-layer .sec-head { border-bottom-color: var(--ink); }
+  .xp-progress, .xp-cursor, .sec-head::after { display: none; }
+}

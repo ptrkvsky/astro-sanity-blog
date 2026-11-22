@@ -48,13 +48,29 @@
   .cv .skills dl { grid-template-columns: 11rem minmax(0, 1fr); }
 }
 
+/* Repli CSS : remplacé par GSAP quand la classe xp-layer est posée (niveaux full et lite). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .cv .pass { animation: cv-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
-    .cv .stamp { animation: cv-stamp .5s var(--ease-out) both; }
+    html:not(.xp-layer) .cv .pass { animation: cv-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    html:not(.xp-layer) .cv .stamp { animation: cv-stamp .5s var(--ease-out) both; }
   }
 }
 @keyframes cv-settle { from { opacity: .35; } to { opacity: 1; } }
 @keyframes cv-stamp { from { opacity: 0; transform: rotate(-6deg) scale(1.15); } to { opacity: 1; transform: rotate(-2deg) scale(1); } }
 
-@media print { .cv .stamp { animation: none; } }
+/* Couche GSAP propre à /cv (le générique est dans xp-layer.css) */
+.xp-layer .cv .skills dd span { position: relative; --k: 1; }
+.xp-layer .cv .skills dd span::after { content: ''; position: absolute; inset: auto 0 -.2rem; height: 1px; background: var(--red); transform: scaleX(calc(var(--lv, 1) * var(--k))); transform-origin: left; }
+.xp-layer .cv .skills .lv-expertise { --lv: 1; }
+.xp-layer .cv .skills .lv-pratique { --lv: .6; }
+.xp-layer .cv .skills .lv-explore { --lv: .25; }
+
+@media (min-width: 48rem) {
+  .cv .timeline { position: relative; --tl: 0; }
+  .xp-layer .cv .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: calc(11rem + .5rem); width: 2px; background: var(--red); transform: scaleY(var(--tl)); transform-origin: top; pointer-events: none; }
+}
+
+@media print {
+  .cv .stamp { animation: none; }
+  .cv .timeline::before, .cv .skills dd span::after { display: none; }
+}

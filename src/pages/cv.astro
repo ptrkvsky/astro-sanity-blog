@@ -1,5 +1,6 @@
 ---
 import '@assets/style/cv.css';
+import '@assets/style/xp-layer.css';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { person } from '../config/person';
 import { getGraphCv } from '@helpers/getGraphCv';
@@ -201,7 +202,15 @@ const levelLabel = { expertise: 'expertise', pratique: 'pratique', explore: 'exp
           <a class="btn" href={person.links.github} rel="noopener">GitHub</a>
           <a class="btn" href="/posts">Articles</a>
         </div>
+        <p class="note" data-layer-status role="status"></p>
+        <div class="actions">
+          <button type="button" class="btn" data-remove-layer hidden>Retirer la couche créative</button>
+        </div>
       </div>
     </section>
   </div>
 </BaseLayout>
+
+<script>
+import '../scripts/experience/cv.js';
+</script>

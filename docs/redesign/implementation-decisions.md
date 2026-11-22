@@ -181,4 +181,16 @@ Détection à la première exécution (`prototypes/epreuve/capabilities.js`) : m
 |---|---|
 | Three.js | Accepté pour une scène 3D réelle (F) : 134 Ko compressés après élagage, chargé après le LCP, réservé au niveau `full` sur grand écran. Non retenu dans la recommandation (concept Calage, WebGL brut) |
 | GSAP + ScrollTrigger | Accepté pour les séquences narratives (D2 révisée) |
-| Lenis, défilement détourné, préchargeur, curseur personnalisé | Toujours écartés |
+| Lenis, défilement détourné, préchargeur, curseur personnalisé | Écartés, sauf sur `/cv` (D12) pour Lenis et le curseur. Préchargeur toujours écarté |
+
+### D12 - Dérogations limitées à `/cv` et à l'accueil
+
+Sur `/cv` et sur l'accueil uniquement, Johan autorise : texte découpé en lettres (SplitText), scramble (ScrambleText), Lenis, curseur personnalisé, boutons magnétiques. Mise en œuvre : `src/scripts/experience/xp-layer.js` (briques partagées), `cv.js` et `home-fx.js` (sélecteurs par page). GSAP vient du paquet npm, instance unique (`gsap-core.js`) ; les fichiers de `public/vendor/gsap-3.13.0/` ne sont plus chargés.
+
+Exclusions sur l'accueil : `.hero-title` (rendu WebGL), `.step h3` et `.index .t` (text-shadow animé), éléments réécrits par JS. Pas de barre de progression : `.calage-meter` en tient lieu.
+
+Garde-fous conservés :
+- le HTML reste complet sans JavaScript ; SplitText pose l'`aria-label` d'origine ;
+- Lenis, curseur et magnétisme seulement au niveau `full` et au pointeur fin ; rien au niveau `static` ;
+- bouton « Retirer la couche créative » qui détruit tout, et retrait automatique si `prefers-reduced-motion` change ;
+- `/cv/imprimer` reste sans JavaScript.

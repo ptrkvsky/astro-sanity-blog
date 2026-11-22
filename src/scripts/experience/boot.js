@@ -9,18 +9,3 @@ export function whenIdleAfterLoad() {
     else addEventListener('load', ready, { once: true });
   });
 }
-
-// Scripts UMD (GSAP) : téléchargés en parallèle, exécutés dans l'ordre (async = false).
-export function loadScripts(urls) {
-  return Promise.all(urls.map((src) => new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.async = false;
-    s.onload = resolve;
-    s.onerror = () => reject(new Error(`script indisponible : ${src}`));
-    document.head.append(s);
-  })));
-}
-
-export const GSAP = '/vendor/gsap-3.13.0/';
-export const gsapFiles = (...plugins) => ['gsap', ...plugins].map((n) => `${GSAP}${n}.min.js`);

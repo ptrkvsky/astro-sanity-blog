@@ -1,0 +1,119 @@
+---
+import '@assets/style/print-cv.css';
+import { person } from '../../config/person';
+import {
+  achievements,
+  keyFacts,
+  pdfProfile,
+  award,
+  experiences,
+  headline,
+  selectedProjects,
+  skillGroups,
+  education,
+} from '@features/cv/data/cv';
+import { publishable } from '@features/cv/data/publishable';
+
+export const prerender = true;
+
+const groups = skillGroups
+  .map((g) => ({ ...g, skills: publishable(g.skills) }))
+  .filter((g) => g.skills.length > 0);
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>{person.name} · {headline.title}</title>
+  </head>
+  <body class="print-cv">
+    <div>
+      <header class="masthead">
+        <div>
+          <h1>{person.name}</h1>
+          <p class="role">{headline.title} <span>· {headline.stack}</span></p>
+        </div>
+        <p class="contact">
+          <span>{person.city}</span>
+          <a href={`mailto:${person.email}`}>{person.email}</a>
+          <a href={person.links.linkedin}>linkedin.com/in/johanpetrikovsky</a>
+          <a href={person.links.github}>github.com/ptrkvsky</a>
+          <a href="https://developpeur-web.tech/cv">developpeur-web.tech/cv</a>
+        </p>
+      </header>
+
+      <div class="facts">
+        {keyFacts.map((f) => <div><b>{f.value}</b><span>{f.label}</span></div>)}
+      </div>
+
+      <h2>Profil</h2>
+      <p class="lede">{pdfProfile[0]}</p>
+      <p>{pdfProfile[1]}</p>
+
+      <p class="award">
+        <b>{award.name}</b>
+        <span>Projet {award.project}, rôle : {award.role.toLowerCase()}. <a href={award.url}>cssdesignawards.com</a></span>
+      </p>
+
+      <h2>Expérience</h2>
+      {experiences.length > 0 && publishable(experiences).map((e) => {
+        const isLead = e.employer === 'SAFTI' && e.role === 'Lead Frontend';
+        return (
+          <article class:list={['job', { lead: isLead }]}>
+            <p class="when"><b>{e.start}{e.end ? ` – ${e.end}` : ''}</b>{e.end ? '' : 'aujourd’hui'}</p>
+            <div>
+              <h3>{e.role} <span>· {e.employer}</span></h3>
+              <p class="meta">{[e.contract, e.place].filter(Boolean).join(' · ')}{e.stack ? ` · ${e.stack}` : ''}</p>
+              <p style="margin-top:1.5mm">{e.summary}</p>
+              {isLead && (
+                <ul class="wins">
+                  {publishable(achievements).map((a) => (
+                    <li><div><b>{a.title}.</b> <span>{a.contribution}</span></div></li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <div>
+      <h2>Projets sélectionnés</h2>
+      <div class="projects">
+        {publishable(selectedProjects).map((p) => (
+          <div>
+            <h3>{p.url ? <a href={p.url}>{p.title}</a> : p.title}</h3>
+            <p class="meta">{p.role}</p>
+            <p style="margin-top:1mm">{p.summary}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2>Compétences</h2>
+      <dl class="skills">
+        {groups.map((g) => (
+          <>
+            <dt>{g.domain}</dt>
+            <dd>
+              {g.skills.map((s, i) => (
+                <><span class={s.level === 'expertise' ? 'x' : s.level === 'explore' ? 'e' : ''}>{s.label}</span>{i < g.skills.length - 1 ? ' · ' : ''}</>
+              ))}
+            </dd>
+          </>
+        ))}
+      </dl>
+      <p class="legend">Gras : expertise quotidienne · Romain : pratiqué en projet · Italique : exploré</p>
+
+      <h2>Formation</h2>
+      {publishable(education).map((e) => (
+        <div class="edu">
+          <p class="when">{e.period}</p>
+          <p><b>{e.title}</b>, {e.school}, {e.place}</p>
+        </div>
+      ))}
+    </div>
+  </body>
+</html>

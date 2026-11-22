@@ -11,7 +11,7 @@ export default defineConfig({
   compressHTML: true,
   integrations: [
     react(),
-    sitemap(),
+    sitemap({ filter: (page) => !page.includes('/cv/imprimer') }),
     partytown({
       // Adds dataLayer.push as a forwarding-event.
       config: {

@@ -1,0 +1,207 @@
+---
+import '@assets/style/cv.css';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { person } from '../config/person';
+import { getGraphCv } from '@helpers/getGraphCv';
+import {
+  achievements,
+  award,
+  cvSeo,
+  education,
+  experiences,
+  headline,
+  passes,
+  selectedProjects,
+  skillGroups,
+  summary,
+} from '@features/cv/data/cv';
+import { publishable } from '@features/cv/data/publishable';
+
+export const prerender = true;
+
+const shownExperiences = publishable(experiences);
+const shownAchievements = publishable(achievements);
+const shownProjects = publishable(selectedProjects);
+const shownEducation = publishable(education);
+const shownGroups = skillGroups
+  .map((g) => ({ ...g, skills: publishable(g.skills) }))
+  .filter((g) => g.skills.length > 0);
+const passKeys = Object.keys(passes) as (keyof typeof passes)[];
+const levelLabel = { expertise: 'expertise', pratique: 'pratique', explore: 'exploré' };
+---
+
+<BaseLayout
+  title={cvSeo.title}
+  description={cvSeo.description}
+  canonical="/cv"
+  schema={getGraphCv()}
+>
+  <div slot="main" class="cv page">
+    <header class="hero">
+      <p class="mono muted">Curriculum vitæ · {person.city} · web depuis {person.since}</p>
+      <h1>{person.name}</h1>
+      <p class="role"><em>{headline.title}</em>, {headline.stack}</p>
+      <p class="lede">{headline.web} {headline.pdf}</p>
+      <div class="actions">
+        <a class="btn primary" href="/cv/johan-petrikovsky-cv-lead-frontend.pdf" download>Télécharger le CV (PDF)</a>
+        <a class="btn" href={`mailto:${person.email}`}>Me contacter</a>
+      </div>
+      <p class="mono proof">
+        <a href={award.url} rel="noopener">{award.name}</a> · {award.project}
+      </p>
+    </header>
+
+    <section class="sec" aria-labelledby="t-resume">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">01</p>
+        <h2 id="t-resume">Résumé</h2>
+      </header>
+      <div class="prose">
+        {summary.map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="t-passes">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">02</p>
+        <h2 id="t-passes">Trois passes</h2>
+        <p class="note">Du détail visuel à l’architecture : chaque passe affine la précédente.</p>
+      </header>
+      {passKeys.map((key) => {
+        const items = shownAchievements.filter((a) => a.pass === key);
+        const [first, ...rest] = passes[key].label.split(' ');
+        return (
+          <article class="pass">
+            <div class="pass-label">
+              <h3><em>{first}</em> {rest.join(' ')}</h3>
+              <p class="note">{passes[key].text}</p>
+            </div>
+            <div class="pass-body">
+              {key === 'craft' && (
+                <div class="award">
+                  <span class="stamp">Projet distingué</span>
+                  <p>
+                    <strong>Draw Me A Sheep</strong>, site d’un studio de design graphique à Nice, dont la direction artistique est de Melody Gautier. J’en suis le développeur crédité.
+                  </p>
+                  <p class="mono muted">
+                    Fiche officielle taguée SVG et WebGL. Le détail des interactions développées sera ajouté après confirmation.
+                  </p>
+                </div>
+              )}
+              {items.map((a) => (
+                <div class="achievement">
+                  <h4>{a.title}</h4>
+                  <dl class="spec">
+                    <div><dt>Contexte</dt><dd>{a.context}</dd></div>
+                    <div><dt>Contribution</dt><dd>{a.contribution}</dd></div>
+                    {a.impact && <div><dt>Impact</dt><dd>{a.impact}</dd></div>}
+                  </dl>
+                </div>
+              ))}
+            </div>
+          </article>
+        );
+      })}
+    </section>
+
+    <section class="sec" aria-labelledby="t-exp">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">03</p>
+        <h2 id="t-exp">Expérience</h2>
+      </header>
+      <ol class="timeline primary">
+        {shownExperiences.map((e) => (
+          <li>
+            <p class="mono when">{e.start}{e.end ? ` – ${e.end}` : ' – aujourd’hui'}</p>
+            <h3>{e.role}, {e.employer}</h3>
+            <p class="mono muted">{[e.contract, e.place].filter(Boolean).join(' · ')}</p>
+            <p>{e.summary}</p>
+            {e.stack && <p class="mono muted">{e.stack}</p>}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="sec" aria-labelledby="t-proj">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">04</p>
+        <h2 id="t-proj">Réalisations</h2>
+      </header>
+      <ul class="selected">
+        {shownProjects.map((p) => (
+          <li>
+            <h3>{p.url ? <a href={p.url} rel="noopener">{p.title}</a> : p.title}</h3>
+            <p class="mono muted">{p.role}</p>
+            <p>{p.summary}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="sec" aria-labelledby="t-dist">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">05</p>
+        <h2 id="t-dist">Distinctions</h2>
+      </header>
+      <dl class="spec">
+        <div><dt>Distinction</dt><dd>{award.name}</dd></div>
+        <div><dt>Projet</dt><dd>{award.project}</dd></div>
+        <div><dt>Rôle</dt><dd>{award.role}</dd></div>
+        <div>
+          <dt>Source</dt>
+          <dd><a href={award.url} rel="noopener">Fiche officielle sur CSS Design Awards</a></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="sec" aria-labelledby="t-skills">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">06</p>
+        <h2 id="t-skills">Compétences</h2>
+      </header>
+      <div class="skills">
+        {shownGroups.map((g) => (
+          <dl>
+            <dt>{g.domain}</dt>
+            <dd>
+              {g.skills.map((s) => (
+                <span class={`lv-${s.level}`} title={levelLabel[s.level]}>{s.label}</span>
+              ))}
+            </dd>
+          </dl>
+        ))}
+      </div>
+      <p class="note legend">En gras : expertise quotidienne. En italique grisé : exploré, pas encore en production.</p>
+    </section>
+
+    <section class="sec" aria-labelledby="t-edu">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">07</p>
+        <h2 id="t-edu">Formation</h2>
+      </header>
+      <ul class="selected">
+        {shownEducation.map((e) => (
+          <li>
+            <h3>{e.title}</h3>
+            <p class="mono muted">{e.school} · {e.period} · {e.place}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="sec" aria-labelledby="t-contact">
+      <header class="sec-head g12">
+        <p class="sec-num" aria-hidden="true">08</p>
+        <h2 id="t-contact">Contact</h2>
+      </header>
+      <div class="hero">
+        <div class="actions">
+          <a class="btn primary" href={`mailto:${person.email}`}>{person.email}</a>
+          <a class="btn" href={person.links.linkedin} rel="noopener">LinkedIn</a>
+          <a class="btn" href={person.links.github} rel="noopener">GitHub</a>
+          <a class="btn" href="/posts">Articles</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

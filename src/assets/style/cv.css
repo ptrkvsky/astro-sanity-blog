@@ -1,0 +1,60 @@
+.cv .hero { padding-block: var(--space-6) 0; }
+.cv .hero h1 { font: 400 var(--step-hero)/.86 var(--f-display); letter-spacing: -.03em; }
+.cv .hero .role { font: var(--step-2)/1 var(--f-display); margin-top: var(--space-3); }
+.cv .hero .role em { color: var(--red); }
+.cv .hero .lede { max-width: var(--measure); margin-top: var(--space-4); font-size: 1.15rem; line-height: 1.55; }
+.cv .hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: var(--space-4); }
+.cv .hero .proof { margin-top: var(--space-4); }
+.cv .proof a { color: inherit; }
+
+.cv .prose { max-width: var(--measure); display: grid; gap: 1rem; line-height: 1.6; }
+
+.cv .pass { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--space-3); padding-block: var(--space-4); border-bottom: 1px solid var(--hair); }
+.cv .pass-label { grid-column: 1 / -1; }
+.cv .pass-label h3 { font: 400 var(--step-2)/1 var(--f-display); }
+.cv .pass-label h3 em { color: var(--red); }
+.cv .pass-label p { margin-top: .4rem; }
+.cv .pass-body { grid-column: 1 / -1; display: grid; gap: var(--space-4); }
+.cv .achievement h4 { font: 400 1.6rem/1.15 var(--f-display); }
+.cv .achievement .spec { margin-top: .75rem; }
+
+.cv .timeline { list-style: none; padding: 0; border-top: 1px solid var(--ink); }
+.cv .timeline li { display: grid; gap: .35rem 1rem; padding-block: 1rem; border-bottom: 1px solid var(--hair); }
+.cv .timeline h3 { font: 400 1.7rem/1.1 var(--f-display); }
+.cv .timeline .when { color: var(--muted); }
+.cv .timeline.primary li:first-child h3 { font-size: 2.4rem; }
+
+.cv .selected { list-style: none; padding: 0; border-top: 1px solid var(--hair); }
+.cv .selected li { display: grid; gap: .3rem; padding-block: 1rem; border-bottom: 1px solid var(--hair); }
+.cv .selected h3 { font: 400 1.8rem/1.1 var(--f-display); }
+.cv .selected a { color: inherit; text-decoration-color: var(--red); text-underline-offset: .2em; }
+
+.cv .award { display: grid; gap: 1rem; max-width: 46rem; }
+.cv .stamp { justify-self: start; font: var(--step--1)/1 var(--f-mono); text-transform: uppercase; letter-spacing: .08em; padding: .35rem .6rem; border: 1.5px solid var(--tape); color: var(--tape); transform: rotate(-2deg); }
+
+.cv .skills { display: grid; gap: var(--space-3); }
+.cv .skills dl { display: grid; gap: .5rem; padding-block: .85rem; border-bottom: 1px solid var(--hair); }
+.cv .skills dt { font: var(--step--1) var(--f-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.cv .skills dd { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; }
+.cv .skills .lv-expertise { font-weight: 600; }
+.cv .skills .lv-explore { color: var(--muted); font-style: italic; }
+.cv .legend { margin-top: var(--space-2); }
+
+@media (min-width: 48rem) {
+  .cv .pass-label { grid-column: 1 / span 4; }
+  .cv .pass-body { grid-column: 5 / -1; }
+  .cv .timeline li { grid-template-columns: 11rem minmax(0, 1fr); }
+  .cv .timeline .when { grid-row: 1 / span 3; }
+  .cv .skills dl { grid-template-columns: 11rem minmax(0, 1fr); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cv .pass { animation: cv-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    .cv .stamp { animation: cv-stamp .5s var(--ease-out) both; }
+  }
+}
+@keyframes cv-settle { from { opacity: .35; } to { opacity: 1; } }
+@keyframes cv-stamp { from { opacity: 0; transform: rotate(-6deg) scale(1.15); } to { opacity: 1; transform: rotate(-2deg) scale(1); } }
+
+@media print { .cv .stamp { animation: none; } }

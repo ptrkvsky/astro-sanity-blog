@@ -43,10 +43,28 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
     trigger ? ScrollTrigger.create({ trigger, start: 'top 88%', once: true, onEnter: play }) : play();
   };
 
+  const naturalLefts = (el) => {
+    const lefts = [];
+    const range = document.createRange();
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      [...node.data].forEach((ch, i) => {
+        if (/\s/.test(ch)) return;
+        range.setStart(node, i);
+        range.setEnd(node, i + ch.length);
+        lefts.push(range.getBoundingClientRect().left);
+      });
+    }
+    return lefts;
+  };
+
   // Le texte reste lu en entier : SplitText pose l'aria-label d'origine, les fragments sont masqués aux lecteurs d'écran.
   const reveal = (el, { type = full ? 'lines,chars' : 'lines', stagger = 0.02, trigger = el, start = 'top 88%', delay = 0, offset = 110 } = {}) => {
     if (!el) return;
     let played = false;
+    const splitChars = type.includes('chars');
+    const natural = splitChars ? naturalLefts(el) : [];
+    let aligned = false;
     splits.push(SplitText.create(el, {
       type,
       mask: 'lines',
@@ -54,7 +72,13 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
       onSplit(self) {
         self.masks?.forEach((m) => m.classList.add('xp-mask'));
         if (played) return undefined;
-        const parts = type.includes('chars') ? self.chars : self.lines;
+        // Des lettres isolées perdent le crénage : on les recale sur leur position d'origine,
+        // sinon le texte « saute » quand le découpage est annulé à la fin.
+        if (splitChars && !aligned && natural.length === self.chars.length) {
+          aligned = true;
+          gsap.set(self.chars, { x: (i, c) => natural[i] - c.getBoundingClientRect().left });
+        }
+        const parts = splitChars ? self.chars : self.lines;
         gsap.set(parts, { yPercent: offset });
         return gsap.to(parts, {
           yPercent: 0,

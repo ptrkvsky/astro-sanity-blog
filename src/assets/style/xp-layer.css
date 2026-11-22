@@ -5,6 +5,9 @@
 /* Le masque de ligne rogne les débords des capitales et des italiques (J, f, y) : marge de sécurité sans effet sur la mise en page. */
 .xp-mask { padding: .12em .2em .25em; margin: -.12em -.2em -.25em; }
 
+/* Titres de section : le bas du masque tombe sur le filet, le texte sort de la ligne au lieu de la traverser. */
+.sec-head .xp-mask { padding-bottom: var(--space-2); margin-bottom: calc(var(--space-2) * -1); }
+
 .xp-progress { position: fixed; inset: 0 0 auto; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; z-index: 60; pointer-events: none; }
 
 .xp-cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--red); mix-blend-mode: difference; pointer-events: none; z-index: 70; }

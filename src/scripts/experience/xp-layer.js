@@ -43,7 +43,7 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
   };
 
   // Le texte reste lu en entier : SplitText pose l'aria-label d'origine, les fragments sont masqués aux lecteurs d'écran.
-  const reveal = (el, { type = full ? 'lines,chars' : 'lines', stagger = 0.02, trigger = el, start = 'top 88%', delay = 0 } = {}) => {
+  const reveal = (el, { type = full ? 'lines,chars' : 'lines', stagger = 0.02, trigger = el, start = 'top 88%', delay = 0, offset = 110 } = {}) => {
     if (!el) return;
     let played = false;
     splits.push(SplitText.create(el, {
@@ -54,14 +54,15 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
         self.masks?.forEach((m) => m.classList.add('xp-mask'));
         if (played) return undefined;
         const parts = type.includes('chars') ? self.chars : self.lines;
-        gsap.set(parts, { yPercent: 110 });
+        gsap.set(parts, { yPercent: offset });
         return gsap.to(parts, {
           yPercent: 0,
           duration: 0.9,
           ease: EASE,
           stagger,
           delay,
-          onComplete: () => { played = true; },
+          // Le texte retrouve son état d'origine : le masque ne rogne plus rien au repos.
+          onComplete: () => { played = true; self.revert(); },
           scrollTrigger: trigger ? { trigger, start, once: true } : undefined,
         });
       },
@@ -89,7 +90,7 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
       ScrollTrigger.create({ trigger: head, start: 'top 85%', once: true, onEnter: () => gsap.to(num, { color: red, duration: 0.6, ease: 'none', clearProps: 'color' }) });
       scramble(num, head);
     }
-    reveal($('h2', head), { trigger: head, stagger: 0.03, ...(titleType && { type: titleType }) });
+    reveal($('h2', head), { trigger: head, stagger: 0.03, offset: 140, ...(titleType && { type: titleType }) });
     gsap.fromTo(head, { '--rule': 0 }, { '--rule': 1, duration: 1.1, ease: EASE, scrollTrigger: { trigger: head, start: 'top 88%', once: true } });
   };
 

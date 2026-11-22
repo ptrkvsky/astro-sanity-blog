@@ -50,6 +50,13 @@
   .cv .skills dl { grid-template-columns: 11rem minmax(0, 1fr); }
 }
 
+/* Hero masqué dès le premier rendu pour éviter le flash avant l'intro GSAP.
+   Sans JavaScript, en mouvement réduit, ou si la couche ne démarre pas (5 s), le contenu s'affiche. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  html:not(.xp-settled) .cv > .hero > * { opacity: 0; animation: xp-failsafe 0s 5s forwards; }
+}
+@keyframes xp-failsafe { to { opacity: 1; } }
+
 /* Repli CSS : remplacé par GSAP quand la classe xp-layer est posée (niveaux full et lite). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

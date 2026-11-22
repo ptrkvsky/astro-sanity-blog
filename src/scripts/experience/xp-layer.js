@@ -9,6 +9,7 @@ const FINE_POINTER = '(hover: hover) and (pointer: fine)';
 const INTERACTIVE = 'a, button, summary';
 const ROOT_CLASS = 'xp-layer';
 const CURSOR_CLASS = 'xp-cursor-on';
+const SETTLED_CLASS = 'xp-settled';
 
 export async function createXpLayer(caps, { removeButton = true } = {}) {
   const [{ SplitText }, { ScrambleTextPlugin }, { default: Lenis }] = await Promise.all([
@@ -177,6 +178,8 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
   const run = (fn) => {
     context = gsap.context(fn);
     root.classList.add(ROOT_CLASS);
+    // Jamais retirée : lève le masquage CSS du hero, y compris après « Retirer la couche créative ».
+    requestAnimationFrame(() => root.classList.add(SETTLED_CLASS));
     ScrollTrigger.refresh();
   };
 

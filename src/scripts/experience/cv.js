@@ -13,7 +13,10 @@ if (caps.tier !== 'static') {
   } catch (e) {
     console.warn("Couche d'expérience indisponible : la page reste dans son état final.", e);
     document.documentElement.classList.remove('xp-layer', 'xp-cursor-on');
+    document.documentElement.classList.add('xp-settled');
   }
+} else {
+  document.documentElement.classList.add('xp-settled');
 }
 
 async function start() {

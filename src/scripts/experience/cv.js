@@ -76,15 +76,12 @@ async function start() {
     // ---------- 06 Compétences ----------
     $$('.cv .skills dl').forEach((dl) => {
       const chips = $$('dd span', dl);
-      gsap.set(chips, { opacity: 0, y: 8, '--k': 0 });
+      gsap.set(chips, { opacity: 0, y: 8 });
       ScrollTrigger.create({
         trigger: dl,
         start: 'top 90%',
         once: true,
-        onEnter: () => {
-          gsap.to(chips, { opacity: 1, y: 0, duration: 0.6, ease: EASE, stagger: 0.04, clearProps: 'transform,opacity' });
-          gsap.to(chips, { '--k': 1, duration: 0.9, ease: EASE, stagger: 0.04, delay: 0.15 });
-        },
+        onEnter: () => gsap.to(chips, { opacity: 1, y: 0, duration: 0.6, ease: EASE, stagger: 0.04, clearProps: 'transform,opacity' }),
       });
     });
 

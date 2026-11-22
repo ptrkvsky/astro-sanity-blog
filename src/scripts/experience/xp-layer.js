@@ -120,11 +120,14 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
     const scaleTo = (scale) => gsap.to(cursor, { scale, duration: 0.35, ease: 'power3.out', overwrite: 'auto' });
     const magnets = $$(magnetSelector).map((el) => ({
       el,
-      x: gsap.quickTo(el, 'x', { duration: 0.5, ease: 'elastic.out(1, .6)' }),
-      y: gsap.quickTo(el, 'y', { duration: 0.5, ease: 'elastic.out(1, .6)' }),
+      x: gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3.out' }),
+      y: gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3.out' }),
     }));
-    const REACH = 60;
-    const PULL = 0.3;
+    const REACH = 40;
+    const PULL = 0.2;
+    // Les boutons sont séparés de 12 px : 4 px de course chacun, ils ne se touchent jamais.
+    const MAX_TRAVEL = 4;
+    const clampTravel = gsap.utils.clamp(-MAX_TRAVEL, MAX_TRAVEL);
     let shown = false;
 
     addEventListener('pointermove', (e) => {
@@ -141,8 +144,8 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
         const dx = e.clientX - (r.left + r.width / 2);
         const dy = e.clientY - (r.top + r.height / 2);
         const near = Math.abs(dx) < r.width / 2 + REACH && Math.abs(dy) < r.height / 2 + REACH;
-        m.x(near ? dx * PULL : 0);
-        m.y(near ? dy * PULL : 0);
+        m.x(near ? clampTravel(dx * PULL) : 0);
+        m.y(near ? clampTravel(dy * PULL) : 0);
       }
     }, { signal, passive: true });
     document.addEventListener('pointerover', (e) => scaleTo(e.target.closest?.(INTERACTIVE) ? 3.2 : 1), { signal });

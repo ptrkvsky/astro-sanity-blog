@@ -28,7 +28,6 @@ const shownGroups = skillGroups
   .map((g) => ({ ...g, skills: publishable(g.skills) }))
   .filter((g) => g.skills.length > 0);
 const passKeys = Object.keys(passes) as (keyof typeof passes)[];
-const levelLabel = { expertise: 'expertise', pratique: 'pratique', explore: 'exploré' };
 ---
 
 <BaseLayout
@@ -166,13 +165,12 @@ const levelLabel = { expertise: 'expertise', pratique: 'pratique', explore: 'exp
             <dt>{g.domain}</dt>
             <dd>
               {g.skills.map((s) => (
-                <span class={`lv-${s.level}`} title={levelLabel[s.level]}>{s.label}</span>
+                <span>{s.label}</span>
               ))}
             </dd>
           </dl>
         ))}
       </div>
-      <p class="note legend">En gras : expertise quotidienne. En italique grisé : exploré, pas encore en production.</p>
     </section>
 
     <section class="sec" aria-labelledby="t-edu">

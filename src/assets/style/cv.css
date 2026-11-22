@@ -7,6 +7,11 @@
 .cv .hero .proof { margin-top: var(--space-4); }
 .cv .proof a { color: inherit; }
 
+.cv .sec:last-of-type { padding-bottom: var(--space-6); }
+.cv .sec:last-of-type .hero { padding-block: 0; }
+.cv .sec:last-of-type .hero .actions { margin-top: 0; }
+.cv .sec:last-of-type .hero .actions + .note, .cv .sec:last-of-type .hero .note + .actions { margin-top: var(--space-3); }
+
 .cv .prose { max-width: var(--measure); display: grid; gap: 1rem; line-height: 1.6; }
 
 .cv .pass { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--space-3); padding-block: var(--space-4); border-bottom: 1px solid var(--hair); }
@@ -36,9 +41,6 @@
 .cv .skills dl { display: grid; gap: .5rem; padding-block: .85rem; border-bottom: 1px solid var(--hair); }
 .cv .skills dt { font: var(--step--1) var(--f-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .cv .skills dd { display: flex; flex-wrap: wrap; gap: .35rem 1.1rem; }
-.cv .skills .lv-expertise { font-weight: 600; }
-.cv .skills .lv-explore { color: var(--muted); font-style: italic; }
-.cv .legend { margin-top: var(--space-2); }
 
 @media (min-width: 48rem) {
   .cv .pass-label { grid-column: 1 / span 4; }
@@ -59,12 +61,6 @@
 @keyframes cv-stamp { from { opacity: 0; transform: rotate(-6deg) scale(1.15); } to { opacity: 1; transform: rotate(-2deg) scale(1); } }
 
 /* Couche GSAP propre à /cv (le générique est dans xp-layer.css) */
-.xp-layer .cv .skills dd span { position: relative; --k: 1; }
-.xp-layer .cv .skills dd span::after { content: ''; position: absolute; inset: auto 0 -.2rem; height: 1px; background: var(--red); transform: scaleX(calc(var(--lv, 1) * var(--k))); transform-origin: left; }
-.xp-layer .cv .skills .lv-expertise { --lv: 1; }
-.xp-layer .cv .skills .lv-pratique { --lv: .6; }
-.xp-layer .cv .skills .lv-explore { --lv: .25; }
-
 @media (min-width: 48rem) {
   .cv .timeline { position: relative; --tl: 0; }
   .xp-layer .cv .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: calc(11rem + .5rem); width: 2px; background: var(--red); transform: scaleY(var(--tl)); transform-origin: top; pointer-events: none; }
@@ -72,5 +68,5 @@
 
 @media print {
   .cv .stamp { animation: none; }
-  .cv .timeline::before, .cv .skills dd span::after { display: none; }
+  .cv .timeline::before { display: none; }
 }

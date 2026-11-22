@@ -51,6 +51,7 @@ export async function createXpLayer(caps, { removeButton = true } = {}) {
       mask: 'lines',
       autoSplit: true,
       onSplit(self) {
+        self.masks?.forEach((m) => m.classList.add('xp-mask'));
         if (played) return undefined;
         const parts = type.includes('chars') ? self.chars : self.lines;
         gsap.set(parts, { yPercent: 110 });

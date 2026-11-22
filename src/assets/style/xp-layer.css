@@ -2,6 +2,9 @@
 .xp-layer .sec-head { position: relative; border-bottom-color: transparent; }
 .xp-layer .sec-head::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: var(--ink); transform: scaleX(var(--rule, 1)); transform-origin: left; }
 
+/* Le masque de ligne rogne les débords des capitales et des italiques (J, f, y) : marge de sécurité sans effet sur la mise en page. */
+.xp-mask { padding: .12em .2em .25em; margin: -.12em -.2em -.25em; }
+
 .xp-progress { position: fixed; inset: 0 0 auto; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; z-index: 60; pointer-events: none; }
 
 .xp-cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--red); mix-blend-mode: difference; pointer-events: none; z-index: 70; }
